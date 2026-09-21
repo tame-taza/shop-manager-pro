@@ -8,16 +8,22 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+Ethiopic:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
 <style>
 :root{
-  --green-900:#0d4f31;
+  --green-900:#0a3d26;
   --green-700:#146c43;
   --green-600:#1a8a58;
   --green-100:#e8f5ee;
   --green-50:#f4faf6;
+  --gold:#c9a227;
+  --gold-light:#f7ecc6;
+  --gold-dark:#8a6d1a;
   --paper:#ffffff;
   --ink:#182620;
   --ink-soft:#5c6d64;
@@ -30,7 +36,10 @@
   --radius-sm:8px;
   --radius-md:12px;
   --radius-lg:18px;
-  --shadow:0 1px 2px rgba(13,79,49,.06), 0 8px 24px -12px rgba(13,79,49,.18);
+  --shadow:0 1px 3px rgba(13,79,49,.08), 0 14px 32px -16px rgba(10,61,38,.28);
+  --shadow-lg:0 4px 10px rgba(13,79,49,.10), 0 24px 48px -18px rgba(10,61,38,.35);
+  --grad-green:linear-gradient(135deg,var(--green-600),var(--green-900));
+  --grad-gold:linear-gradient(135deg,#e6c65c,var(--gold-dark));
   --font-ui:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --font-am:'Noto Sans Ethiopic','Manrope',sans-serif;
 }
@@ -61,21 +70,22 @@ a{color:inherit;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:8px;}
 .app-shell{display:flex;min-height:100vh;}
 .sidebar{
-  width:230px;flex-shrink:0;background:var(--green-900);color:#eafff2;
+  width:230px;flex-shrink:0;background:var(--grad-green);color:#eafff2;
   display:flex;flex-direction:column;padding:20px 14px;position:sticky;top:0;height:100vh;
+  box-shadow:6px 0 24px -12px rgba(0,0,0,.35);
 }
 .brand{display:flex;align-items:center;gap:10px;padding:6px 8px 22px;}
-.brand-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(155deg,var(--green-600),#0a3a24);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#fff;flex-shrink:0;}
+.brand-mark{width:34px;height:34px;border-radius:9px;background:var(--grad-gold);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#3a2c05;flex-shrink:0;box-shadow:0 3px 10px rgba(0,0,0,.25);}
 .brand-text{line-height:1.15;}
 .brand-text b{display:block;font-size:14.5px;font-weight:800;}
-.brand-text span{display:block;font-size:10.5px;color:#9fd8bb;letter-spacing:.02em;}
+.brand-text span{display:block;font-size:10.5px;color:var(--gold-light);letter-spacing:.02em;}
 .nav-group{display:flex;flex-direction:column;gap:2px;flex:1;overflow-y:auto;}
 .nav-item{
   display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;
   color:#cfe9db;text-decoration:none;font-size:14px;font-weight:600;cursor:pointer;border:none;background:none;text-align:left;width:100%;
 }
-.nav-item:hover{background:rgba(255,255,255,.06);color:#fff;}
-.nav-item.active{background:var(--green-600);color:#fff;}
+.nav-item:hover{background:rgba(255,255,255,.08);color:#fff;}
+.nav-item.active{background:rgba(255,255,255,.14);color:#fff;box-shadow:inset 3px 0 0 var(--gold);}
 .nav-icon{font-size:16px;width:20px;text-align:center;}
 .sidebar-foot{padding-top:12px;border-top:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;gap:6px;}
 .shop-chip{font-size:12px;color:#a9d9c1;padding:0 8px 6px;line-height:1.4;}
@@ -97,16 +107,19 @@ a{color:inherit;}
 @media(max-width:980px){.grid-4{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:560px){.grid-4{grid-template-columns:1fr 1fr;}.grid-2{grid-template-columns:1fr;}}
 .card{background:var(--paper);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px 18px;box-shadow:var(--shadow);}
+.card.premium{background:linear-gradient(160deg,var(--paper) 60%,var(--green-50));border-color:var(--gold-light);}
 .card h3{margin:0 0 4px;font-size:12.5px;color:var(--ink-soft);font-weight:700;text-transform:none;}
-.stat-value{font-size:22px;font-weight:800;margin:2px 0 0;}
+.stat-value{font-size:23px;font-weight:800;margin:2px 0 0;background:var(--grad-green);-webkit-background-clip:text;background-clip:text;color:transparent;}
 .stat-sub{font-size:11.5px;color:var(--ink-faint);margin-top:2px;}
 .section-title{font-size:15px;font-weight:800;margin:26px 0 10px;display:flex;align-items:center;gap:8px;}
-.trophy-card{display:flex;align-items:center;gap:14px;padding:16px 18px;}
-.trophy-emoji{font-size:26px;}
+.trophy-card{display:flex;align-items:center;gap:14px;padding:16px 18px;background:linear-gradient(160deg,var(--paper),var(--gold-light) 220%);border-color:var(--gold-light);}
+.trophy-emoji{font-size:26px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.15));}
 .trophy-date{font-size:12.5px;color:var(--ink-soft);font-weight:600;}
-.trophy-amt{font-size:19px;font-weight:800;color:var(--green-700);}
-.btn{background:var(--green-700);color:#fff;border:none;padding:10px 16px;border-radius:10px;font-weight:700;font-size:13.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
-.btn:hover{background:var(--green-600);}
+.trophy-amt{font-size:19px;font-weight:800;color:var(--gold-dark);}
+.btn{background:var(--grad-green);color:#fff;border:none;padding:10px 16px;border-radius:10px;font-weight:700;font-size:13.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:0 2px 8px -2px rgba(10,61,38,.5);}
+.btn:hover{filter:brightness(1.08);}
+.btn:disabled{opacity:.6;cursor:default;}
+.btn-gold{background:var(--grad-gold);color:#3a2c05;box-shadow:0 2px 8px -2px rgba(138,109,26,.5);}
 .btn-outline{background:transparent;border:1px solid var(--border);color:var(--ink);}
 .btn-outline:hover{background:var(--green-100);}
 .btn-danger{background:var(--red-bg);color:var(--red);}
@@ -182,6 +195,47 @@ tbody tr:hover{background:var(--green-50);}
 .list-item:last-child{border-bottom:none;}
 .field-note{font-size:11px;color:var(--ink-faint);margin-top:4px;}
 .badge-dot{width:7px;height:7px;border-radius:99px;background:var(--red);display:inline-block;margin-right:5px;}
+
+/* ---- new premium/feature styles ---- */
+.combo-wrap{position:relative;}
+.combo-results{border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;max-height:220px;overflow-y:auto;background:var(--paper);box-shadow:var(--shadow-lg);position:relative;z-index:3;}
+.combo-item{padding:9px 12px;font-size:13px;cursor:pointer;border-bottom:1px solid var(--border);}
+.combo-item:last-child{border-bottom:none;}
+.combo-item:hover,.combo-item.hl{background:var(--green-50);}
+.combo-selected{display:flex;align-items:center;justify-content:space-between;background:var(--green-50);border:1px solid var(--gold-light);border-radius:9px;padding:9px 12px;margin-top:6px;font-size:13px;font-weight:700;}
+.progress-track{background:var(--green-100);border-radius:99px;height:10px;overflow:hidden;margin-top:6px;}
+.progress-fill{height:100%;background:var(--grad-gold);border-radius:99px;transition:width .3s ease;}
+.progress-fill.over{background:var(--grad-green);}
+.goal-row{margin-bottom:14px;}
+.goal-row:last-child{margin-bottom:0;}
+.goal-label{display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;color:var(--ink-soft);}
+.planner-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;align-items:flex-start;}
+.planner-item:last-child{border-bottom:none;}
+.planner-icon{font-size:16px;flex-shrink:0;}
+.planner-item b{display:block;margin-bottom:2px;}
+.planner-item.warn{color:var(--amber);}
+.planner-item.warn b{color:var(--amber);}
+.planner-item.good{color:var(--green-700);}
+.invoice-items{border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin:10px 0;}
+.invoice-item-row{display:grid;grid-template-columns:1fr 60px 90px 90px 30px;gap:6px;padding:8px 10px;align-items:center;border-bottom:1px solid var(--border);background:var(--paper);}
+.invoice-item-row:last-child{border-bottom:none;}
+.invoice-item-row input{padding:6px 8px;font-size:12.5px;}
+.invoice-item-row .ln-total{font-size:12.5px;font-weight:700;text-align:right;}
+.remove-line{background:var(--red-bg);color:var(--red);border:none;border-radius:6px;width:26px;height:26px;cursor:pointer;font-weight:800;}
+.invoice-preview{background:#fff;color:#1a2620;border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-lg);max-width:640px;margin:0 auto;}
+.invoice-preview .inv-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid var(--gold);padding-bottom:14px;margin-bottom:16px;}
+.invoice-preview h2{margin:0;font-size:20px;}
+.invoice-preview table{width:100%;border-collapse:collapse;margin-top:14px;}
+.invoice-preview th{background:var(--green-50);text-align:left;padding:8px;font-size:11.5px;text-transform:uppercase;color:var(--ink-soft);}
+.invoice-preview td{padding:8px;border-bottom:1px solid var(--border);font-size:13px;}
+.invoice-total-row td{font-weight:800;font-size:15px;border-top:2px solid var(--ink);border-bottom:none;}
+.import-drop{border:2px dashed var(--border);border-radius:var(--radius-md);padding:20px;text-align:center;color:var(--ink-soft);font-size:13px;cursor:pointer;}
+.import-drop:hover{border-color:var(--gold);}
+@media print{
+  body *{visibility:hidden;}
+  #printArea, #printArea *{visibility:visible;}
+  #printArea{position:absolute;left:0;top:0;width:100%;}
+}
 </style>
 </head>
 <body>
@@ -194,8 +248,8 @@ tbody tr:hover{background:var(--green-50);}
 /* ---------------- i18n ---------------- */
 var LANG = localStorage.getItem('ssr_lang') || 'en';
 var T = {
-  en:{app_name:"Shop Sales Record", tagline:"Taza Technology", dashboard:"Dashboard", quick_sale:"Quick Sale", sales:"Sales", calendar:"Calendar", products:"Products", stock_purchase:"Stock Purchase", expenses:"Expenses", reports:"Reports", settings:"Settings", logout:"Log out"},
-  am:{app_name:"የሽያጭ መዝገብ", tagline:"ታዛ ቴክኖሎጂ", dashboard:"ዳሽቦርድ", quick_sale:"ፈጣን ሽያጭ", sales:"ሽያጮች", calendar:"የቀን መቁጠሪያ", products:"ምርቶች", stock_purchase:"የስቶክ ግዢ", expenses:"ወጪዎች", reports:"ሪፖርቶች", settings:"ቅንብሮች", logout:"ውጣ"}
+  en:{app_name:"Shop Sales Record", tagline:"Taza Technology", dashboard:"Dashboard", quick_sale:"Quick Sale", sales:"Sales", invoice:"Invoice", calendar:"Calendar", products:"Products", stock_purchase:"Stock Purchase", expenses:"Expenses", reports:"Reports", settings:"Settings", logout:"Log out"},
+  am:{app_name:"የሽያጭ መዝገብ", tagline:"ታዛ ቴክኖሎጂ", dashboard:"ዳሽቦርድ", quick_sale:"ፈጣን ሽያጭ", sales:"ሽያጮች", invoice:"ደረሰኝ", calendar:"የቀን መቁጠሪያ", products:"ምርቶች", stock_purchase:"የስቶክ ግዢ", expenses:"ወጪዎች", reports:"ሪፖርቶች", settings:"ቅንብሮች", logout:"ውጣ"}
 };
 function tr(k){ return (T[LANG]&&T[LANG][k]) || T.en[k] || k; }
 
@@ -237,10 +291,13 @@ function friendlyAuthError(err){
 }
 
 /* live Firestore listeners for the logged-in shop */
-var UNSUB = {products:null, sales:null, stockPurchases:null, expenses:null};
+var UNSUB = {products:null, sales:null, stockPurchases:null, expenses:null, invoices:null, profile:null};
 function shopRef(){ return db.collection('shops').doc(STATE.session.userId); }
 function subscribeAll(uidStr){
   var base = db.collection('shops').doc(uidStr);
+  UNSUB.profile = base.onSnapshot(function(doc){
+    if(doc.exists){ STATE.shopProfile = doc.data(); render(); }
+  }, function(){});
   UNSUB.products = base.collection('products').onSnapshot(function(snap){
     STATE.data.products = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
     render();
@@ -255,6 +312,10 @@ function subscribeAll(uidStr){
   }, function(){});
   UNSUB.expenses = base.collection('expenses').onSnapshot(function(snap){
     STATE.data.expenses = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
+    render();
+  }, function(){});
+  UNSUB.invoices = base.collection('invoices').onSnapshot(function(snap){
+    STATE.data.invoices = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); }).sort(function(a,b){return (b.createdAt||'').localeCompare(a.createdAt||'');});
     render();
   }, function(){});
 }
@@ -297,6 +358,11 @@ var STATE = {
   reportRange:'today',
   reportCustomFrom:todayStr(),
   reportCustomTo:todayStr(),
+  dashboardPeriod:'today',
+  quickSaleQuery:'',
+  quickSaleSelectedId:'',
+  invoiceDraft:{customerName:'',phone:'',address:'',items:[{name:'',qty:1,unitPrice:0}]},
+  invoicePreview:null,
   sidebarOpen:false,
   modal:null /* {type,...} */
 };
@@ -509,6 +575,7 @@ var NAV = [
   {id:'dashboard', icon:'🏠', label:'dashboard'},
   {id:'quickSale', icon:'➕', label:'quick_sale'},
   {id:'sales', icon:'📋', label:'sales'},
+  {id:'invoice', icon:'🧾', label:'invoice'},
   {id:'calendar', icon:'📅', label:'calendar'},
   {id:'products', icon:'📦', label:'products'},
   {id:'stockPurchase', icon:'🛒', label:'stock_purchase'},
@@ -516,7 +583,7 @@ var NAV = [
   {id:'reports', icon:'📊', label:'reports'},
   {id:'settings', icon:'⚙️', label:'settings'}
 ];
-var VIEW_TITLES = {dashboard:'Dashboard',quickSale:'Quick Add Sale',sales:'Sales Record',calendar:'Sales Calendar',products:'Products',stockPurchase:'Stock Purchase',expenses:'Expenses',reports:'Reports',settings:'Settings'};
+var VIEW_TITLES = {dashboard:'Dashboard',quickSale:'Quick Add Sale',sales:'Sales Record',invoice:'Invoice Maker',calendar:'Sales Calendar',products:'Products',stockPurchase:'Stock Purchase',expenses:'Expenses',reports:'Reports',settings:'Settings'};
 
 function renderShell(){
   var u = currentUser();
@@ -557,6 +624,7 @@ function renderView(){
     case 'dashboard': return renderDashboard();
     case 'quickSale': return renderQuickSale();
     case 'sales': return renderSales();
+    case 'invoice': return renderInvoice();
     case 'calendar': return renderCalendar();
     case 'products': return renderProducts();
     case 'stockPurchase': return renderStockPurchase();
@@ -580,17 +648,19 @@ function periodBlock(label, stats){
     '</div>';
 }
 function renderDashboard(){
-  var t = todayStr();
-  var wkStart = isoDate(startOfWeek(new Date()));
-  var moStart = isoDate(startOfMonth(new Date()));
-  var yrStart = isoDate(startOfYear(new Date()));
-  var today = periodStats(t,t);
-  var week = periodStats(wkStart,t);
-  var month = periodStats(moStart,t);
-  var year = periodStats(yrStart,t);
+  var period = STATE.dashboardPeriod||'today';
+  var range = periodRangeFor(period);
+  var stats = periodStats(range.from, range.to);
   var lowStock = STATE.data.products.filter(function(p){ return (p.currentStock||0) <= (p.reorderLevel||0); });
   var tSales = topDay('sales');
   var tProfit = topDay('profit');
+  var goal = goalFor(period);
+  var pct = goal>0 ? Math.min(100, round2((stats.totalSales/goal)*100)) : null;
+
+  var labels = {today:'Today',week:'Weekly',month:'Monthly',year:'Yearly'};
+  var tabs = ['today','week','month','year'].map(function(p){
+    return '<button class="tab-btn'+(period===p?' active':'')+'" data-act="dash-period" data-period="'+p+'">'+labels[p]+'</button>';
+  }).join('');
 
   var html = '';
   if(lowStock.length){
@@ -599,17 +669,22 @@ function renderDashboard(){
       ' <button class="link-btn" data-nav="products" style="margin-left:auto;">View products</button></div>';
   }
 
-  html += '<div class="section-title">Today <span class="muted" style="font-weight:600;">— '+today.count+' sale'+(today.count!==1?'s':'')+'</span></div>'+
+  html += '<div class="tabs">'+tabs+'</div>';
+  html += '<div class="section-title">'+range.label+' <span class="muted" style="font-weight:600;">— '+stats.count+' sale'+(stats.count!==1?'s':'')+'</span></div>'+
     '<div class="grid grid-4">'+
-      statCard('Total Sales', fmtETB(today.totalSales))+
-      statCard('Gross Profit', fmtETB(today.gross))+
-      statCard('Expenses', fmtETB(today.expenses))+
-      statCard('Net Profit', fmtETB(today.net))+
+      statCard('Total Sales', fmtETB(stats.totalSales))+
+      statCard('Gross Profit', fmtETB(stats.gross))+
+      statCard('Expenses', fmtETB(stats.expenses))+
+      statCard('Net Profit', fmtETB(stats.net))+
     '</div>';
 
-  html += '<div class="section-title">This week</div>' + periodBlock('week',week);
-  html += '<div class="section-title">This month</div>' + periodBlock('month',month);
-  html += '<div class="section-title">This year</div>' + periodBlock('year',year);
+  if(goal>0){
+    html += '<div class="card premium" style="margin-top:14px;">'+
+      '<div class="goal-label"><span>🎯 '+range.label+' Sales Goal</span><b>'+fmtETB(stats.totalSales)+' / '+fmtETB(goal)+'</b></div>'+
+      '<div class="progress-track"><div class="progress-fill'+(pct>=100?' over':'')+'" style="width:'+pct+'%;"></div></div>'+
+      '<div class="stat-sub" style="margin-top:6px;">'+pct+'% of goal reached'+(pct>=100?' 🎉':'')+'</div>'+
+    '</div>';
+  }
 
   html += '<div class="section-title">Top records</div>'+
     '<div class="grid grid-2">'+
@@ -620,7 +695,72 @@ function renderDashboard(){
       (tProfit?('<div class="trophy-date">'+fmtDateLong(tProfit.date)+'</div><div class="trophy-amt">'+fmtETB(tProfit.amount)+'</div>'):'<div class="muted">No sales recorded yet</div>')+
       '</div></div>'+
     '</div>';
+
+  html += renderPlanner();
   return html;
+}
+
+function periodRangeFor(period){
+  var t = new Date();
+  if(period==='week') return {from:isoDate(startOfWeek(t)), to:todayStr(), label:'This Week'};
+  if(period==='month') return {from:isoDate(startOfMonth(t)), to:todayStr(), label:'This Month'};
+  if(period==='year') return {from:isoDate(startOfYear(t)), to:todayStr(), label:'This Year'};
+  return {from:todayStr(), to:todayStr(), label:'Today'};
+}
+function goalFor(period){
+  var g = STATE.shopProfile || {};
+  var map = {today:'dailyGoal', week:'weeklyGoal', month:'monthlyGoal', year:'yearlyGoal'};
+  return parseFloat(g[map[period]])||0;
+}
+
+function renderPlanner(){
+  var t = todayStr();
+  var todayStats = periodStats(t,t);
+  var moStart = isoDate(startOfMonth(new Date()));
+  var monthStats = periodStats(moStart, t);
+  var prevMonthAnchor = new Date(); prevMonthAnchor.setDate(1); prevMonthAnchor.setMonth(prevMonthAnchor.getMonth()-1);
+  var prevMoStart = isoDate(startOfMonth(prevMonthAnchor));
+  var prevMoEnd = isoDate(addDays(startOfMonth(new Date()), -1));
+  var prevMonthStats = periodStats(prevMoStart, prevMoEnd);
+  var lowStock = STATE.data.products.filter(function(p){ return (p.currentStock||0) <= (p.reorderLevel||0); });
+  var items = [];
+
+  if(todayStats.count===0){
+    items.push({icon:'📝', cls:'warn', title:'No sales logged today yet', text:'Remember to record every sale before closing up — even small ones add up in your reports.'});
+  } else {
+    items.push({icon:'✅', cls:'good', title:todayStats.count+' sale'+(todayStats.count!==1?'s':'')+' logged today', text:'Keep it up — total so far: '+fmtETB(todayStats.totalSales)+'.'});
+  }
+
+  if(lowStock.length){
+    items.push({icon:'📦', cls:'warn', title:lowStock.length+' product'+(lowStock.length>1?'s':'')+' low on stock', text:lowStock.slice(0,5).map(function(p){return p.name;}).join(', ')+' — consider restocking soon.'});
+  } else if(STATE.data.products.length){
+    items.push({icon:'📦', cls:'good', title:'Stock levels look healthy', text:'No products are at or below their reorder level right now.'});
+  }
+
+  var expenseRatio = monthStats.totalSales>0 ? round2((monthStats.expenses/monthStats.totalSales)*100) : 0;
+  if(monthStats.expenses>0 && expenseRatio>30){
+    items.push({icon:'💸', cls:'warn', title:'Expenses are '+expenseRatio+'% of this month\'s sales', text:'That is on the high side — review your expense categories for anything you can cut.'});
+  } else if(monthStats.expenses>0){
+    items.push({icon:'💸', cls:'good', title:'Expenses under control', text:'Running at '+expenseRatio+'% of this month\'s sales so far.'});
+  }
+
+  if(monthStats.totalSales>0){
+    var margin = round2((monthStats.net/monthStats.totalSales)*100);
+    items.push({icon: margin<0?'📉':'📈', cls: margin<0?'warn':'good', title:'This month\'s net margin: '+margin+'%', text: margin<0 ? 'You are running at a loss this month — check pricing and expenses.' : 'Net profit is '+fmtETB(monthStats.net)+' so far this month.'});
+  }
+
+  items.push({icon:'🗓️', cls:'', title:'Weekly routine', text:'Count physical stock, review your top-selling products, and reconcile cash with recorded sales.'});
+
+  var dayOfMonth = new Date().getDate();
+  var daysInThisMonth = new Date(new Date().getFullYear(), new Date().getMonth()+1, 0).getDate();
+  if(daysInThisMonth - dayOfMonth <= 3){
+    items.push({icon:'📊', cls:'warn', title:'Month-end is near', text:'Review your full Reports for the month, compare to last month ('+fmtETB(prevMonthStats.totalSales)+' in sales), and plan next month\'s goal.'});
+  }
+
+  return '<div class="section-title">🗓️ Store Success Planner</div>'+
+    '<div class="card">'+ items.map(function(i){
+      return '<div class="planner-item '+i.cls+'"><span class="planner-icon">'+i.icon+'</span><div><b>'+esc(i.title)+'</b><span class="muted">'+esc(i.text)+'</span></div></div>';
+    }).join('') +'</div>';
 }
 
 /* ---------------- QUICK SALE ---------------- */
@@ -637,17 +777,26 @@ function renderQuickSale(){
 
   var productFields;
   if(mode==='existing'){
-    var options = products.map(function(p){ return '<option value="'+p.id+'" data-cost="'+p.costPrice+'" data-sell="'+p.sellingPrice+'">'+esc(p.name)+' (stock: '+p.currentStock+')</option>'; }).join('');
-    productFields = '<label>Product</label><select name="productId" required>'+options+'</select>'+
+    var query = (STATE.quickSaleQuery||'').toLowerCase();
+    var selected = STATE.quickSaleSelectedId ? findProduct(STATE.quickSaleSelectedId) : null;
+    var matches = query ? products.filter(function(p){return p.name.toLowerCase().indexOf(query)>=0;}) : products;
+    productFields = '<label>Product</label>'+
+      '<input type="hidden" name="productId" value="'+(selected?selected.id:'')+'">'+
+      (!selected ? (
+        '<div class="combo-wrap">'+
+          '<input type="text" id="qsProductSearch" placeholder="Search product by name…" value="'+esc(STATE.quickSaleQuery||'')+'" autocomplete="off">'+
+          '<div class="combo-results">'+ (matches.length? matches.map(function(p){
+            return '<div class="combo-item" data-act="qs-pick-product" data-id="'+p.id+'">'+esc(p.name)+' <span class="muted">(stock: '+p.currentStock+')</span></div>';
+          }).join('') : '<div class="combo-item muted">No matching products</div>') +'</div>'+
+        '</div>'
+      ) : '<div class="combo-selected"><span>✓ '+esc(selected.name)+' — stock: '+selected.currentStock+'</span><button type="button" class="link-btn" data-act="qs-clear-product">Change</button></div>')+
       '<div class="form-row">'+
         '<div><label>Quantity</label><input type="number" name="quantity" min="1" step="1" value="1" required></div>'+
-        '<div><label>Cost price (per unit)</label><input type="number" name="costPrice" min="0" step="0.01" required id="qsCost"></div>'+
+        '<div><label>Cost price (per unit)</label><input type="number" name="costPrice" min="0" step="0.01" required id="qsCost" value="'+(selected?selected.costPrice:'')+'"></div>'+
       '</div>'+
-      '<label>Selling price (per unit)</label><input type="number" name="sellingPrice" min="0" step="0.01" required id="qsSell">';
+      '<label>Selling price (per unit)</label><input type="number" name="sellingPrice" min="0" step="0.01" required id="qsSell" value="'+(selected?selected.sellingPrice:'')+'">';
   } else {
-    var namesList = products.map(function(p){return '<option value="'+esc(p.name)+'">';}).join('');
-    productFields = '<label>Product name</label><input type="text" name="newProductName" list="qsProductNames" required placeholder="e.g. Coca-Cola 500ml">'+
-      '<datalist id="qsProductNames">'+namesList+'</datalist>'+
+    productFields = '<label>Product name</label><input type="text" name="newProductName" required placeholder="e.g. Coca-Cola 500ml" autocomplete="off">'+
       '<label>Category <span class="field-note" style="display:inline;margin:0;">(optional)</span></label><input type="text" name="newProductCategory" placeholder="Optional">'+
       '<div class="form-row">'+
         '<div><label>Quantity</label><input type="number" name="quantity" min="1" step="1" value="1" required></div>'+
@@ -721,6 +870,70 @@ function renderSales(){
     '<th>Date</th><th>Product</th><th>Qty</th><th>Cost</th><th>Sell</th><th>Total sales</th><th>COGS</th><th>Gross profit</th><th></th>'+
   '</tr></thead><tbody>'+rows+'</tbody></table></div>'
   ) : emptyState('📋','No sales match','Try clearing your filters, or record a new sale.'));
+}
+
+/* ---------------- INVOICE MAKER ---------------- */
+function renderInvoiceItemRow(item, idx){
+  var qty = item.qty||0, price = item.unitPrice||0;
+  var total = round2(qty*price);
+  return '<div class="invoice-item-row">'+
+    '<input type="text" id="invItemName_'+idx+'" placeholder="Item / product name" value="'+esc(item.name||'')+'" data-inv-field="name" data-idx="'+idx+'">'+
+    '<input type="number" id="invItemQty_'+idx+'" min="0" step="1" placeholder="Qty" value="'+qty+'" data-inv-field="qty" data-idx="'+idx+'">'+
+    '<input type="number" id="invItemPrice_'+idx+'" min="0" step="0.01" placeholder="Unit price" value="'+price+'" data-inv-field="unitPrice" data-idx="'+idx+'">'+
+    '<div class="ln-total">'+fmtETB(total)+'</div>'+
+    '<button type="button" class="remove-line" data-act="inv-remove-item" data-idx="'+idx+'">×</button>'+
+  '</div>';
+}
+function renderInvoice(){
+  if(STATE.invoicePreview) return renderInvoicePreview(STATE.invoicePreview);
+  var d = STATE.invoiceDraft;
+  var grandTotal = round2(d.items.reduce(function(a,it){return a+(it.qty||0)*(it.unitPrice||0);},0));
+  return '<div class="two-col">'+
+  '<div class="card">'+
+    '<h3 style="margin-bottom:10px;">Customer details</h3>'+
+    '<label>Customer name</label><input type="text" id="invCustomerName" value="'+esc(d.customerName)+'" placeholder="Customer name (optional)">'+
+    '<div class="form-row">'+
+      '<div><label>Phone</label><input type="text" id="invPhone" value="'+esc(d.phone)+'" placeholder="Optional"></div>'+
+      '<div><label>Address</label><input type="text" id="invAddress" value="'+esc(d.address)+'" placeholder="Optional"></div>'+
+    '</div>'+
+    '<h3 style="margin:18px 0 8px;">Items</h3>'+
+    '<div class="invoice-items">'+ d.items.map(renderInvoiceItemRow).join('') +'</div>'+
+    '<button type="button" class="btn btn-outline btn-sm" data-act="inv-add-item">➕ Add line</button>'+
+    '<div class="card" style="margin-top:14px;background:var(--green-50);border-style:dashed;display:flex;justify-content:space-between;align-items:center;">'+
+      '<span style="font-weight:700;">Grand total</span><span class="stat-value" style="font-size:18px;">'+fmtETB(grandTotal)+'</span>'+
+    '</div>'+
+    '<form id="invoiceForm"><button type="submit" class="btn btn-block" style="margin-top:16px;">🧾 Generate invoice preview</button></form>'+
+  '</div>'+
+  '<div class="card"><h3 style="margin-bottom:10px;">Recent invoices</h3>'+
+    ((STATE.data.invoices||[]).slice(0,8).map(function(inv){
+      return '<div class="list-item"><span>'+esc(inv.customerName||'Walk-in')+' · '+(inv.createdAt?fmtDateLong(inv.createdAt.slice(0,10)):'')+'</span><b>'+fmtETB(inv.total)+'</b></div>';
+    }).join('') || '<div class="muted">No invoices yet.</div>')+
+  '</div>'+
+  '</div>';
+}
+function renderInvoicePreview(inv){
+  var rows = inv.items.map(function(it){
+    return '<tr><td>'+esc(it.name)+'</td><td>'+it.qty+'</td><td>'+fmtETB(it.unitPrice)+'</td><td>'+fmtETB(round2(it.qty*it.unitPrice))+'</td></tr>';
+  }).join('');
+  var shop = currentUser()||{};
+  return '<div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">'+
+    '<button class="btn btn-outline btn-sm" data-act="inv-edit">← Edit</button>'+
+    '<button class="btn btn-gold btn-sm" data-act="inv-save-pdf">📥 Save PDF</button>'+
+    '<button class="btn btn-sm" data-act="inv-print">🖨️ Print</button>'+
+    '<button class="btn btn-outline btn-sm" data-act="inv-new">➕ New invoice</button>'+
+  '</div>'+
+  '<div id="printArea"><div class="invoice-preview">'+
+    '<div class="inv-head">'+
+      '<div><h2>'+esc(shop.shopName||'Shop')+'</h2><div class="muted">'+esc(shop.ownerName||'')+'</div></div>'+
+      '<div style="text-align:right;"><div style="font-weight:800;color:var(--gold-dark);">'+esc(inv.invoiceNo)+'</div><div class="muted">'+fmtDateLong(inv.createdAt.slice(0,10))+'</div></div>'+
+    '</div>'+
+    '<div style="margin-bottom:10px;"><b>Bill to:</b> '+esc(inv.customerName||'Walk-in customer')+
+      (inv.phone?' · '+esc(inv.phone):'')+(inv.address?'<br>'+esc(inv.address):'')+'</div>'+
+    '<table><thead><tr><th>Item</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead><tbody>'+rows+
+      '<tr class="invoice-total-row"><td colspan="3">TOTAL</td><td>'+fmtETB(inv.total)+'</td></tr>'+
+    '</tbody></table>'+
+    '<p class="muted" style="margin-top:20px;">Thank you for your business!</p>'+
+  '</div></div>';
 }
 
 /* ---------------- CALENDAR ---------------- */
@@ -799,7 +1012,12 @@ function renderProducts(){
       '</div></td>'+
     '</tr>';
   }).join('');
-  return '<div class="toolbar"><div></div><button class="btn" data-act="add-product">➕ Add product</button></div>'+
+  return '<div class="toolbar"><div></div><div style="display:flex;gap:8px;">'+
+      '<label class="btn btn-outline" for="importCsvInput" style="cursor:pointer;">📤 Import CSV</label>'+
+      '<input type="file" id="importCsvInput" accept=".csv" style="display:none;">'+
+      '<button class="btn" data-act="add-product">➕ Add product</button>'+
+    '</div></div>'+
+    '<p class="field-note" style="margin-bottom:12px;">CSV columns: Name, Category, Cost Price, Selling Price, Opening Stock, Reorder Level</p>'+
     (STATE.data.products.length ? (
     '<div class="table-wrap"><table><thead><tr>'+
       '<th>Name</th><th>Category</th><th>Cost</th><th>Sell</th><th>Opening</th><th>Current</th><th>Reorder</th><th>Status</th><th></th>'+
@@ -905,8 +1123,13 @@ function renderReports(){
       statCard('Net Profit', fmtETB(stats.net))+
       statCard('Number of Sales', stats.count)+
       statCard('Stock Purchased', fmtETB(stockP))+
-      '<div class="card" style="display:flex;align-items:center;justify-content:center;">'+
-        '<button class="btn btn-block" data-act="export-excel">📥 Export to Excel</button>'+
+      '<div class="card" style="display:flex;flex-direction:column;gap:6px;justify-content:center;">'+
+        '<div class="muted" style="font-size:11.5px;font-weight:700;">📥 Export report</div>'+
+        '<div style="display:flex;gap:6px;flex-wrap:wrap;">'+
+          '<button class="btn btn-sm" data-act="export-excel">Excel</button>'+
+          '<button class="btn btn-outline btn-sm" data-act="export-csv">CSV</button>'+
+          '<button class="btn btn-gold btn-sm" data-act="export-pdf">🧾 PDF</button>'+
+        '</div>'+
       '</div>'+
     '</div>'+
     '<div class="grid grid-2" style="margin-top:20px;">'+
@@ -917,20 +1140,37 @@ function renderReports(){
 
 /* ---------------- SETTINGS ---------------- */
 function renderSettings(){
-  var u = currentUser();
+  var u = currentUser() || {};
+  var goals = {
+    dailyGoal: u.dailyGoal||'', weeklyGoal: u.weeklyGoal||'', monthlyGoal: u.monthlyGoal||'', yearlyGoal: u.yearlyGoal||''
+  };
   return '<div class="two-col">'+
     '<div class="card"><h3 style="margin-bottom:10px;">Account</h3>'+
       '<div class="list-item"><span>Shop name</span><b>'+esc(u.shopName)+'</b></div>'+
       '<div class="list-item"><span>Owner</span><b>'+esc(u.ownerName)+'</b></div>'+
       '<div class="list-item"><span>Email</span><b>'+esc(u.email)+'</b></div>'+
-      '<div class="list-item"><span>Member since</span><b>'+fmtDateLong(u.createdAt.slice(0,10))+'</b></div>'+
+      '<div class="list-item"><span>Member since</span><b>'+(u.createdAt?fmtDateLong(u.createdAt.slice(0,10)):'—')+'</b></div>'+
       '<button class="btn btn-outline btn-block" style="margin-top:16px;" data-act="logout">🚪 Log out</button>'+
     '</div>'+
     '<div class="card"><h3 style="margin-bottom:10px;">Data & export</h3>'+
-      '<p class="muted">All data is stored locally on this device only — nothing is sent to the cloud.</p>'+
-      '<button class="btn btn-block" data-act="export-excel">📥 Export all data to Excel</button>'+
+      '<p class="muted">Your data is synced to your account in real time and works across every device you sign in on.</p>'+
+      '<div style="display:flex;gap:6px;flex-wrap:wrap;">'+
+        '<button class="btn btn-sm" data-act="export-excel">📊 Excel</button>'+
+        '<button class="btn btn-outline btn-sm" data-act="export-csv">📄 CSV</button>'+
+        '<button class="btn btn-gold btn-sm" data-act="export-pdf">🧾 PDF</button>'+
+      '</div>'+
       '<h3 style="margin:18px 0 6px;">Language</h3>'+
       '<button class="btn btn-outline btn-block" data-act="toggle-lang">'+(LANG==='en'?'Switch to አማርኛ':'Switch to English')+'</button>'+
+    '</div>'+
+    '<div class="card premium"><h3 style="margin-bottom:10px;">🎯 Sales Goals</h3>'+
+      '<p class="muted" style="margin-bottom:10px;">Set targets to track progress on your Dashboard.</p>'+
+      '<form id="goalsForm">'+
+        '<label>Daily goal (ETB)</label><input type="number" min="0" step="0.01" name="dailyGoal" value="'+esc(goals.dailyGoal)+'">'+
+        '<label>Weekly goal (ETB)</label><input type="number" min="0" step="0.01" name="weeklyGoal" value="'+esc(goals.weeklyGoal)+'">'+
+        '<label>Monthly goal (ETB)</label><input type="number" min="0" step="0.01" name="monthlyGoal" value="'+esc(goals.monthlyGoal)+'">'+
+        '<label>Yearly goal (ETB)</label><input type="number" min="0" step="0.01" name="yearlyGoal" value="'+esc(goals.yearlyGoal)+'">'+
+        '<button type="submit" class="btn btn-block" style="margin-top:16px;">Save goals</button>'+
+      '</form>'+
     '</div>'+
   '</div>';
 }
@@ -1014,7 +1254,6 @@ function bindEvents(){
   var qs = document.getElementById('quickSaleForm');
   if(qs){
     qs.addEventListener('submit', onQuickSale);
-    var prodSel = qs.querySelector('[name=productId]');
     var costI = qs.querySelector('#qsCost');
     var sellI = qs.querySelector('#qsSell');
     var qtyI = qs.querySelector('[name=quantity]');
@@ -1025,17 +1264,12 @@ function bindEvents(){
       document.getElementById('pvCogs').textContent = fmtETB(cogs);
       document.getElementById('pvGross').textContent = fmtETB(gross);
     }
-    if(prodSel){
-      var fillFromProduct = function(){
-        var opt = prodSel.options[prodSel.selectedIndex];
-        if(opt){ costI.value = opt.getAttribute('data-cost'); sellI.value = opt.getAttribute('data-sell'); }
-        updatePreview();
-      };
-      prodSel.addEventListener('change', fillFromProduct);
-      fillFromProduct();
-    }
     [costI,sellI,qtyI].forEach(function(i){ if(i) i.addEventListener('input', updatePreview); });
     updatePreview();
+    var qsSearch = qs.querySelector('#qsProductSearch');
+    if(qsSearch){
+      qsSearch.addEventListener('input', function(){ STATE.quickSaleQuery = qsSearch.value; render(); preserveFocus('qsProductSearch'); });
+    }
   }
 
   var stockForm = document.getElementById('stockForm');
@@ -1048,6 +1282,28 @@ function bindEvents(){
   if(editSaleForm) editSaleForm.addEventListener('submit', onSaveEditSale);
   var editExpenseForm = document.getElementById('editExpenseForm');
   if(editExpenseForm) editExpenseForm.addEventListener('submit', onSaveEditExpense);
+  var goalsForm = document.getElementById('goalsForm');
+  if(goalsForm) goalsForm.addEventListener('submit', onSaveGoals);
+  var importCsvInput = document.getElementById('importCsvInput');
+  if(importCsvInput) importCsvInput.addEventListener('change', onImportCsv);
+  var invoiceForm = document.getElementById('invoiceForm');
+  if(invoiceForm) invoiceForm.addEventListener('submit', onGenerateInvoice);
+  var invCustomerName = document.getElementById('invCustomerName');
+  if(invCustomerName) invCustomerName.addEventListener('input', function(){ STATE.invoiceDraft.customerName = invCustomerName.value; render(); preserveFocus('invCustomerName'); });
+  var invPhone = document.getElementById('invPhone');
+  if(invPhone) invPhone.addEventListener('input', function(){ STATE.invoiceDraft.phone = invPhone.value; render(); preserveFocus('invPhone'); });
+  var invAddress = document.getElementById('invAddress');
+  if(invAddress) invAddress.addEventListener('input', function(){ STATE.invoiceDraft.address = invAddress.value; render(); preserveFocus('invAddress'); });
+  app.querySelectorAll('[data-inv-field]').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var idx = parseInt(inp.getAttribute('data-idx'),10);
+      var field = inp.getAttribute('data-inv-field');
+      STATE.invoiceDraft.items[idx][field] = (field==='name') ? inp.value : (parseFloat(inp.value)||0);
+      var focusId = inp.id;
+      render();
+      preserveFocus(focusId);
+    });
+  });
 
   var salesSearch = document.getElementById('salesSearch');
   if(salesSearch) salesSearch.addEventListener('input', function(){ STATE.salesFilter.search = salesSearch.value; render(); preserveFocus('salesSearch'); });
@@ -1082,7 +1338,10 @@ function handleAction(act, el, ev){
   if(act==='cal-next'){ STATE.calMonthCursor = new Date(STATE.calMonthCursor.getFullYear(), STATE.calMonthCursor.getMonth()+1, 1); render(); return; }
   if(act==='select-cal-date'){ STATE.calSelectedDate = el.getAttribute('data-date'); render(); return; }
   if(act==='report-range'){ STATE.reportRange = el.getAttribute('data-range'); render(); return; }
-  if(act==='qs-mode'){ STATE.quickSaleMode = el.getAttribute('data-mode'); render(); return; }
+  if(act==='dash-period'){ STATE.dashboardPeriod = el.getAttribute('data-period'); render(); return; }
+  if(act==='qs-mode'){ STATE.quickSaleMode = el.getAttribute('data-mode'); STATE.quickSaleQuery=''; STATE.quickSaleSelectedId=''; render(); return; }
+  if(act==='qs-pick-product'){ STATE.quickSaleSelectedId = el.getAttribute('data-id'); STATE.quickSaleQuery=''; render(); return; }
+  if(act==='qs-clear-product'){ STATE.quickSaleSelectedId=''; STATE.quickSaleQuery=''; render(); return; }
   if(act==='add-product'){ STATE.modal={type:'product', data:{}}; render(); return; }
   if(act==='edit-product'){ var p=findProduct(el.getAttribute('data-id')); STATE.modal={type:'product', data:Object.assign({},p)}; render(); return; }
   if(act==='delete-product'){
@@ -1111,7 +1370,20 @@ function handleAction(act, el, ev){
     if(confirm('Delete this expense?')){ deleteExpenseDoc(el.getAttribute('data-id')).catch(showActionError); }
     return;
   }
-  if(act==='export-excel'){ exportExcel(); return; }
+  if(act==='export-excel'){ exportExcel().catch(showActionError); return; }
+  if(act==='export-csv'){ exportCSV().catch(showActionError); return; }
+  if(act==='export-pdf'){ exportPDF().catch(showActionError); return; }
+  if(act==='inv-add-item'){ STATE.invoiceDraft.items.push({name:'',qty:1,unitPrice:0}); render(); return; }
+  if(act==='inv-remove-item'){
+    var ridx=parseInt(el.getAttribute('data-idx'),10);
+    STATE.invoiceDraft.items.splice(ridx,1);
+    if(!STATE.invoiceDraft.items.length) STATE.invoiceDraft.items.push({name:'',qty:1,unitPrice:0});
+    render(); return;
+  }
+  if(act==='inv-edit'){ STATE.invoicePreview=null; render(); return; }
+  if(act==='inv-new'){ STATE.invoicePreview=null; STATE.invoiceDraft={customerName:'',phone:'',address:'',items:[{name:'',qty:1,unitPrice:0}]}; render(); return; }
+  if(act==='inv-print'){ window.print(); return; }
+  if(act==='inv-save-pdf'){ exportInvoicePDF(STATE.invoicePreview); return; }
 }
 function showActionError(err){ alert('Something went wrong: '+((err&&err.message)||err)); }
 
@@ -1197,6 +1469,7 @@ async function onQuickSale(ev){
       }
     } else {
       productId = fd.get('productId');
+      if(!productId){ throw new Error('Please search and select a product first.'); }
       var p = findProduct(productId);
       productName = p ? p.name : '';
     }
@@ -1286,6 +1559,118 @@ async function onSaveEditExpense(ev){
   }catch(err){ showActionError(err); }
 }
 
+async function onSaveGoals(ev){
+  ev.preventDefault();
+  var fd = new FormData(ev.target);
+  var fields = {};
+  ['dailyGoal','weeklyGoal','monthlyGoal','yearlyGoal'].forEach(function(k){
+    var v = fd.get(k);
+    fields[k] = (v===''||v===null) ? 0 : parseFloat(v);
+  });
+  try{
+    await shopRef().update(fields);
+    STATE.shopProfile = Object.assign({}, STATE.shopProfile, fields);
+    render();
+  }catch(err){ showActionError(err); }
+}
+
+async function onImportCsv(ev){
+  var file = ev.target.files && ev.target.files[0];
+  if(!file) return;
+  if(typeof Papa === 'undefined'){ alert('CSV import library failed to load. Check your connection and try again.'); return; }
+  Papa.parse(file, {
+    header:true, skipEmptyLines:true,
+    complete: async function(results){
+      var rows = results.data;
+      var added = 0, skipped = 0;
+      for(var i=0;i<rows.length;i++){
+        var r = rows[i];
+        var name = (r['Name']||r['name']||'').trim();
+        if(!name) continue;
+        var exists = STATE.data.products.some(function(p){ return p.name.toLowerCase()===name.toLowerCase(); });
+        if(exists){ skipped++; continue; }
+        try{
+          await saveProductDoc({
+            name:name,
+            category:(r['Category']||r['category']||'').trim(),
+            costPrice:parseFloat(r['Cost Price']||r['costPrice']||r['Cost price']||0)||0,
+            sellingPrice:parseFloat(r['Selling Price']||r['sellingPrice']||r['Selling price']||0)||0,
+            openingStock:parseFloat(r['Opening Stock']||r['openingStock']||r['Opening stock']||0)||0,
+            currentStock:parseFloat(r['Opening Stock']||r['openingStock']||r['Opening stock']||0)||0,
+            reorderLevel:parseFloat(r['Reorder Level']||r['reorderLevel']||r['Reorder level']||0)||0
+          }, null);
+          added++;
+        }catch(e){ /* skip row on error */ }
+      }
+      ev.target.value = '';
+      alert(added+' product(s) imported.'+(skipped?(' '+skipped+' skipped (already exist).'):''));
+    },
+    error: function(){ alert('Could not read that CSV file.'); ev.target.value=''; }
+  });
+}
+
+async function onGenerateInvoice(ev){
+  ev.preventDefault();
+  var d = STATE.invoiceDraft;
+  var items = d.items.filter(function(it){ return (it.name||'').trim() && (it.qty||0)>0; }).map(function(it){
+    return {name:it.name.trim(), qty:it.qty, unitPrice:it.unitPrice, lineTotal:round2(it.qty*it.unitPrice)};
+  });
+  if(!items.length){ alert('Add at least one item with a name and quantity.'); return; }
+  var total = round2(items.reduce(function(a,it){return a+it.lineTotal;},0));
+  var invoiceNo = 'INV-'+String((STATE.data.invoices||[]).length+1).padStart(4,'0');
+  var invoice = {
+    invoiceNo: invoiceNo,
+    customerName: d.customerName||'', phone: d.phone||'', address: d.address||'',
+    items: items, total: total,
+    createdAt: new Date().toISOString()
+  };
+  try{
+    var ref = await shopRef().collection('invoices').add(invoice);
+    STATE.invoicePreview = Object.assign({id:ref.id}, invoice);
+    render();
+  }catch(err){ showActionError(err); }
+}
+
+function exportInvoicePDF(inv){
+  if(!inv) return;
+  if(typeof window.jspdf === 'undefined'){ alert('PDF export library failed to load. Check your connection and try again.'); return; }
+  var shop = currentUser() || {};
+  var doc = new window.jspdf.jsPDF();
+
+  doc.setFontSize(18); doc.setTextColor(20,108,67);
+  doc.text(shop.shopName || 'Shop', 14, 20);
+  doc.setFontSize(10); doc.setTextColor(90,90,90);
+  if(shop.ownerName) doc.text(shop.ownerName, 14, 26);
+
+  doc.setFontSize(12); doc.setTextColor(138,109,26);
+  doc.text(inv.invoiceNo, 196, 20, {align:'right'});
+  doc.setFontSize(9); doc.setTextColor(90,90,90);
+  doc.text(fmtDateLong(inv.createdAt.slice(0,10)), 196, 26, {align:'right'});
+
+  doc.setDrawColor(201,162,39); doc.setLineWidth(0.8); doc.line(14,31,196,31);
+
+  doc.setFontSize(10); doc.setTextColor(20,30,25);
+  var billTo = 'Bill to: '+(inv.customerName||'Walk-in customer');
+  doc.text(billTo, 14, 39);
+  var y2 = 45;
+  if(inv.phone){ doc.text('Phone: '+inv.phone, 14, y2); y2+=5; }
+  if(inv.address){ doc.text('Address: '+inv.address, 14, y2); y2+=5; }
+
+  doc.autoTable({
+    startY: y2+4,
+    head: [['Item','Qty','Unit Price','Total']],
+    body: inv.items.map(function(it){ return [it.name, String(it.qty), fmtETB(it.unitPrice), fmtETB(it.lineTotal)]; }),
+    foot: [['','', 'TOTAL', fmtETB(inv.total)]],
+    theme:'grid', headStyles:{fillColor:[20,108,67]}, footStyles:{fillColor:[201,162,39], textColor:[40,30,5], fontStyle:'bold'}, styles:{fontSize:10}
+  });
+
+  var endY = doc.lastAutoTable.finalY + 14;
+  doc.setFontSize(9); doc.setTextColor(120,120,120);
+  doc.text('Thank you for your business!', 14, endY);
+
+  doc.save(inv.invoiceNo+'.pdf');
+}
+
 /* ---------------- EXCEL EXPORT ---------------- */
 async function exportExcel(){
   if(typeof XLSX === 'undefined'){ alert('Excel export library failed to load. Check your connection and try again.'); return; }
@@ -1328,8 +1713,10 @@ async function exportExcel(){
 
   var wbout = XLSX.write(wb, {bookType:'xlsx', type:'array'});
   var blob = new Blob([wbout], {type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-  var filename = 'shop-sales-record-'+todayStr()+'.xlsx';
+  await saveBlob(blob, 'shop-sales-record-'+todayStr()+'.xlsx');
+}
 
+async function saveBlob(blob, filename){
   try{
     var downloads = window.claude ? await window.claude.use('downloads') : null;
     if(downloads){
@@ -1350,13 +1737,90 @@ function fallbackDownload(blob, filename){
   setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
 }
 
+function csvRow(arr){
+  return arr.map(function(v){
+    v = (v===undefined||v===null)?'':String(v);
+    if(/[",\n]/.test(v)) v = '"'+v.replace(/"/g,'""')+'"';
+    return v;
+  }).join(',');
+}
+async function exportCSV(){
+  var lines = [];
+  lines.push('SALES');
+  lines.push(csvRow(['Date','Product','Quantity','Cost Price','Selling Price','Total Sales','COGS','Gross Profit']));
+  STATE.data.sales.slice().sort(function(a,b){return a.date.localeCompare(b.date);}).forEach(function(s){
+    lines.push(csvRow([s.date,s.productName,s.quantity,s.costPrice,s.sellingPrice,s.totalSales,s.cogs,s.grossProfit]));
+  });
+  lines.push(''); lines.push('EXPENSES');
+  lines.push(csvRow(['Date','Category','Description','Amount']));
+  STATE.data.expenses.slice().sort(function(a,b){return a.date.localeCompare(b.date);}).forEach(function(e){
+    lines.push(csvRow([e.date,e.category,e.description,e.amount]));
+  });
+  lines.push(''); lines.push('STOCK PURCHASES');
+  lines.push(csvRow(['Date','Product','Quantity','Unit Cost','Total Cost','Supplier']));
+  STATE.data.stockPurchases.slice().sort(function(a,b){return a.date.localeCompare(b.date);}).forEach(function(sp){
+    lines.push(csvRow([sp.date,sp.productName,sp.quantity,sp.unitCost,sp.totalCost,sp.supplier]));
+  });
+  lines.push(''); lines.push('PRODUCTS');
+  lines.push(csvRow(['Name','Category','Cost Price','Selling Price','Opening Stock','Current Stock','Reorder Level']));
+  STATE.data.products.forEach(function(p){
+    lines.push(csvRow([p.name,p.category,p.costPrice,p.sellingPrice,p.openingStock,p.currentStock,p.reorderLevel]));
+  });
+  var csv = '\uFEFF'+lines.join('\r\n');
+  var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  await saveBlob(blob, 'shop-sales-record-'+todayStr()+'.csv');
+}
+
+async function exportPDF(){
+  if(typeof window.jspdf === 'undefined'){ alert('PDF export library failed to load. Check your connection and try again.'); return; }
+  var range = reportRangeDates();
+  var stats = periodStats(range.from, range.to);
+  var salesInR = salesInRange(range.from, range.to).slice().sort(function(a,b){return a.date.localeCompare(b.date);});
+  var shop = currentUser() || {};
+  var doc = new window.jspdf.jsPDF();
+
+  doc.setFontSize(16); doc.setTextColor(20,108,67);
+  doc.text(shop.shopName || 'Shop Sales Record', 14, 18);
+  doc.setFontSize(10); doc.setTextColor(90,90,90);
+  doc.text('Report: '+range.from+' to '+range.to, 14, 25);
+  doc.text('Generated: '+fmtDateLong(todayStr()), 14, 30);
+
+  doc.autoTable({
+    startY: 36,
+    head: [['Metric','Value']],
+    body: [
+      ['Total Sales', fmtETB(stats.totalSales)],
+      ['COGS', fmtETB(stats.cogs)],
+      ['Gross Profit', fmtETB(stats.gross)],
+      ['Expenses', fmtETB(stats.expenses)],
+      ['Net Profit', fmtETB(stats.net)],
+      ['Number of Sales', String(stats.count)]
+    ],
+    theme:'striped', headStyles:{fillColor:[20,108,67]}, styles:{fontSize:10}
+  });
+
+  var nextY = doc.lastAutoTable.finalY + 10;
+  doc.setFontSize(12); doc.setTextColor(20,30,25);
+  doc.text('Sales detail', 14, nextY);
+
+  doc.autoTable({
+    startY: nextY+4,
+    head: [['Date','Product','Qty','Unit Price','Total Price']],
+    body: salesInR.map(function(s){ return [fmtDateLong(s.date), s.productName, String(s.quantity), fmtETB(s.sellingPrice), fmtETB(s.totalSales)]; }),
+    foot: [['','','', 'TOTAL', fmtETB(stats.totalSales)]],
+    theme:'grid', headStyles:{fillColor:[20,108,67]}, footStyles:{fillColor:[201,162,39], textColor:[40,30,5], fontStyle:'bold'}, styles:{fontSize:9}
+  });
+
+  doc.save('shop-sales-record-'+todayStr()+'.pdf');
+}
+
 /* ---------------- init ---------------- */
 if(FIREBASE_OK){
   auth.onAuthStateChanged(async function(user){
     unsubscribeAll();
     if(user){
       STATE.session = {userId:user.uid};
-      STATE.data = {products:[],sales:[],stockPurchases:[],expenses:[]};
+      STATE.data = {products:[],sales:[],stockPurchases:[],expenses:[],invoices:[]};
       try{
         var profSnap = await db.collection('shops').doc(user.uid).get();
         STATE.shopProfile = profSnap.exists ? profSnap.data() : {shopName:'',ownerName:'',email:user.email,createdAt:new Date().toISOString()};
