@@ -16,11 +16,11 @@
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
 <style>
 :root{
-  --green-900:#0a3d26;
-  --green-700:#146c43;
-  --green-600:#1a8a58;
-  --green-100:#e8f5ee;
-  --green-50:#f4faf6;
+  --green-900:#073b3a;
+  --green-700:#0e7c72;
+  --green-600:#14a396;
+  --green-100:#e3f5f2;
+  --green-50:#f5fbfa;
   --gold:#c9a227;
   --gold-light:#f7ecc6;
   --gold-dark:#8a6d1a;
@@ -46,12 +46,12 @@
 :root:not([data-theme="light"]){ }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --paper:#0f1a14; --green-50:#0f1a14; --green-100:#152a20; --ink:#eaf3ee; --ink-soft:#a9bcb2; --ink-faint:#71877b;
+    --paper:#0d1917; --green-50:#0d1917; --green-100:#132825; --ink:#eaf3ee; --ink-soft:#a9bcb2; --ink-faint:#71877b;
     --border:#25392f; --amber-bg:#2b2210; --red-bg:#2c1717; --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
   }
 }
 :root[data-theme="dark"]{
-  --paper:#0f1a14; --green-50:#0f1a14; --green-100:#152a20; --ink:#eaf3ee; --ink-soft:#a9bcb2; --ink-faint:#71877b;
+  --paper:#0d1917; --green-50:#0d1917; --green-100:#132825; --ink:#eaf3ee; --ink-soft:#a9bcb2; --ink-faint:#71877b;
   --border:#25392f; --amber-bg:#2b2210; --red-bg:#2c1717; --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
 }
 *{box-sizing:border-box;}
@@ -86,7 +86,9 @@ a{color:inherit;}
 }
 .nav-item:hover{background:rgba(255,255,255,.08);color:#fff;}
 .nav-item.active{background:rgba(255,255,255,.14);color:#fff;box-shadow:inset 3px 0 0 var(--gold);}
-.nav-icon{font-size:16px;width:20px;text-align:center;}
+.nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:.92;}
+.nav-svg{width:18px;height:18px;}
+.nav-item.active .nav-icon{opacity:1;}
 .sidebar-foot{padding-top:12px;border-top:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;gap:6px;}
 .shop-chip{font-size:12px;color:#a9d9c1;padding:0 8px 6px;line-height:1.4;}
 .shop-chip b{display:block;color:#fff;font-size:13px;}
@@ -110,6 +112,11 @@ a{color:inherit;}
 .card.premium{background:linear-gradient(160deg,var(--paper) 60%,var(--green-50));border-color:var(--gold-light);}
 .card h3{margin:0 0 4px;font-size:12.5px;color:var(--ink-soft);font-weight:700;text-transform:none;}
 .stat-value{font-size:23px;font-weight:800;margin:2px 0 0;background:var(--grad-green);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.stat-value.sv-black{background:none;-webkit-text-fill-color:initial;color:var(--ink);}
+.stat-value.sv-green{background:none;-webkit-text-fill-color:initial;color:#0e9c5a;}
+.stat-value.sv-red{background:none;-webkit-text-fill-color:initial;color:var(--red);}
+.stat-value.sv-yellow{background:none;-webkit-text-fill-color:initial;color:#c99a12;}
+.stat-value.sv-blue{background:none;-webkit-text-fill-color:initial;color:#2566a8;}
 .stat-sub{font-size:11.5px;color:var(--ink-faint);margin-top:2px;}
 .section-title{font-size:15px;font-weight:800;margin:26px 0 10px;display:flex;align-items:center;gap:8px;}
 .trophy-card{display:flex;align-items:center;gap:14px;padding:16px 18px;background:linear-gradient(160deg,var(--paper),var(--gold-light) 220%);border-color:var(--gold-light);}
@@ -218,6 +225,15 @@ tbody tr:hover{background:var(--green-50);}
 .planner-item.good{color:var(--green-700);}
 .invoice-items{border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin:10px 0;}
 .invoice-item-row{display:grid;grid-template-columns:1fr 60px 90px 90px 30px;gap:6px;padding:8px 10px;align-items:center;border-bottom:1px solid var(--border);background:var(--paper);}
+@media(max-width:640px){
+  .invoice-item-row{grid-template-columns:1fr 1fr;grid-template-areas:"name name" "qty cost" "total remove";row-gap:6px;padding:10px;}
+  .invoice-item-row input:nth-child(1){grid-area:name;}
+  .invoice-item-row input:nth-child(2){grid-area:qty;}
+  .invoice-item-row input:nth-child(3){grid-area:cost;}
+  .invoice-item-row .ln-total{grid-area:total;text-align:left;}
+  .invoice-item-row .remove-line{grid-area:remove;justify-self:end;}
+  .combo-results{max-height:180px;}
+}
 .invoice-item-row:last-child{border-bottom:none;}
 .invoice-item-row input{padding:6px 8px;font-size:12.5px;}
 .invoice-item-row .ln-total{font-size:12.5px;font-weight:700;text-align:right;}
@@ -232,9 +248,11 @@ tbody tr:hover{background:var(--green-50);}
 .import-drop{border:2px dashed var(--border);border-radius:var(--radius-md);padding:20px;text-align:center;color:var(--ink-soft);font-size:13px;cursor:pointer;}
 .import-drop:hover{border-color:var(--gold);}
 @media print{
+  @page{ size: A4; margin: 15mm; }
   body *{visibility:hidden;}
   #printArea, #printArea *{visibility:visible;}
   #printArea{position:absolute;left:0;top:0;width:100%;}
+  .invoice-preview{box-shadow:none;max-width:none;width:100%;}
 }
 </style>
 </head>
@@ -363,6 +381,8 @@ var STATE = {
   quickSaleSelectedId:'',
   invoiceDraft:{customerName:'',phone:'',address:'',items:[{name:'',qty:1,unitPrice:0}]},
   invoicePreview:null,
+  stockMode:'single',
+  bulkStockDraft:{date:todayStr(),supplier:'',notes:'',rows:[{name:'',qty:1,unitCost:0}]},
   sidebarOpen:false,
   modal:null /* {type,...} */
 };
@@ -572,24 +592,41 @@ function renderSignupForm(){
 
 /* ---------------- SHELL ---------------- */
 var NAV = [
-  {id:'dashboard', icon:'🏠', label:'dashboard'},
-  {id:'quickSale', icon:'➕', label:'quick_sale'},
-  {id:'sales', icon:'📋', label:'sales'},
-  {id:'invoice', icon:'🧾', label:'invoice'},
-  {id:'calendar', icon:'📅', label:'calendar'},
-  {id:'products', icon:'📦', label:'products'},
-  {id:'stockPurchase', icon:'🛒', label:'stock_purchase'},
-  {id:'expenses', icon:'💸', label:'expenses'},
-  {id:'reports', icon:'📊', label:'reports'},
-  {id:'settings', icon:'⚙️', label:'settings'}
+  {id:'dashboard', icon:'home', label:'dashboard'},
+  {id:'quickSale', icon:'plus', label:'quick_sale'},
+  {id:'sales', icon:'list', label:'sales'},
+  {id:'invoice', icon:'receipt', label:'invoice'},
+  {id:'calendar', icon:'calendar', label:'calendar'},
+  {id:'products', icon:'box', label:'products'},
+  {id:'stockPurchase', icon:'cart', label:'stock_purchase'},
+  {id:'expenses', icon:'dollar', label:'expenses'},
+  {id:'reports', icon:'chart', label:'reports'},
+  {id:'settings', icon:'gear', label:'settings'}
 ];
 var VIEW_TITLES = {dashboard:'Dashboard',quickSale:'Quick Add Sale',sales:'Sales Record',invoice:'Invoice Maker',calendar:'Sales Calendar',products:'Products',stockPurchase:'Stock Purchase',expenses:'Expenses',reports:'Reports',settings:'Settings'};
+
+function navIcon(name){
+  var paths = {
+    home: '<path d="M3 9l9-7 9 7"/><path d="M9 22V12h6v10"/><path d="M5 10v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10"/>',
+    plus: '<circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>',
+    list: '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/>',
+    receipt: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>',
+    calendar: '<rect x="3" y="4" width="18" height="18" rx="3" ry="3"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+    box: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',
+    cart: '<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>',
+    dollar: '<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+    chart: '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+    gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+    logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>'
+  };
+  return '<svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(paths[name]||'')+'</svg>';
+}
 
 function renderShell(){
   var u = currentUser();
   var navHtml = NAV.map(function(n){
     return '<button class="nav-item'+(STATE.view===n.id?' active':'')+'" data-nav="'+n.id+'">'+
-      '<span class="nav-icon">'+n.icon+'</span><span'+(LANG==='am'?' lang-am':'')+'>'+esc(tr(n.label))+'</span></button>';
+      '<span class="nav-icon">'+navIcon(n.icon)+'</span><span'+(LANG==='am'?' lang-am':'')+'>'+esc(tr(n.label))+'</span></button>';
   }).join('');
   return ''+
   '<div class="sidebar-scrim'+(STATE.sidebarOpen?' show':'')+'" data-act="close-sidebar"></div>'+
@@ -599,7 +636,7 @@ function renderShell(){
       '<div class="nav-group">'+navHtml+'</div>'+
       '<div class="sidebar-foot">'+
         '<div class="shop-chip"><b>'+esc(u?u.shopName:'')+'</b>'+esc(u?u.ownerName:'')+'</div>'+
-        '<button class="nav-item" data-act="logout"><span class="nav-icon">🚪</span><span>'+esc(tr('logout'))+'</span></button>'+
+        '<button class="nav-item" data-act="logout"><span class="nav-icon">'+navIcon('logout')+'</span><span>'+esc(tr('logout'))+'</span></button>'+
       '</div>'+
     '</div>'+
     '<div class="main">'+
@@ -636,16 +673,14 @@ function renderView(){
 }
 
 /* ---------------- DASHBOARD ---------------- */
-function statCard(title,value,sub){
-  return '<div class="card"><h3>'+esc(title)+'</h3><div class="stat-value">'+esc(value)+'</div>'+(sub?'<div class="stat-sub">'+esc(sub)+'</div>':'')+'</div>';
+function statCard(title,value,sub,colorClass){
+  return '<div class="card"><h3>'+esc(title)+'</h3><div class="stat-value '+(colorClass||'')+'">'+esc(value)+'</div>'+(sub?'<div class="stat-sub">'+esc(sub)+'</div>':'')+'</div>';
 }
-function periodBlock(label, stats){
-  return '<div class="grid grid-4">'+
-    statCard('Total Sales', fmtETB(stats.totalSales))+
-    statCard('Gross Profit', fmtETB(stats.gross))+
-    statCard('Expenses', fmtETB(stats.expenses))+
-    statCard('Net Profit', fmtETB(stats.net))+
-    '</div>';
+function netProfitColorClass(pct, net){
+  if(pct===null || pct===undefined) return net>=0 ? 'sv-green' : 'sv-red';
+  if(pct>=100) return 'sv-green';
+  if(pct>=50) return 'sv-blue';
+  return 'sv-yellow';
 }
 function renderDashboard(){
   var period = STATE.dashboardPeriod||'today';
@@ -672,10 +707,10 @@ function renderDashboard(){
   html += '<div class="tabs">'+tabs+'</div>';
   html += '<div class="section-title">'+range.label+' <span class="muted" style="font-weight:600;">— '+stats.count+' sale'+(stats.count!==1?'s':'')+'</span></div>'+
     '<div class="grid grid-4">'+
-      statCard('Total Sales', fmtETB(stats.totalSales))+
-      statCard('Gross Profit', fmtETB(stats.gross))+
-      statCard('Expenses', fmtETB(stats.expenses))+
-      statCard('Net Profit', fmtETB(stats.net))+
+      statCard('Total Sales', fmtETB(stats.totalSales), null, 'sv-black')+
+      statCard('Gross Profit', fmtETB(stats.gross), null, 'sv-green')+
+      statCard('Expenses', fmtETB(stats.expenses), null, 'sv-red')+
+      statCard('Net Profit', fmtETB(stats.net), null, netProfitColorClass(pct, stats.net))+
     '</div>';
 
   if(goal>0){
@@ -924,7 +959,7 @@ function renderInvoicePreview(inv){
   '</div>'+
   '<div id="printArea"><div class="invoice-preview">'+
     '<div class="inv-head">'+
-      '<div><h2>'+esc(shop.shopName||'Shop')+'</h2><div class="muted">'+esc(shop.ownerName||'')+'</div></div>'+
+      '<div><h2>'+esc(shop.shopName||'Shop')+'</h2><div class="muted">'+esc(shop.ownerName||'')+'</div>'+(shop.shopAddress?'<div class="muted">'+esc(shop.shopAddress)+'</div>':'')+(shop.shopPhone?'<div class="muted">'+esc(shop.shopPhone)+'</div>':'')+'</div>'+
       '<div style="text-align:right;"><div style="font-weight:800;color:var(--gold-dark);">'+esc(inv.invoiceNo)+'</div><div class="muted">'+fmtDateLong(inv.createdAt.slice(0,10))+'</div></div>'+
     '</div>'+
     '<div style="margin-bottom:10px;"><b>Bill to:</b> '+esc(inv.customerName||'Walk-in customer')+
@@ -1027,16 +1062,47 @@ function renderProducts(){
 
 /* ---------------- STOCK PURCHASE ---------------- */
 function renderStockPurchase(){
-  if(!STATE.data.products.length){
-    return emptyState('📦','No products yet','Add a product first, then record stock purchases against it.', 'products','Go to Products');
-  }
-  var options = STATE.data.products.map(function(p){return '<option value="'+p.id+'">'+esc(p.name)+'</option>';}).join('');
+  var mode = STATE.stockMode||'single';
+  var tabs = '<div class="tabs" style="margin-bottom:14px;">'+
+      '<button type="button" class="tab-btn'+(mode==='single'?' active':'')+'" data-act="stock-mode" data-mode="single">Single item</button>'+
+      '<button type="button" class="tab-btn'+(mode==='bulk'?' active':'')+'" data-act="stock-mode" data-mode="bulk">📦 Bulk entry</button>'+
+    '</div>';
+
   var list = STATE.data.stockPurchases.slice().sort(function(a,b){return b.date.localeCompare(a.date);});
   var rows = list.map(function(sp){
     return '<tr><td>'+fmtDateLong(sp.date)+'</td><td>'+esc(sp.productName)+'</td><td>'+sp.quantity+'</td><td>'+fmtETB(sp.unitCost)+'</td><td>'+fmtETB(sp.totalCost)+'</td><td>'+esc(sp.supplier||'—')+'</td>'+
       '<td><button class="btn btn-danger btn-sm" data-act="delete-stock" data-id="'+sp.id+'">Delete</button></td></tr>';
   }).join('');
-  return '<div class="two-col">'+
+  var historyCard = '<div class="card"><h3 style="margin-bottom:10px;">Purchase history</h3>'+
+    (list.length? '<div class="table-wrap" style="border:none;"><table style="min-width:0;"><thead><tr><th>Date</th><th>Product</th><th>Qty</th><th>Unit cost</th><th>Total</th><th>Supplier</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>' : '<div class="muted">No purchases recorded yet.</div>')+
+    '</div>';
+
+  if(mode==='bulk'){
+    var d = STATE.bulkStockDraft;
+    var itemRows = d.rows.map(renderBulkStockRow).join('');
+    return tabs + '<div class="two-col">'+
+      '<div class="card"><h3 style="margin-bottom:10px;">📦 Bulk stock entry</h3>'+
+        '<p class="field-note" style="margin-bottom:10px;">Register a wholesale delivery of several products at once. New product names are created automatically.</p>'+
+        '<form id="bulkStockForm">'+
+        '<div class="form-row">'+
+          '<div><label>Date</label><input type="date" id="bulkDate" value="'+esc(d.date)+'" max="'+todayStr()+'"></div>'+
+          '<div><label>Supplier / source</label><input type="text" id="bulkSupplier" value="'+esc(d.supplier)+'" placeholder="Optional"></div>'+
+        '</div>'+
+        '<label style="margin-top:14px;">Items</label>'+
+        '<div class="invoice-items">'+itemRows+'</div>'+
+        '<button type="button" class="btn btn-outline btn-sm" data-act="bulk-add-row" style="margin-top:6px;">+ Add another item</button>'+
+        '<label>Notes</label><textarea id="bulkNotes" rows="2" placeholder="Optional">'+esc(d.notes)+'</textarea>'+
+        '<button type="submit" class="btn btn-block" style="margin-top:16px;">📦 Save all items</button>'+
+        '<p class="field-note">Stock purchases increase product stock but are not deducted from Net Profit.</p>'+
+        '</form>'+
+      '</div>'+ historyCard +'</div>';
+  }
+
+  if(!STATE.data.products.length){
+    return tabs + emptyState('📦','No products yet','Add a product first, or switch to Bulk entry to add new ones on the fly.', 'products','Go to Products');
+  }
+  var options = STATE.data.products.map(function(p){return '<option value="'+p.id+'">'+esc(p.name)+'</option>';}).join('');
+  return tabs + '<div class="two-col">'+
   '<div class="card"><h3 style="margin-bottom:10px;">Record stock purchase</h3>'+
   '<form id="stockForm">'+
     '<label>Date</label><input type="date" name="date" value="'+todayStr()+'" max="'+todayStr()+'" required>'+
@@ -1048,9 +1114,19 @@ function renderStockPurchase(){
     '<button type="submit" class="btn btn-block" style="margin-top:16px;">🛒 Save purchase</button>'+
     '<p class="field-note">Stock purchases increase product stock but are not deducted from Net Profit.</p>'+
   '</form></div>'+
-  '<div class="card"><h3 style="margin-bottom:10px;">Purchase history</h3>'+
-  (list.length? '<div class="table-wrap" style="border:none;"><table style="min-width:0;"><thead><tr><th>Date</th><th>Product</th><th>Qty</th><th>Unit cost</th><th>Total</th><th>Supplier</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>' : '<div class="muted">No purchases recorded yet.</div>')+
-  '</div></div>';
+  historyCard +'</div>';
+}
+
+function renderBulkStockRow(item, idx){
+  var qty = item.qty||0, cost = item.unitCost||0;
+  var total = round2(qty*cost);
+  return '<div class="invoice-item-row">'+
+    '<input type="text" id="bulkItemName_'+idx+'" placeholder="Product name" value="'+esc(item.name||'')+'" data-bulk-field="name" data-idx="'+idx+'">'+
+    '<input type="number" id="bulkItemQty_'+idx+'" min="0" step="1" placeholder="Qty" value="'+qty+'" data-bulk-field="qty" data-idx="'+idx+'">'+
+    '<input type="number" id="bulkItemCost_'+idx+'" min="0" step="0.01" placeholder="Unit cost" value="'+cost+'" data-bulk-field="unitCost" data-idx="'+idx+'">'+
+    '<div class="ln-total">'+fmtETB(total)+'</div>'+
+    '<button type="button" class="remove-line" data-act="bulk-remove-row" data-idx="'+idx+'">×</button>'+
+  '</div>';
 }
 
 /* ---------------- EXPENSES ---------------- */
@@ -1105,6 +1181,9 @@ function renderReports(){
   }
   var opts = [['today','Today'],['yesterday','Yesterday'],['week','This Week'],['month','This Month'],['year','This Year'],['custom','Custom Range']];
   var tabs = opts.map(function(o){return '<button class="tab-btn'+(STATE.reportRange===o[0]?' active':'')+'" data-act="report-range" data-range="'+o[0]+'">'+o[1]+'</button>';}).join('');
+  var reportGoalField = {today:'dailyGoal', week:'weeklyGoal', month:'monthlyGoal', year:'yearlyGoal'}[STATE.reportRange];
+  var reportGoal = reportGoalField ? (parseFloat((STATE.shopProfile||{})[reportGoalField])||0) : 0;
+  var reportPct = reportGoal>0 ? Math.min(100, round2((stats.totalSales/reportGoal)*100)) : null;
   return ''+
     '<div class="tabs">'+tabs+'</div>'+
     (STATE.reportRange==='custom' ? (
@@ -1114,13 +1193,13 @@ function renderReports(){
       '</div></div>'
     ) : '')+
     '<div class="grid grid-4">'+
-      statCard('Total Sales', fmtETB(stats.totalSales))+
+      statCard('Total Sales', fmtETB(stats.totalSales), null, 'sv-black')+
       statCard('COGS', fmtETB(stats.cogs))+
-      statCard('Gross Profit', fmtETB(stats.gross))+
-      statCard('Expenses', fmtETB(stats.expenses))+
+      statCard('Gross Profit', fmtETB(stats.gross), null, 'sv-green')+
+      statCard('Expenses', fmtETB(stats.expenses), null, 'sv-red')+
     '</div>'+
     '<div class="grid grid-4" style="margin-top:14px;">'+
-      statCard('Net Profit', fmtETB(stats.net))+
+      statCard('Net Profit', fmtETB(stats.net), null, netProfitColorClass(reportPct, stats.net))+
       statCard('Number of Sales', stats.count)+
       statCard('Stock Purchased', fmtETB(stockP))+
       '<div class="card" style="display:flex;flex-direction:column;gap:6px;justify-content:center;">'+
@@ -1144,6 +1223,8 @@ function renderSettings(){
   var goals = {
     dailyGoal: u.dailyGoal||'', weeklyGoal: u.weeklyGoal||'', monthlyGoal: u.monthlyGoal||'', yearlyGoal: u.yearlyGoal||''
   };
+  var shopAddress = (u.shopAddress!==undefined && u.shopAddress!==null) ? u.shopAddress : 'Burayu, Keta';
+  var shopPhone = u.shopPhone || '';
   return '<div class="two-col">'+
     '<div class="card"><h3 style="margin-bottom:10px;">Account</h3>'+
       '<div class="list-item"><span>Shop name</span><b>'+esc(u.shopName)+'</b></div>'+
@@ -1151,6 +1232,14 @@ function renderSettings(){
       '<div class="list-item"><span>Email</span><b>'+esc(u.email)+'</b></div>'+
       '<div class="list-item"><span>Member since</span><b>'+(u.createdAt?fmtDateLong(u.createdAt.slice(0,10)):'—')+'</b></div>'+
       '<button class="btn btn-outline btn-block" style="margin-top:16px;" data-act="logout">🚪 Log out</button>'+
+    '</div>'+
+    '<div class="card"><h3 style="margin-bottom:10px;">Business info</h3>'+
+      '<p class="muted" style="margin-bottom:10px;">Shown on your printed invoices.</p>'+
+      '<form id="businessInfoForm">'+
+        '<label>Business address</label><input type="text" name="shopAddress" value="'+esc(shopAddress)+'" placeholder="e.g. Burayu, Keta">'+
+        '<label>Business phone</label><input type="text" name="shopPhone" value="'+esc(shopPhone)+'" placeholder="Optional">'+
+        '<button type="submit" class="btn btn-block" style="margin-top:16px;">Save business info</button>'+
+      '</form>'+
     '</div>'+
     '<div class="card"><h3 style="margin-bottom:10px;">Data & export</h3>'+
       '<p class="muted">Your data is synced to your account in real time and works across every device you sign in on.</p>'+
@@ -1284,6 +1373,8 @@ function bindEvents(){
   if(editExpenseForm) editExpenseForm.addEventListener('submit', onSaveEditExpense);
   var goalsForm = document.getElementById('goalsForm');
   if(goalsForm) goalsForm.addEventListener('submit', onSaveGoals);
+  var businessInfoForm = document.getElementById('businessInfoForm');
+  if(businessInfoForm) businessInfoForm.addEventListener('submit', onSaveBusinessInfo);
   var importCsvInput = document.getElementById('importCsvInput');
   if(importCsvInput) importCsvInput.addEventListener('change', onImportCsv);
   var invoiceForm = document.getElementById('invoiceForm');
@@ -1299,6 +1390,25 @@ function bindEvents(){
       var idx = parseInt(inp.getAttribute('data-idx'),10);
       var field = inp.getAttribute('data-inv-field');
       STATE.invoiceDraft.items[idx][field] = (field==='name') ? inp.value : (parseFloat(inp.value)||0);
+      var focusId = inp.id;
+      render();
+      preserveFocus(focusId);
+    });
+  });
+
+  var bulkStockForm = document.getElementById('bulkStockForm');
+  if(bulkStockForm) bulkStockForm.addEventListener('submit', onBulkStockSubmit);
+  var bulkDate = document.getElementById('bulkDate');
+  if(bulkDate) bulkDate.addEventListener('change', function(){ STATE.bulkStockDraft.date = bulkDate.value; });
+  var bulkSupplier = document.getElementById('bulkSupplier');
+  if(bulkSupplier) bulkSupplier.addEventListener('input', function(){ STATE.bulkStockDraft.supplier = bulkSupplier.value; render(); preserveFocus('bulkSupplier'); });
+  var bulkNotes = document.getElementById('bulkNotes');
+  if(bulkNotes) bulkNotes.addEventListener('input', function(){ STATE.bulkStockDraft.notes = bulkNotes.value; render(); preserveFocus('bulkNotes'); });
+  app.querySelectorAll('[data-bulk-field]').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var idx = parseInt(inp.getAttribute('data-idx'),10);
+      var field = inp.getAttribute('data-bulk-field');
+      STATE.bulkStockDraft.rows[idx][field] = (field==='name') ? inp.value : (parseFloat(inp.value)||0);
       var focusId = inp.id;
       render();
       preserveFocus(focusId);
@@ -1384,6 +1494,14 @@ function handleAction(act, el, ev){
   if(act==='inv-new'){ STATE.invoicePreview=null; STATE.invoiceDraft={customerName:'',phone:'',address:'',items:[{name:'',qty:1,unitPrice:0}]}; render(); return; }
   if(act==='inv-print'){ window.print(); return; }
   if(act==='inv-save-pdf'){ exportInvoicePDF(STATE.invoicePreview); return; }
+  if(act==='stock-mode'){ STATE.stockMode = el.getAttribute('data-mode'); render(); return; }
+  if(act==='bulk-add-row'){ STATE.bulkStockDraft.rows.push({name:'',qty:1,unitCost:0}); render(); return; }
+  if(act==='bulk-remove-row'){
+    var bidx=parseInt(el.getAttribute('data-idx'),10);
+    STATE.bulkStockDraft.rows.splice(bidx,1);
+    if(!STATE.bulkStockDraft.rows.length) STATE.bulkStockDraft.rows.push({name:'',qty:1,unitCost:0});
+    render(); return;
+  }
 }
 function showActionError(err){ alert('Something went wrong: '+((err&&err.message)||err)); }
 
@@ -1497,6 +1615,48 @@ async function onAddStock(ev){
   }catch(err){ showActionError(err); }
 }
 
+async function onBulkStockSubmit(ev){
+  ev.preventDefault();
+  var d = STATE.bulkStockDraft;
+  var date = d.date || todayStr();
+  var supplier = d.supplier || '';
+  var notes = d.notes || '';
+  var validRows = d.rows.filter(function(r){ return (r.name||'').trim() && (r.qty||0)>0; });
+  if(!validRows.length){ alert('Add at least one item with a name and quantity.'); return; }
+  var submitBtn = ev.target.querySelector('button[type=submit]');
+  if(submitBtn) submitBtn.disabled = true;
+  var added = 0;
+  try{
+    for(var i=0;i<validRows.length;i++){
+      var r = validRows[i];
+      var name = r.name.trim();
+      var existing = STATE.data.products.find(function(p){ return p.name.toLowerCase()===name.toLowerCase(); });
+      var productId, productName;
+      if(existing){
+        productId = existing.id; productName = existing.name;
+      } else {
+        var newRef = shopRef().collection('products').doc();
+        await newRef.set({
+          name:name, category:'', costPrice:r.unitCost||0, sellingPrice:r.unitCost||0,
+          openingStock:0, currentStock:0, reorderLevel:0
+        });
+        productId = newRef.id; productName = name;
+      }
+      await addStockPurchase({
+        date: date, productId: productId, productName: productName,
+        quantity: r.qty, unitCost: r.unitCost||0, supplier: supplier, notes: notes
+      });
+      added++;
+    }
+    STATE.bulkStockDraft = {date:todayStr(), supplier:'', notes:'', rows:[{name:'',qty:1,unitCost:0}]};
+    STATE.stockMode = 'single';
+    render();
+  }catch(err){
+    showActionError(err);
+    if(submitBtn) submitBtn.disabled = false;
+  }
+}
+
 async function onAddExpense(ev){
   ev.preventDefault();
   var fd = new FormData(ev.target);
@@ -1574,6 +1734,20 @@ async function onSaveGoals(ev){
   }catch(err){ showActionError(err); }
 }
 
+async function onSaveBusinessInfo(ev){
+  ev.preventDefault();
+  var fd = new FormData(ev.target);
+  var fields = {
+    shopAddress: (fd.get('shopAddress')||'').trim(),
+    shopPhone: (fd.get('shopPhone')||'').trim()
+  };
+  try{
+    await shopRef().update(fields);
+    STATE.shopProfile = Object.assign({}, STATE.shopProfile, fields);
+    render();
+  }catch(err){ showActionError(err); }
+}
+
 async function onImportCsv(ev){
   var file = ev.target.files && ev.target.files[0];
   if(!file) return;
@@ -1635,24 +1809,27 @@ function exportInvoicePDF(inv){
   if(!inv) return;
   if(typeof window.jspdf === 'undefined'){ alert('PDF export library failed to load. Check your connection and try again.'); return; }
   var shop = currentUser() || {};
-  var doc = new window.jspdf.jsPDF();
+  var doc = new window.jspdf.jsPDF({unit:'mm', format:'a4'});
 
   doc.setFontSize(18); doc.setTextColor(20,108,67);
   doc.text(shop.shopName || 'Shop', 14, 20);
   doc.setFontSize(10); doc.setTextColor(90,90,90);
-  if(shop.ownerName) doc.text(shop.ownerName, 14, 26);
+  var y1 = 26;
+  if(shop.ownerName){ doc.text(shop.ownerName, 14, y1); y1+=5; }
+  if(shop.shopAddress){ doc.text(shop.shopAddress, 14, y1); y1+=5; }
+  if(shop.shopPhone){ doc.text(shop.shopPhone, 14, y1); y1+=5; }
 
   doc.setFontSize(12); doc.setTextColor(138,109,26);
   doc.text(inv.invoiceNo, 196, 20, {align:'right'});
   doc.setFontSize(9); doc.setTextColor(90,90,90);
   doc.text(fmtDateLong(inv.createdAt.slice(0,10)), 196, 26, {align:'right'});
 
-  doc.setDrawColor(201,162,39); doc.setLineWidth(0.8); doc.line(14,31,196,31);
+  doc.setDrawColor(201,162,39); doc.setLineWidth(0.8); doc.line(14,Math.max(31,y1+2),196,Math.max(31,y1+2));
 
   doc.setFontSize(10); doc.setTextColor(20,30,25);
   var billTo = 'Bill to: '+(inv.customerName||'Walk-in customer');
-  doc.text(billTo, 14, 39);
-  var y2 = 45;
+  var y2 = Math.max(31,y1+2) + 8;
+  doc.text(billTo, 14, y2); y2 += 6;
   if(inv.phone){ doc.text('Phone: '+inv.phone, 14, y2); y2+=5; }
   if(inv.address){ doc.text('Address: '+inv.address, 14, y2); y2+=5; }
 
@@ -1777,16 +1954,19 @@ async function exportPDF(){
   var stats = periodStats(range.from, range.to);
   var salesInR = salesInRange(range.from, range.to).slice().sort(function(a,b){return a.date.localeCompare(b.date);});
   var shop = currentUser() || {};
-  var doc = new window.jspdf.jsPDF();
+  var doc = new window.jspdf.jsPDF({unit:'mm', format:'a4'});
 
   doc.setFontSize(16); doc.setTextColor(20,108,67);
   doc.text(shop.shopName || 'Shop Sales Record', 14, 18);
   doc.setFontSize(10); doc.setTextColor(90,90,90);
-  doc.text('Report: '+range.from+' to '+range.to, 14, 25);
-  doc.text('Generated: '+fmtDateLong(todayStr()), 14, 30);
+  var addrLine = shop.shopAddress ? (shop.shopAddress+(shop.shopPhone?' · '+shop.shopPhone:'')) : '';
+  var yLine = 25;
+  if(addrLine){ doc.text(addrLine, 14, yLine); yLine += 5; }
+  doc.text('Report: '+range.from+' to '+range.to, 14, yLine); yLine += 5;
+  doc.text('Generated: '+fmtDateLong(todayStr()), 14, yLine);
 
   doc.autoTable({
-    startY: 36,
+    startY: yLine+6,
     head: [['Metric','Value']],
     body: [
       ['Total Sales', fmtETB(stats.totalSales)],
