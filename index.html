@@ -16,11 +16,11 @@
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
 <style>
 :root{
-  --green-900:#073b3a;
-  --green-700:#0e7c72;
-  --green-600:#14a396;
-  --green-100:#e3f5f2;
-  --green-50:#f5fbfa;
+  --green-900:#0f1b2e;
+  --green-700:#1d3a5f;
+  --green-600:#2c5c8f;
+  --green-100:#e9eef5;
+  --green-50:#f6f8fb;
   --gold:#c9a227;
   --gold-light:#f7ecc6;
   --gold-dark:#8a6d1a;
@@ -33,12 +33,14 @@
   --amber-bg:#fdf3e0;
   --red:#b23b3b;
   --red-bg:#fbeaea;
+  --success:#0e9c5a;
+  --success-bg:#e6f7ee;
   --radius-sm:8px;
   --radius-md:12px;
   --radius-lg:18px;
-  --shadow:0 1px 3px rgba(13,79,49,.08), 0 14px 32px -16px rgba(10,61,38,.28);
-  --shadow-lg:0 4px 10px rgba(13,79,49,.10), 0 24px 48px -18px rgba(10,61,38,.35);
-  --grad-green:linear-gradient(135deg,var(--green-600),var(--green-900));
+  --shadow:0 1px 3px rgba(15,27,46,.08), 0 14px 32px -16px rgba(15,27,46,.28);
+  --shadow-lg:0 4px 10px rgba(15,27,46,.10), 0 24px 48px -18px rgba(15,27,46,.32);
+  --grad-brand:linear-gradient(135deg,var(--green-600),var(--green-900));
   --grad-gold:linear-gradient(135deg,#e6c65c,var(--gold-dark));
   --font-ui:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --font-am:'Noto Sans Ethiopic','Manrope',sans-serif;
@@ -47,12 +49,12 @@
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --paper:#0d1917; --green-50:#0d1917; --green-100:#132825; --ink:#eaf3ee; --ink-soft:#a9bcb2; --ink-faint:#71877b;
-    --border:#25392f; --amber-bg:#2b2210; --red-bg:#2c1717; --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    --border:#25392f; --amber-bg:#2b2210; --red-bg:#2c1717; --success:#2fbf7a; --success-bg:#123626; --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
   }
 }
 :root[data-theme="dark"]{
   --paper:#0d1917; --green-50:#0d1917; --green-100:#132825; --ink:#eaf3ee; --ink-soft:#a9bcb2; --ink-faint:#71877b;
-  --border:#25392f; --amber-bg:#2b2210; --red-bg:#2c1717; --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  --border:#25392f; --amber-bg:#2b2210; --red-bg:#2c1717; --success:#2fbf7a; --success-bg:#123626; --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
 }
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
@@ -70,7 +72,7 @@ a{color:inherit;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:8px;}
 .app-shell{display:flex;min-height:100vh;}
 .sidebar{
-  width:230px;flex-shrink:0;background:var(--grad-green);color:#eafff2;
+  width:230px;flex-shrink:0;background:var(--grad-brand);color:#eafff2;
   display:flex;flex-direction:column;padding:20px 14px;position:sticky;top:0;height:100vh;
   box-shadow:6px 0 24px -12px rgba(0,0,0,.35);
 }
@@ -88,6 +90,14 @@ a{color:inherit;}
 .nav-item.active{background:rgba(255,255,255,.14);color:#fff;box-shadow:inset 3px 0 0 var(--gold);}
 .nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:.92;}
 .nav-svg{width:18px;height:18px;}
+.nav-svg.icon-sm{width:14px;height:14px;}
+.nav-svg.icon-md{width:20px;height:20px;}
+.nav-svg.icon-lg{width:26px;height:26px;}
+.icon-badge{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.icon-badge.badge-warn{background:var(--amber-bg);color:var(--amber);}
+.icon-badge.badge-good{background:var(--success-bg);color:var(--success);}
+.icon-badge.badge-neutral{background:var(--green-100);color:var(--green-700);}
+.icon-badge.badge-gold{background:var(--gold-light);color:var(--gold-dark);}
 .nav-item.active .nav-icon{opacity:1;}
 .sidebar-foot{padding-top:12px;border-top:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;gap:6px;}
 .shop-chip{font-size:12px;color:#a9d9c1;padding:0 8px 6px;line-height:1.4;}
@@ -111,7 +121,7 @@ a{color:inherit;}
 .card{background:var(--paper);border:1px solid var(--border);border-radius:var(--radius-md);padding:16px 18px;box-shadow:var(--shadow);}
 .card.premium{background:linear-gradient(160deg,var(--paper) 60%,var(--green-50));border-color:var(--gold-light);}
 .card h3{margin:0 0 4px;font-size:12.5px;color:var(--ink-soft);font-weight:700;text-transform:none;}
-.stat-value{font-size:23px;font-weight:800;margin:2px 0 0;background:var(--grad-green);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.stat-value{font-size:23px;font-weight:800;margin:2px 0 0;background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;color:transparent;}
 .stat-value.sv-black{background:none;-webkit-text-fill-color:initial;color:var(--ink);}
 .stat-value.sv-green{background:none;-webkit-text-fill-color:initial;color:#0e9c5a;}
 .stat-value.sv-red{background:none;-webkit-text-fill-color:initial;color:var(--red);}
@@ -120,10 +130,10 @@ a{color:inherit;}
 .stat-sub{font-size:11.5px;color:var(--ink-faint);margin-top:2px;}
 .section-title{font-size:15px;font-weight:800;margin:26px 0 10px;display:flex;align-items:center;gap:8px;}
 .trophy-card{display:flex;align-items:center;gap:14px;padding:16px 18px;background:linear-gradient(160deg,var(--paper),var(--gold-light) 220%);border-color:var(--gold-light);}
-.trophy-emoji{font-size:26px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.15));}
+.trophy-emoji{flex-shrink:0;}
 .trophy-date{font-size:12.5px;color:var(--ink-soft);font-weight:600;}
 .trophy-amt{font-size:19px;font-weight:800;color:var(--gold-dark);}
-.btn{background:var(--grad-green);color:#fff;border:none;padding:10px 16px;border-radius:10px;font-weight:700;font-size:13.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:0 2px 8px -2px rgba(10,61,38,.5);}
+.btn{background:var(--grad-brand);color:#fff;border:none;padding:10px 16px;border-radius:10px;font-weight:700;font-size:13.5px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:0 2px 8px -2px rgba(15,27,46,.45);}
 .btn:hover{filter:brightness(1.08);}
 .btn:disabled{opacity:.6;cursor:default;}
 .btn-gold{background:var(--grad-gold);color:#3a2c05;box-shadow:0 2px 8px -2px rgba(138,109,26,.5);}
@@ -169,7 +179,7 @@ tbody tr:hover{background:var(--green-50);}
 .auth-tab{flex:1;text-align:center;padding:8px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;border:none;background:none;color:var(--ink-soft);}
 .auth-tab.active{background:var(--paper);color:var(--green-700);box-shadow:0 1px 3px rgba(0,0,0,.08);}
 .err-text{color:var(--red);font-size:12.5px;margin-top:10px;background:var(--red-bg);padding:8px 10px;border-radius:8px;}
-.ok-text{color:var(--green-700);font-size:12.5px;margin-top:10px;background:var(--green-100);padding:8px 10px;border-radius:8px;}
+.ok-text{color:var(--success);font-size:12.5px;margin-top:10px;background:var(--success-bg);padding:8px 10px;border-radius:8px;}
 .link-btn{background:none;border:none;color:var(--green-700);font-weight:700;font-size:12.5px;cursor:pointer;padding:0;text-decoration:underline;}
 .lowstock-banner{display:flex;align-items:center;gap:10px;background:var(--amber-bg);color:var(--amber);border:1px solid #f0d9a8;border-radius:var(--radius-md);padding:12px 16px;margin-bottom:16px;font-size:13px;font-weight:600;}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
@@ -179,7 +189,7 @@ tbody tr:hover{background:var(--green-50);}
 .cal-cell.empty-cell{background:transparent;border:none;cursor:default;}
 .cal-cell.today{border-color:var(--green-700);border-width:2px;}
 .cal-cell .d{font-weight:800;font-size:12px;}
-.cal-cell .amt{color:var(--green-700);font-weight:700;margin-top:3px;font-size:10.5px;}
+.cal-cell .amt{color:var(--success);font-weight:700;margin-top:3px;font-size:10.5px;}
 .cal-cell.selected{background:var(--green-100);border-color:var(--green-700);}
 .cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
 .cal-nav b{font-size:15px;}
@@ -211,8 +221,18 @@ tbody tr:hover{background:var(--green-50);}
 .combo-item:hover,.combo-item.hl{background:var(--green-50);}
 .combo-selected{display:flex;align-items:center;justify-content:space-between;background:var(--green-50);border:1px solid var(--gold-light);border-radius:9px;padding:9px 12px;margin-top:6px;font-size:13px;font-weight:700;}
 .progress-track{background:var(--green-100);border-radius:99px;height:10px;overflow:hidden;margin-top:6px;}
+.progress-track.lg{height:16px;}
+.goal-hero{background:linear-gradient(135deg,var(--paper),var(--gold-light) 260%);border:1px solid var(--gold-light);border-radius:var(--radius-lg);padding:20px 22px;box-shadow:var(--shadow);margin-top:14px;}
+.goal-hero-top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px;}
+.goal-hero-left{display:flex;align-items:center;gap:12px;}
+.goal-hero-title{font-size:14px;font-weight:800;}
+.goal-hero-sub{font-size:12.5px;color:var(--ink-soft);margin-top:1px;}
+.goal-hero-pct{font-size:30px;font-weight:800;color:var(--gold-dark);line-height:1;flex-shrink:0;}
+.goal-hero-pct span{font-size:16px;font-weight:700;}
+.goal-hero-foot{margin-top:10px;font-size:12.5px;color:var(--ink-soft);font-weight:600;}
+.goal-badge-done{display:inline-flex;align-items:center;gap:5px;color:var(--success);font-weight:800;}
 .progress-fill{height:100%;background:var(--grad-gold);border-radius:99px;transition:width .3s ease;}
-.progress-fill.over{background:var(--grad-green);}
+.progress-fill.over{background:var(--grad-brand);}
 .goal-row{margin-bottom:14px;}
 .goal-row:last-child{margin-bottom:0;}
 .goal-label{display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;color:var(--ink-soft);}
@@ -222,7 +242,7 @@ tbody tr:hover{background:var(--green-50);}
 .planner-item b{display:block;margin-bottom:2px;}
 .planner-item.warn{color:var(--amber);}
 .planner-item.warn b{color:var(--amber);}
-.planner-item.good{color:var(--green-700);}
+.planner-item.good{color:var(--success);}
 .invoice-items{border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin:10px 0;}
 .invoice-item-row{display:grid;grid-template-columns:1fr 60px 90px 90px 30px;gap:6px;padding:8px 10px;align-items:center;border-bottom:1px solid var(--border);background:var(--paper);}
 @media(max-width:640px){
@@ -265,6 +285,14 @@ tbody tr:hover{background:var(--green-50);}
 
 /* ---------------- i18n ---------------- */
 var LANG = localStorage.getItem('ssr_lang') || 'en';
+var THEME = localStorage.getItem('ssr_theme') || 'system';
+function applyTheme(theme){
+  THEME = theme;
+  localStorage.setItem('ssr_theme', theme);
+  if(theme==='system') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', theme);
+}
+applyTheme(THEME);
 var T = {
   en:{app_name:"Shop Sales Record", tagline:"Taza Technology", dashboard:"Dashboard", quick_sale:"Quick Sale", sales:"Sales", invoice:"Invoice", calendar:"Calendar", products:"Products", stock_purchase:"Stock Purchase", expenses:"Expenses", reports:"Reports", settings:"Settings", logout:"Log out"},
   am:{app_name:"የሽያጭ መዝገብ", tagline:"ታዛ ቴክኖሎጂ", dashboard:"ዳሽቦርድ", quick_sale:"ፈጣን ሽያጭ", sales:"ሽያጮች", invoice:"ደረሰኝ", calendar:"የቀን መቁጠሪያ", products:"ምርቶች", stock_purchase:"የስቶክ ግዢ", expenses:"ወጪዎች", reports:"ሪፖርቶች", settings:"ቅንብሮች", logout:"ውጣ"}
@@ -398,6 +426,17 @@ function recomputeSale(s){
   return Object.assign({}, s, {totalSales:totalSales, cogs:cogs, grossProfit:round2(totalSales-cogs)});
 }
 
+function debitProduct(stock, debt, qty){
+  stock = stock||0; debt = debt||0; qty = qty||0;
+  if(stock >= qty) return {currentStock: round2(stock-qty), debt: round2(debt)};
+  return {currentStock: 0, debt: round2(debt + (qty-stock))};
+}
+function creditProduct(stock, debt, qty){
+  stock = stock||0; debt = debt||0; qty = qty||0;
+  if(debt >= qty) return {currentStock: round2(stock), debt: round2(debt-qty)};
+  return {currentStock: round2(stock + (qty-debt)), debt: 0};
+}
+
 async function addSale(saleInput){
   var base = shopRef();
   var saleRef = base.collection('sales').doc();
@@ -406,8 +445,10 @@ async function addSale(saleInput){
   await db.runTransaction(async function(tx){
     var prodSnap = await tx.get(productRef);
     var stock = prodSnap.exists ? (prodSnap.data().currentStock||0) : 0;
+    var debt = prodSnap.exists ? (prodSnap.data().debt||0) : 0;
+    var after = debitProduct(stock, debt, saleInput.quantity);
     tx.set(saleRef, sale);
-    tx.update(productRef, {currentStock: stock - saleInput.quantity});
+    tx.update(productRef, {currentStock: after.currentStock, debt: after.debt});
   });
 }
 
@@ -424,17 +465,26 @@ async function updateSale(saleId, patch){
       var ref = base.collection('products').doc(oldProductId);
       var snap = await tx.get(ref);
       if(snap.exists){
-        var stock = snap.data().currentStock||0;
-        var netDelta = oldSale.quantity - recomputed.quantity;
-        tx.update(ref, {currentStock: stock + netDelta});
+        var d0 = snap.data();
+        var reverted = creditProduct(d0.currentStock||0, d0.debt||0, oldSale.quantity);
+        var applied = debitProduct(reverted.currentStock, reverted.debt, recomputed.quantity);
+        tx.update(ref, {currentStock: applied.currentStock, debt: applied.debt});
       }
     } else {
       var oldRef = base.collection('products').doc(oldProductId);
       var newRef = base.collection('products').doc(newProductId);
       var oldSnap = await tx.get(oldRef);
       var newSnap = await tx.get(newRef);
-      if(oldSnap.exists) tx.update(oldRef, {currentStock: (oldSnap.data().currentStock||0) + oldSale.quantity});
-      if(newSnap.exists) tx.update(newRef, {currentStock: (newSnap.data().currentStock||0) - recomputed.quantity});
+      if(oldSnap.exists){
+        var od = oldSnap.data();
+        var revertedOld = creditProduct(od.currentStock||0, od.debt||0, oldSale.quantity);
+        tx.update(oldRef, {currentStock: revertedOld.currentStock, debt: revertedOld.debt});
+      }
+      if(newSnap.exists){
+        var nd = newSnap.data();
+        var appliedNew = debitProduct(nd.currentStock||0, nd.debt||0, recomputed.quantity);
+        tx.update(newRef, {currentStock: appliedNew.currentStock, debt: appliedNew.debt});
+      }
     }
     tx.set(saleRef, recomputed);
   });
@@ -449,7 +499,11 @@ async function deleteSale(saleId){
     var sale = saleSnap.data();
     var prodRef = base.collection('products').doc(sale.productId);
     var prodSnap = await tx.get(prodRef);
-    if(prodSnap.exists) tx.update(prodRef, {currentStock: (prodSnap.data().currentStock||0) + sale.quantity});
+    if(prodSnap.exists){
+      var d = prodSnap.data();
+      var after = creditProduct(d.currentStock||0, d.debt||0, sale.quantity);
+      tx.update(prodRef, {currentStock: after.currentStock, debt: after.debt});
+    }
     tx.delete(saleRef);
   });
 }
@@ -462,8 +516,10 @@ async function addStockPurchase(spInput){
   await db.runTransaction(async function(tx){
     var prodSnap = await tx.get(prodRef);
     var stock = prodSnap.exists ? (prodSnap.data().currentStock||0) : 0;
+    var debt = prodSnap.exists ? (prodSnap.data().debt||0) : 0;
+    var after = creditProduct(stock, debt, spInput.quantity);
     tx.set(spRef, sp);
-    tx.update(prodRef, {currentStock: stock + spInput.quantity});
+    tx.update(prodRef, {currentStock: after.currentStock, debt: after.debt});
   });
 }
 
@@ -476,7 +532,11 @@ async function deleteStockPurchase(spId){
     var sp = spSnap.data();
     var prodRef = base.collection('products').doc(sp.productId);
     var prodSnap = await tx.get(prodRef);
-    if(prodSnap.exists) tx.update(prodRef, {currentStock: (prodSnap.data().currentStock||0) - sp.quantity});
+    if(prodSnap.exists){
+      var d = prodSnap.data();
+      var after = debitProduct(d.currentStock||0, d.debt||0, sp.quantity);
+      tx.update(prodRef, {currentStock: after.currentStock, debt: after.debt});
+    }
     tx.delete(spRef);
   });
 }
@@ -547,7 +607,7 @@ function renderAuth(){
   var tab = STATE.authTab;
   if(STATE.forgotMode){
     return '<div class="auth-wrap"><div class="auth-card">' +
-      '<div class="auth-brand"><div class="brand-mark" style="background:linear-gradient(155deg,var(--green-600),#0a3a24)">TT</div>' +
+      '<div class="auth-brand"><div class="brand-mark" style="background:var(--grad-brand)">TT</div>' +
       '<div><b style="display:block;font-weight:800;">Reset password</b><span class="muted">Taza Technology™</span></div></div>' +
       '<form id="forgotForm">'+
       '<label>Email</label><input name="email" type="email" required placeholder="you@example.com">'+
@@ -560,7 +620,7 @@ function renderAuth(){
       '</div></div>';
   }
   return '<div class="auth-wrap"><div class="auth-card">'+
-    '<div class="auth-brand"><div class="brand-mark" style="background:linear-gradient(155deg,var(--green-600),#0a3a24)">TT</div>'+
+    '<div class="auth-brand"><div class="brand-mark" style="background:var(--grad-brand)">TT</div>'+
     '<div><b style="display:block;font-weight:800;font-size:15px;">Shop Sales Record</b><span class="muted">Taza Technology™</span></div></div>'+
     '<div class="auth-tabs">'+
       '<button class="auth-tab'+(tab==='login'?' active':'')+'" data-act="tab-login">Log in</button>'+
@@ -617,9 +677,24 @@ function navIcon(name){
     dollar: '<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
     chart: '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
     gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
-    logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>'
+    logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
+    award: '<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>',
+    target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+    alert: '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+    check: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+    trendUp: '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+    trendDown: '<polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/>',
+    note: '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>',
+    download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+    printer: '<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+    search: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+    barcode: '<path d="M3 5v14M7 5v14M11 5v10M15 5v14M19 5v10M22 5v14M3 5H2M3 19H2"/>',
+    upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>'
   };
   return '<svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(paths[name]||'')+'</svg>';
+}
+function uiIcon(name, extraClass){
+  return navIcon(name).replace('class="nav-svg"', 'class="nav-svg '+(extraClass||'')+'"');
 }
 
 function renderShell(){
@@ -647,7 +722,7 @@ function renderShell(){
         '</div>'+
         '<div class="topbar-right">'+
           '<button class="icon-btn" data-act="toggle-lang">'+(LANG==='en'?'አማ':'EN')+'</button>'+
-          '<button class="icon-btn" data-nav="quickSale">➕ Quick Sale</button>'+
+          '<button class="icon-btn" data-nav="quickSale">'+uiIcon('plus','icon-sm')+' Quick Sale</button>'+
         '</div>'+
       '</div>'+
       '<div class="content">'+renderView()+'</div>'+
@@ -699,8 +774,8 @@ function renderDashboard(){
 
   var html = '';
   if(lowStock.length){
-    html += '<div class="lowstock-banner">⚠️ '+lowStock.length+' product'+(lowStock.length>1?'s':'')+' at or below reorder level — '+
-      lowStock.slice(0,4).map(function(p){return esc(p.name);}).join(', ') + (lowStock.length>4?'…':'') +
+    html += '<div class="lowstock-banner">'+uiIcon('alert','icon-md')+'<span>'+lowStock.length+' product'+(lowStock.length>1?'s':'')+' at or below reorder level — '+
+      lowStock.slice(0,4).map(function(p){return esc(p.name);}).join(', ') + (lowStock.length>4?'…':'') + '</span>'+
       ' <button class="link-btn" data-nav="products" style="margin-left:auto;">View products</button></div>';
   }
 
@@ -714,19 +789,27 @@ function renderDashboard(){
     '</div>';
 
   if(goal>0){
-    html += '<div class="card premium" style="margin-top:14px;">'+
-      '<div class="goal-label"><span>🎯 '+range.label+' Sales Goal</span><b>'+fmtETB(stats.totalSales)+' / '+fmtETB(goal)+'</b></div>'+
-      '<div class="progress-track"><div class="progress-fill'+(pct>=100?' over':'')+'" style="width:'+pct+'%;"></div></div>'+
-      '<div class="stat-sub" style="margin-top:6px;">'+pct+'% of goal reached'+(pct>=100?' 🎉':'')+'</div>'+
+    var remaining = Math.max(0, round2(goal-stats.totalSales));
+    html += '<div class="goal-hero">'+
+      '<div class="goal-hero-top">'+
+        '<div class="goal-hero-left">'+
+          '<div class="icon-badge badge-gold">'+uiIcon('target','icon-md')+'</div>'+
+          '<div><div class="goal-hero-title">'+range.label+' Sales Goal</div>'+
+          '<div class="goal-hero-sub">'+fmtETB(stats.totalSales)+' of '+fmtETB(goal)+'</div></div>'+
+        '</div>'+
+        '<div class="goal-hero-pct">'+pct+'<span>%</span></div>'+
+      '</div>'+
+      '<div class="progress-track lg"><div class="progress-fill'+(pct>=100?' over':'')+'" style="width:'+pct+'%;"></div></div>'+
+      '<div class="goal-hero-foot">'+(pct>=100 ? ('<span class="goal-badge-done">'+uiIcon('check','icon-sm')+' Goal reached</span>') : ('<span>'+fmtETB(remaining)+' more to reach your goal</span>'))+'</div>'+
     '</div>';
   }
 
   html += '<div class="section-title">Top records</div>'+
     '<div class="grid grid-2">'+
-    '<div class="card trophy-card"><div class="trophy-emoji">🏆</div><div><h3 style="margin-bottom:2px;">Top Sales Day</h3>'+
+    '<div class="card trophy-card"><div class="icon-badge badge-gold trophy-emoji">'+uiIcon('award','icon-lg')+'</div><div><h3 style="margin-bottom:2px;">Top Sales Day</h3>'+
       (tSales?('<div class="trophy-date">'+fmtDateLong(tSales.date)+'</div><div class="trophy-amt">'+fmtETB(tSales.amount)+'</div>'):'<div class="muted">No sales recorded yet</div>')+
       '</div></div>'+
-    '<div class="card trophy-card"><div class="trophy-emoji">🏆</div><div><h3 style="margin-bottom:2px;">Top Profit Day</h3>'+
+    '<div class="card trophy-card"><div class="icon-badge badge-gold trophy-emoji">'+uiIcon('award','icon-lg')+'</div><div><h3 style="margin-bottom:2px;">Top Profit Day</h3>'+
       (tProfit?('<div class="trophy-date">'+fmtDateLong(tProfit.date)+'</div><div class="trophy-amt">'+fmtETB(tProfit.amount)+'</div>'):'<div class="muted">No sales recorded yet</div>')+
       '</div></div>'+
     '</div>';
@@ -761,40 +844,40 @@ function renderPlanner(){
   var items = [];
 
   if(todayStats.count===0){
-    items.push({icon:'📝', cls:'warn', title:'No sales logged today yet', text:'Remember to record every sale before closing up — even small ones add up in your reports.'});
+    items.push({icon:'note', badge:'badge-warn', title:'No sales logged today yet', text:'Remember to record every sale before closing up — even small ones add up in your reports.'});
   } else {
-    items.push({icon:'✅', cls:'good', title:todayStats.count+' sale'+(todayStats.count!==1?'s':'')+' logged today', text:'Keep it up — total so far: '+fmtETB(todayStats.totalSales)+'.'});
+    items.push({icon:'check', badge:'badge-good', title:todayStats.count+' sale'+(todayStats.count!==1?'s':'')+' logged today', text:'Keep it up — total so far: '+fmtETB(todayStats.totalSales)+'.'});
   }
 
   if(lowStock.length){
-    items.push({icon:'📦', cls:'warn', title:lowStock.length+' product'+(lowStock.length>1?'s':'')+' low on stock', text:lowStock.slice(0,5).map(function(p){return p.name;}).join(', ')+' — consider restocking soon.'});
+    items.push({icon:'box', badge:'badge-warn', title:lowStock.length+' product'+(lowStock.length>1?'s':'')+' low on stock', text:lowStock.slice(0,5).map(function(p){return p.name;}).join(', ')+' — consider restocking soon.'});
   } else if(STATE.data.products.length){
-    items.push({icon:'📦', cls:'good', title:'Stock levels look healthy', text:'No products are at or below their reorder level right now.'});
+    items.push({icon:'box', badge:'badge-good', title:'Stock levels look healthy', text:'No products are at or below their reorder level right now.'});
   }
 
   var expenseRatio = monthStats.totalSales>0 ? round2((monthStats.expenses/monthStats.totalSales)*100) : 0;
   if(monthStats.expenses>0 && expenseRatio>30){
-    items.push({icon:'💸', cls:'warn', title:'Expenses are '+expenseRatio+'% of this month\'s sales', text:'That is on the high side — review your expense categories for anything you can cut.'});
+    items.push({icon:'dollar', badge:'badge-warn', title:'Expenses are '+expenseRatio+'% of this month\'s sales', text:'That is on the high side — review your expense categories for anything you can cut.'});
   } else if(monthStats.expenses>0){
-    items.push({icon:'💸', cls:'good', title:'Expenses under control', text:'Running at '+expenseRatio+'% of this month\'s sales so far.'});
+    items.push({icon:'dollar', badge:'badge-good', title:'Expenses under control', text:'Running at '+expenseRatio+'% of this month\'s sales so far.'});
   }
 
   if(monthStats.totalSales>0){
     var margin = round2((monthStats.net/monthStats.totalSales)*100);
-    items.push({icon: margin<0?'📉':'📈', cls: margin<0?'warn':'good', title:'This month\'s net margin: '+margin+'%', text: margin<0 ? 'You are running at a loss this month — check pricing and expenses.' : 'Net profit is '+fmtETB(monthStats.net)+' so far this month.'});
+    items.push({icon: margin<0?'trendDown':'trendUp', badge: margin<0?'badge-warn':'badge-good', title:'This month\'s net margin: '+margin+'%', text: margin<0 ? 'You are running at a loss this month — check pricing and expenses.' : 'Net profit is '+fmtETB(monthStats.net)+' so far this month.'});
   }
 
-  items.push({icon:'🗓️', cls:'', title:'Weekly routine', text:'Count physical stock, review your top-selling products, and reconcile cash with recorded sales.'});
+  items.push({icon:'calendar', badge:'badge-neutral', title:'Weekly routine', text:'Count physical stock, review your top-selling products, and reconcile cash with recorded sales.'});
 
   var dayOfMonth = new Date().getDate();
   var daysInThisMonth = new Date(new Date().getFullYear(), new Date().getMonth()+1, 0).getDate();
   if(daysInThisMonth - dayOfMonth <= 3){
-    items.push({icon:'📊', cls:'warn', title:'Month-end is near', text:'Review your full Reports for the month, compare to last month ('+fmtETB(prevMonthStats.totalSales)+' in sales), and plan next month\'s goal.'});
+    items.push({icon:'chart', badge:'badge-warn', title:'Month-end is near', text:'Review your full Reports for the month, compare to last month ('+fmtETB(prevMonthStats.totalSales)+' in sales), and plan next month\'s goal.'});
   }
 
-  return '<div class="section-title">🗓️ Store Success Planner</div>'+
+  return '<div class="section-title">'+uiIcon('calendar','icon-sm')+' Store Success Planner</div>'+
     '<div class="card">'+ items.map(function(i){
-      return '<div class="planner-item '+i.cls+'"><span class="planner-icon">'+i.icon+'</span><div><b>'+esc(i.title)+'</b><span class="muted">'+esc(i.text)+'</span></div></div>';
+      return '<div class="planner-item"><span class="icon-badge '+i.badge+'" style="width:30px;height:30px;flex-shrink:0;">'+uiIcon(i.icon,'icon-sm')+'</span><div><b>'+esc(i.title)+'</b><span class="muted">'+esc(i.text)+'</span></div></div>';
     }).join('') +'</div>';
 }
 
@@ -814,17 +897,18 @@ function renderQuickSale(){
   if(mode==='existing'){
     var query = (STATE.quickSaleQuery||'').toLowerCase();
     var selected = STATE.quickSaleSelectedId ? findProduct(STATE.quickSaleSelectedId) : null;
-    var matches = query ? products.filter(function(p){return p.name.toLowerCase().indexOf(query)>=0;}) : products;
+    var matches = query ? products.filter(function(p){return p.name.toLowerCase().indexOf(query)>=0 || (p.barcode||'').toLowerCase().indexOf(query)>=0;}) : products;
     productFields = '<label>Product</label>'+
       '<input type="hidden" name="productId" value="'+(selected?selected.id:'')+'">'+
       (!selected ? (
         '<div class="combo-wrap">'+
-          '<input type="text" id="qsProductSearch" placeholder="Search product by name…" value="'+esc(STATE.quickSaleQuery||'')+'" autocomplete="off">'+
+          '<input type="text" id="qsProductSearch" placeholder="Search by name or scan a barcode…" value="'+esc(STATE.quickSaleQuery||'')+'" autocomplete="off">'+
+          '<button type="button" class="btn btn-outline btn-sm" data-act="qs-scan-barcode" style="margin-top:6px;">'+uiIcon('barcode','icon-sm')+' Scan barcode</button>'+
           '<div class="combo-results">'+ (matches.length? matches.map(function(p){
             return '<div class="combo-item" data-act="qs-pick-product" data-id="'+p.id+'">'+esc(p.name)+' <span class="muted">(stock: '+p.currentStock+')</span></div>';
           }).join('') : '<div class="combo-item muted">No matching products</div>') +'</div>'+
         '</div>'
-      ) : '<div class="combo-selected"><span>✓ '+esc(selected.name)+' — stock: '+selected.currentStock+'</span><button type="button" class="link-btn" data-act="qs-clear-product">Change</button></div>')+
+      ) : '<div class="combo-selected"><span>'+uiIcon('check','icon-sm')+' '+esc(selected.name)+' — stock: '+selected.currentStock+'</span><button type="button" class="link-btn" data-act="qs-clear-product">Change</button></div>')+
       '<div class="form-row">'+
         '<div><label>Quantity</label><input type="number" name="quantity" min="1" step="1" value="1" required></div>'+
         '<div><label>Cost price (per unit)</label><input type="number" name="costPrice" min="0" step="0.01" required id="qsCost" value="'+(selected?selected.costPrice:'')+'"></div>'+
@@ -850,9 +934,9 @@ function renderQuickSale(){
     '<div id="qsPreview" class="card" style="margin-top:16px;background:var(--green-50);border-style:dashed;">'+
       '<div class="list-item"><span>Total sales</span><b id="pvTotal">0 ETB</b></div>'+
       '<div class="list-item"><span>COGS</span><b id="pvCogs">0 ETB</b></div>'+
-      '<div class="list-item"><span>Gross profit</span><b id="pvGross" style="color:var(--green-700);">0 ETB</b></div>'+
+      '<div class="list-item"><span>Gross profit</span><b id="pvGross" style="color:var(--success);">0 ETB</b></div>'+
     '</div>'+
-    '<button type="submit" class="btn btn-block" style="margin-top:16px;">➕ Record sale</button>'+
+    '<button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('plus','icon-sm')+' Record sale</button>'+
   '</form>'+
   '</div>'+
   '<div class="card"><h3 style="margin-bottom:10px;">Recent sales</h3>'+
@@ -882,7 +966,7 @@ function renderSales(){
       '<td>'+fmtETB(s.sellingPrice)+'</td>'+
       '<td>'+fmtETB(s.totalSales)+'</td>'+
       '<td>'+fmtETB(s.cogs)+'</td>'+
-      '<td style="color:var(--green-700);font-weight:700;">'+fmtETB(s.grossProfit)+'</td>'+
+      '<td style="color:var(--success);font-weight:700;">'+fmtETB(s.grossProfit)+'</td>'+
       '<td><div class="row-actions">'+
         '<button class="btn btn-outline btn-sm" data-act="edit-sale" data-id="'+s.id+'">Edit</button>'+
         '<button class="btn btn-danger btn-sm" data-act="delete-sale" data-id="'+s.id+'">Delete</button>'+
@@ -898,13 +982,13 @@ function renderSales(){
       '<select id="salesProductFilter">'+productOptions+'</select>'+
       (f.search||f.date||f.product ? '<button class="btn-outline btn btn-sm" data-act="clear-sales-filter">Clear</button>' : '')+
     '</div>'+
-    '<button class="btn" data-nav="quickSale">➕ Add sale</button>'+
+    '<button class="btn" data-nav="quickSale">'+uiIcon('plus','icon-sm')+' Add sale</button>'+
   '</div>'+
   (list.length ? (
   '<div class="table-wrap"><table><thead><tr>'+
     '<th>Date</th><th>Product</th><th>Qty</th><th>Cost</th><th>Sell</th><th>Total sales</th><th>COGS</th><th>Gross profit</th><th></th>'+
   '</tr></thead><tbody>'+rows+'</tbody></table></div>'
-  ) : emptyState('📋','No sales match','Try clearing your filters, or record a new sale.'));
+  ) : emptyState('list','No sales match','Try clearing your filters, or record a new sale.'));
 }
 
 /* ---------------- INVOICE MAKER ---------------- */
@@ -933,11 +1017,11 @@ function renderInvoice(){
     '</div>'+
     '<h3 style="margin:18px 0 8px;">Items</h3>'+
     '<div class="invoice-items">'+ d.items.map(renderInvoiceItemRow).join('') +'</div>'+
-    '<button type="button" class="btn btn-outline btn-sm" data-act="inv-add-item">➕ Add line</button>'+
+    '<button type="button" class="btn btn-outline btn-sm" data-act="inv-add-item">'+uiIcon('plus','icon-sm')+' Add line</button>'+
     '<div class="card" style="margin-top:14px;background:var(--green-50);border-style:dashed;display:flex;justify-content:space-between;align-items:center;">'+
       '<span style="font-weight:700;">Grand total</span><span class="stat-value" style="font-size:18px;">'+fmtETB(grandTotal)+'</span>'+
     '</div>'+
-    '<form id="invoiceForm"><button type="submit" class="btn btn-block" style="margin-top:16px;">🧾 Generate invoice preview</button></form>'+
+    '<form id="invoiceForm"><button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('receipt','icon-sm')+' Generate invoice preview</button></form>'+
   '</div>'+
   '<div class="card"><h3 style="margin-bottom:10px;">Recent invoices</h3>'+
     ((STATE.data.invoices||[]).slice(0,8).map(function(inv){
@@ -953,9 +1037,9 @@ function renderInvoicePreview(inv){
   var shop = currentUser()||{};
   return '<div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">'+
     '<button class="btn btn-outline btn-sm" data-act="inv-edit">← Edit</button>'+
-    '<button class="btn btn-gold btn-sm" data-act="inv-save-pdf">📥 Save PDF</button>'+
-    '<button class="btn btn-sm" data-act="inv-print">🖨️ Print</button>'+
-    '<button class="btn btn-outline btn-sm" data-act="inv-new">➕ New invoice</button>'+
+    '<button class="btn btn-gold btn-sm" data-act="inv-save-pdf">'+uiIcon('download','icon-sm')+' Save PDF</button>'+
+    '<button class="btn btn-sm" data-act="inv-print">'+uiIcon('printer','icon-sm')+' Print</button>'+
+    '<button class="btn btn-outline btn-sm" data-act="inv-new">'+uiIcon('plus','icon-sm')+' New invoice</button>'+
   '</div>'+
   '<div id="printArea"><div class="invoice-preview">'+
     '<div class="inv-head">'+
@@ -1020,7 +1104,7 @@ function renderCalendar(){
       '<div class="list-item"><span>COGS</span><b>'+fmtETB(selStats.cogs)+'</b></div>'+
       '<div class="list-item"><span>Gross profit</span><b>'+fmtETB(selStats.gross)+'</b></div>'+
       '<div class="list-item"><span>Expenses</span><b>'+fmtETB(selStats.expenses)+'</b></div>'+
-      '<div class="list-item"><span>Net profit</span><b style="color:var(--green-700);">'+fmtETB(selStats.net)+'</b></div>'+
+      '<div class="list-item"><span>Net profit</span><b style="color:var(--success);">'+fmtETB(selStats.net)+'</b></div>'+
       '<div class="list-item"><span>Number of sales</span><b>'+selStats.count+'</b></div>'+
       '<h3 style="margin:14px 0 4px;">Sales that day</h3>'+
       (selSales.length? selSales.map(function(s){return '<div class="list-item"><span>'+esc(s.productName)+' ×'+s.quantity+'</span><b>'+fmtETB(s.totalSales)+'</b></div>';}).join('') : '<div class="muted">No sales on this date.</div>')+
@@ -1032,13 +1116,15 @@ function renderCalendar(){
 function renderProducts(){
   var rows = STATE.data.products.map(function(p){
     var low = (p.currentStock||0) <= (p.reorderLevel||0);
+    var debt = p.debt||0;
     return '<tr>'+
-      '<td>'+esc(p.name)+'</td>'+
+      '<td>'+esc(p.name)+(p.barcode?('<br><span class="muted" style="font-size:10.5px;">'+esc(p.barcode)+'</span>'):'')+'</td>'+
       '<td>'+esc(p.category||'—')+'</td>'+
       '<td>'+fmtETB(p.costPrice)+'</td>'+
       '<td>'+fmtETB(p.sellingPrice)+'</td>'+
       '<td>'+p.openingStock+'</td>'+
       '<td>'+p.currentStock+'</td>'+
+      '<td>'+(debt>0 ? '<span class="pill pill-red">'+debt+' owed</span>' : '—')+'</td>'+
       '<td>'+p.reorderLevel+'</td>'+
       '<td>'+(low?'<span class="pill pill-amber">Low stock</span>':'<span class="pill pill-green">OK</span>')+'</td>'+
       '<td><div class="row-actions">'+
@@ -1047,17 +1133,19 @@ function renderProducts(){
       '</div></td>'+
     '</tr>';
   }).join('');
+  var anyDebt = STATE.data.products.some(function(p){ return (p.debt||0)>0; });
   return '<div class="toolbar"><div></div><div style="display:flex;gap:8px;">'+
-      '<label class="btn btn-outline" for="importCsvInput" style="cursor:pointer;">📤 Import CSV</label>'+
+      '<label class="btn btn-outline" for="importCsvInput" style="cursor:pointer;">'+uiIcon('upload','icon-sm')+' Import CSV</label>'+
       '<input type="file" id="importCsvInput" accept=".csv" style="display:none;">'+
-      '<button class="btn" data-act="add-product">➕ Add product</button>'+
+      '<button class="btn" data-act="add-product">'+uiIcon('plus','icon-sm')+' Add product</button>'+
     '</div></div>'+
     '<p class="field-note" style="margin-bottom:12px;">CSV columns: Name, Category, Cost Price, Selling Price, Opening Stock, Reorder Level</p>'+
+    (anyDebt ? '<div class="lowstock-banner">'+uiIcon('alert','icon-md')+'<span>Some products have sales pending stock delivery — the "owed" column shows quantity sold that has not yet been received. It will clear automatically once you log the matching Stock Purchase.</span></div>' : '')+
     (STATE.data.products.length ? (
     '<div class="table-wrap"><table><thead><tr>'+
-      '<th>Name</th><th>Category</th><th>Cost</th><th>Sell</th><th>Opening</th><th>Current</th><th>Reorder</th><th>Status</th><th></th>'+
+      '<th>Name</th><th>Category</th><th>Cost</th><th>Sell</th><th>Opening</th><th>Current</th><th>Owed</th><th>Reorder</th><th>Status</th><th></th>'+
     '</tr></thead><tbody>'+rows+'</tbody></table></div>'
-    ) : emptyState('📦','No products yet','Add your first product to start recording sales and stock.'));
+    ) : emptyState('box','No products yet','Add your first product to start recording sales and stock.'));
 }
 
 /* ---------------- STOCK PURCHASE ---------------- */
@@ -1065,7 +1153,7 @@ function renderStockPurchase(){
   var mode = STATE.stockMode||'single';
   var tabs = '<div class="tabs" style="margin-bottom:14px;">'+
       '<button type="button" class="tab-btn'+(mode==='single'?' active':'')+'" data-act="stock-mode" data-mode="single">Single item</button>'+
-      '<button type="button" class="tab-btn'+(mode==='bulk'?' active':'')+'" data-act="stock-mode" data-mode="bulk">📦 Bulk entry</button>'+
+      '<button type="button" class="tab-btn'+(mode==='bulk'?' active':'')+'" data-act="stock-mode" data-mode="bulk">'+uiIcon('box','icon-sm')+' Bulk entry</button>'+
     '</div>';
 
   var list = STATE.data.stockPurchases.slice().sort(function(a,b){return b.date.localeCompare(a.date);});
@@ -1081,7 +1169,7 @@ function renderStockPurchase(){
     var d = STATE.bulkStockDraft;
     var itemRows = d.rows.map(renderBulkStockRow).join('');
     return tabs + '<div class="two-col">'+
-      '<div class="card"><h3 style="margin-bottom:10px;">📦 Bulk stock entry</h3>'+
+      '<div class="card"><h3 style="margin-bottom:10px;">'+uiIcon('box','icon-sm')+' Bulk stock entry</h3>'+
         '<p class="field-note" style="margin-bottom:10px;">Register a wholesale delivery of several products at once. New product names are created automatically.</p>'+
         '<form id="bulkStockForm">'+
         '<div class="form-row">'+
@@ -1092,14 +1180,14 @@ function renderStockPurchase(){
         '<div class="invoice-items">'+itemRows+'</div>'+
         '<button type="button" class="btn btn-outline btn-sm" data-act="bulk-add-row" style="margin-top:6px;">+ Add another item</button>'+
         '<label>Notes</label><textarea id="bulkNotes" rows="2" placeholder="Optional">'+esc(d.notes)+'</textarea>'+
-        '<button type="submit" class="btn btn-block" style="margin-top:16px;">📦 Save all items</button>'+
+        '<button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('box','icon-sm')+' Save all items</button>'+
         '<p class="field-note">Stock purchases increase product stock but are not deducted from Net Profit.</p>'+
         '</form>'+
       '</div>'+ historyCard +'</div>';
   }
 
   if(!STATE.data.products.length){
-    return tabs + emptyState('📦','No products yet','Add a product first, or switch to Bulk entry to add new ones on the fly.', 'products','Go to Products');
+    return tabs + emptyState('box','No products yet','Add a product first, or switch to Bulk entry to add new ones on the fly.', 'products','Go to Products');
   }
   var options = STATE.data.products.map(function(p){return '<option value="'+p.id+'">'+esc(p.name)+'</option>';}).join('');
   return tabs + '<div class="two-col">'+
@@ -1111,7 +1199,7 @@ function renderStockPurchase(){
     '<div><label>Unit cost</label><input type="number" name="unitCost" min="0" step="0.01" required></div></div>'+
     '<label>Supplier / source</label><input type="text" name="supplier" placeholder="Optional">'+
     '<label>Notes</label><textarea name="notes" rows="2" placeholder="Optional"></textarea>'+
-    '<button type="submit" class="btn btn-block" style="margin-top:16px;">🛒 Save purchase</button>'+
+    '<button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('cart','icon-sm')+' Save purchase</button>'+
     '<p class="field-note">Stock purchases increase product stock but are not deducted from Net Profit.</p>'+
   '</form></div>'+
   historyCard +'</div>';
@@ -1146,7 +1234,7 @@ function renderExpenses(){
     '<label>Description</label><input type="text" name="description" placeholder="Optional">'+
     '<label>Amount</label><input type="number" name="amount" min="0" step="0.01" required>'+
     '<label>Notes</label><textarea name="notes" rows="2" placeholder="Optional"></textarea>'+
-    '<button type="submit" class="btn btn-block" style="margin-top:16px;">💸 Save expense</button>'+
+    '<button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('dollar','icon-sm')+' Save expense</button>'+
   '</form></div>'+
   '<div class="card"><h3 style="margin-bottom:10px;">Expense history</h3>'+
   (list.length? '<div class="table-wrap" style="border:none;"><table style="min-width:0;"><thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>' : '<div class="muted">No expenses recorded yet.</div>')+
@@ -1203,17 +1291,17 @@ function renderReports(){
       statCard('Number of Sales', stats.count)+
       statCard('Stock Purchased', fmtETB(stockP))+
       '<div class="card" style="display:flex;flex-direction:column;gap:6px;justify-content:center;">'+
-        '<div class="muted" style="font-size:11.5px;font-weight:700;">📥 Export report</div>'+
+        '<div class="muted" style="font-size:11.5px;font-weight:700;">'+uiIcon('download','icon-sm')+' Export report</div>'+
         '<div style="display:flex;gap:6px;flex-wrap:wrap;">'+
           '<button class="btn btn-sm" data-act="export-excel">Excel</button>'+
           '<button class="btn btn-outline btn-sm" data-act="export-csv">CSV</button>'+
-          '<button class="btn btn-gold btn-sm" data-act="export-pdf">🧾 PDF</button>'+
+          '<button class="btn btn-gold btn-sm" data-act="export-pdf">'+uiIcon('receipt','icon-sm')+' PDF</button>'+
         '</div>'+
       '</div>'+
     '</div>'+
     '<div class="grid grid-2" style="margin-top:20px;">'+
-      '<div class="card trophy-card"><div class="trophy-emoji">🏆</div><div><h3>Top Sales Day</h3>'+(tSales?('<div class="trophy-date">'+fmtDateLong(tSales.date)+'</div><div class="trophy-amt">'+fmtETB(tSales.amount)+'</div>'):'<div class="muted">No sales in range</div>')+'</div></div>'+
-      '<div class="card trophy-card"><div class="trophy-emoji">🏆</div><div><h3>Top Profit Day</h3>'+(tProfit?('<div class="trophy-date">'+fmtDateLong(tProfit.date)+'</div><div class="trophy-amt">'+fmtETB(tProfit.amount)+'</div>'):'<div class="muted">No sales in range</div>')+'</div></div>'+
+      '<div class="card trophy-card"><div class="icon-badge badge-gold trophy-emoji">'+uiIcon('award','icon-lg')+'</div><div><h3>Top Sales Day</h3>'+(tSales?('<div class="trophy-date">'+fmtDateLong(tSales.date)+'</div><div class="trophy-amt">'+fmtETB(tSales.amount)+'</div>'):'<div class="muted">No sales in range</div>')+'</div></div>'+
+      '<div class="card trophy-card"><div class="icon-badge badge-gold trophy-emoji">'+uiIcon('award','icon-lg')+'</div><div><h3>Top Profit Day</h3>'+(tProfit?('<div class="trophy-date">'+fmtDateLong(tProfit.date)+'</div><div class="trophy-amt">'+fmtETB(tProfit.amount)+'</div>'):'<div class="muted">No sales in range</div>')+'</div></div>'+
     '</div>';
 }
 
@@ -1231,7 +1319,7 @@ function renderSettings(){
       '<div class="list-item"><span>Owner</span><b>'+esc(u.ownerName)+'</b></div>'+
       '<div class="list-item"><span>Email</span><b>'+esc(u.email)+'</b></div>'+
       '<div class="list-item"><span>Member since</span><b>'+(u.createdAt?fmtDateLong(u.createdAt.slice(0,10)):'—')+'</b></div>'+
-      '<button class="btn btn-outline btn-block" style="margin-top:16px;" data-act="logout">🚪 Log out</button>'+
+      '<button class="btn btn-outline btn-block" style="margin-top:16px;" data-act="logout">'+uiIcon('logout','icon-sm')+' Log out</button>'+
     '</div>'+
     '<div class="card"><h3 style="margin-bottom:10px;">Business info</h3>'+
       '<p class="muted" style="margin-bottom:10px;">Shown on your printed invoices.</p>'+
@@ -1244,14 +1332,20 @@ function renderSettings(){
     '<div class="card"><h3 style="margin-bottom:10px;">Data & export</h3>'+
       '<p class="muted">Your data is synced to your account in real time and works across every device you sign in on.</p>'+
       '<div style="display:flex;gap:6px;flex-wrap:wrap;">'+
-        '<button class="btn btn-sm" data-act="export-excel">📊 Excel</button>'+
-        '<button class="btn btn-outline btn-sm" data-act="export-csv">📄 CSV</button>'+
-        '<button class="btn btn-gold btn-sm" data-act="export-pdf">🧾 PDF</button>'+
+        '<button class="btn btn-sm" data-act="export-excel">'+uiIcon('chart','icon-sm')+' Excel</button>'+
+        '<button class="btn btn-outline btn-sm" data-act="export-csv">'+uiIcon('note','icon-sm')+' CSV</button>'+
+        '<button class="btn btn-gold btn-sm" data-act="export-pdf">'+uiIcon('receipt','icon-sm')+' PDF</button>'+
       '</div>'+
       '<h3 style="margin:18px 0 6px;">Language</h3>'+
       '<button class="btn btn-outline btn-block" data-act="toggle-lang">'+(LANG==='en'?'Switch to አማርኛ':'Switch to English')+'</button>'+
+      '<h3 style="margin:18px 0 6px;">Appearance</h3>'+
+      '<div class="tabs" style="margin-bottom:0;">'+
+        '<button class="tab-btn'+(THEME==='light'?' active':'')+'" data-act="set-theme" data-theme="light">Light</button>'+
+        '<button class="tab-btn'+(THEME==='dark'?' active':'')+'" data-act="set-theme" data-theme="dark">Dark</button>'+
+        '<button class="tab-btn'+(THEME==='system'?' active':'')+'" data-act="set-theme" data-theme="system">System</button>'+
+      '</div>'+
     '</div>'+
-    '<div class="card premium"><h3 style="margin-bottom:10px;">🎯 Sales Goals</h3>'+
+    '<div class="card premium"><h3 style="margin-bottom:10px;">'+uiIcon('target','icon-sm')+' Sales Goals</h3>'+
       '<p class="muted" style="margin-bottom:10px;">Set targets to track progress on your Dashboard.</p>'+
       '<form id="goalsForm">'+
         '<label>Daily goal (ETB)</label><input type="number" min="0" step="0.01" name="dailyGoal" value="'+esc(goals.dailyGoal)+'">'+
@@ -1265,13 +1359,52 @@ function renderSettings(){
 }
 
 /* ---------------- shared UI bits ---------------- */
-function emptyState(emoji,title,desc,navTo,navLabel){
-  return '<div class="card empty"><div class="empty-emoji">'+emoji+'</div><b>'+esc(title)+'</b><p class="muted">'+esc(desc)+'</p>'+
+function emptyState(icon,title,desc,navTo,navLabel){
+  return '<div class="card empty"><div class="icon-badge badge-neutral" style="margin:0 auto 12px;">'+uiIcon(icon,'icon-lg')+'</div><b>'+esc(title)+'</b><p class="muted">'+esc(desc)+'</p>'+
     (navTo? '<button class="btn" data-nav="'+navTo+'" style="margin-top:8px;">'+esc(navLabel)+'</button>' : '')+'</div>';
 }
 function esc(s){ s = (s===undefined||s===null)?'':String(s); return s.replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 
 /* ---------------- MODAL ---------------- */
+var SCAN_STREAM = null;
+function stopScan(){
+  if(SCAN_STREAM){
+    SCAN_STREAM.getTracks().forEach(function(t){ t.stop(); });
+    SCAN_STREAM = null;
+  }
+}
+async function startBarcodeScan(){
+  var video = document.getElementById('scanVideo');
+  var statusEl = document.getElementById('scanStatus');
+  if(!video) return;
+  try{
+    var stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+    SCAN_STREAM = stream;
+    video.srcObject = stream;
+    var detector = new window.BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128','code_39','qr_code']});
+    function tick(){
+      if(!SCAN_STREAM) return;
+      detector.detect(video).then(function(codes){
+        if(codes && codes.length){
+          var value = codes[0].rawValue;
+          stopScan();
+          STATE.modal = null;
+          var match = STATE.data.products.find(function(p){ return p.barcode && p.barcode.toLowerCase()===value.toLowerCase(); });
+          if(match){ STATE.quickSaleSelectedId = match.id; STATE.quickSaleQuery=''; }
+          else { STATE.quickSaleQuery = value; }
+          render();
+          if(!match){ setTimeout(function(){ alert('No product matches barcode '+value+' yet. You can add it under this product\'s Barcode field in Products.'); }, 50); }
+          return;
+        }
+        requestAnimationFrame(tick);
+      }).catch(function(){ requestAnimationFrame(tick); });
+    }
+    requestAnimationFrame(tick);
+  }catch(err){
+    if(statusEl) statusEl.textContent = 'Could not access the camera: '+((err&&err.message)||err);
+  }
+}
+
 function renderModal(){
   var m = STATE.modal;
   if(!m) return '';
@@ -1282,6 +1415,7 @@ function renderModal(){
     body = '<form id="productForm">'+
       '<label>Product name</label><input name="name" required value="'+esc(p.name||'')+'">'+
       '<label>Category</label><input name="category" value="'+esc(p.category||'')+'" placeholder="Optional">'+
+      '<label>Barcode / SKU <span class="field-note" style="display:inline;margin:0;">(optional — scan or type)</span></label><input name="barcode" value="'+esc(p.barcode||'')+'" placeholder="Scan with a barcode scanner or type manually">'+
       '<div class="form-row"><div><label>Cost price</label><input type="number" name="costPrice" min="0" step="0.01" required value="'+(p.costPrice!==undefined?p.costPrice:'')+'"></div>'+
       '<div><label>Selling price</label><input type="number" name="sellingPrice" min="0" step="0.01" required value="'+(p.sellingPrice!==undefined?p.sellingPrice:'')+'"></div></div>'+
       '<div class="form-row"><div><label>Opening stock</label><input type="number" name="openingStock" min="0" step="1" required value="'+(p.openingStock!==undefined?p.openingStock:0)+'" '+(p.id?'':'')+'></div>'+
@@ -1313,6 +1447,11 @@ function renderModal(){
       '<label>Amount</label><input type="number" name="amount" min="0" step="0.01" value="'+e.amount+'" required>'+
       '<div class="modal-foot"><button type="button" class="btn btn-outline" data-act="close-modal">Cancel</button><button type="submit" class="btn">Save changes</button></div>'+
     '</form>';
+  } else if(m.type==='scan'){
+    title = 'Scan barcode';
+    body = '<div id="scanStatus" class="muted" style="margin-bottom:8px;">Point the camera at a barcode…</div>'+
+      '<video id="scanVideo" playsinline autoplay muted style="width:100%;border-radius:10px;background:#000;"></video>'+
+      '<div class="modal-foot"><button type="button" class="btn btn-outline btn-block" data-act="close-modal">Cancel</button></div>';
   }
   return '<div class="modal-back" data-act="close-modal-back"><div class="modal"><h2>'+title+'</h2>'+body+'</div></div>';
 }
@@ -1357,7 +1496,16 @@ function bindEvents(){
     updatePreview();
     var qsSearch = qs.querySelector('#qsProductSearch');
     if(qsSearch){
-      qsSearch.addEventListener('input', function(){ STATE.quickSaleQuery = qsSearch.value; render(); preserveFocus('qsProductSearch'); });
+      qsSearch.addEventListener('input', function(){
+        var v = qsSearch.value;
+        STATE.quickSaleQuery = v;
+        var exact = STATE.data.products.find(function(p){ return p.barcode && p.barcode.toLowerCase()===v.trim().toLowerCase(); });
+        if(exact && v.trim().length>=3){
+          STATE.quickSaleSelectedId = exact.id; STATE.quickSaleQuery='';
+          render(); return;
+        }
+        render(); preserveFocus('qsProductSearch');
+      });
     }
   }
 
@@ -1440,9 +1588,10 @@ function handleAction(act, el, ev){
   if(act==='back-to-login'){ STATE.forgotMode=false; STATE.authError=''; STATE.authMsg=''; render(); return; }
   if(act==='logout'){ auth.signOut(); return; }
   if(act==='toggle-lang'){ LANG = LANG==='en'?'am':'en'; localStorage.setItem('ssr_lang',LANG); render(); return; }
+  if(act==='set-theme'){ applyTheme(el.getAttribute('data-theme')); render(); return; }
   if(act==='open-sidebar'){ STATE.sidebarOpen=true; render(); return; }
   if(act==='close-sidebar'){ STATE.sidebarOpen=false; render(); return; }
-  if(act==='close-modal' || act==='close-modal-back'){ STATE.modal=null; render(); return; }
+  if(act==='close-modal' || act==='close-modal-back'){ stopScan(); STATE.modal=null; render(); return; }
   if(act==='clear-sales-filter'){ STATE.salesFilter={search:'',date:'',product:''}; render(); return; }
   if(act==='cal-prev'){ STATE.calMonthCursor = new Date(STATE.calMonthCursor.getFullYear(), STATE.calMonthCursor.getMonth()-1, 1); render(); return; }
   if(act==='cal-next'){ STATE.calMonthCursor = new Date(STATE.calMonthCursor.getFullYear(), STATE.calMonthCursor.getMonth()+1, 1); render(); return; }
@@ -1452,6 +1601,16 @@ function handleAction(act, el, ev){
   if(act==='qs-mode'){ STATE.quickSaleMode = el.getAttribute('data-mode'); STATE.quickSaleQuery=''; STATE.quickSaleSelectedId=''; render(); return; }
   if(act==='qs-pick-product'){ STATE.quickSaleSelectedId = el.getAttribute('data-id'); STATE.quickSaleQuery=''; render(); return; }
   if(act==='qs-clear-product'){ STATE.quickSaleSelectedId=''; STATE.quickSaleQuery=''; render(); return; }
+  if(act==='qs-scan-barcode'){
+    if(!('BarcodeDetector' in window)){
+      alert('Camera barcode scanning is not supported in this browser. You can still type or paste a barcode into the search box.');
+      return;
+    }
+    STATE.modal = {type:'scan'};
+    render();
+    startBarcodeScan();
+    return;
+  }
   if(act==='add-product'){ STATE.modal={type:'product', data:{}}; render(); return; }
   if(act==='edit-product'){ var p=findProduct(el.getAttribute('data-id')); STATE.modal={type:'product', data:Object.assign({},p)}; render(); return; }
   if(act==='delete-product'){
@@ -1673,7 +1832,7 @@ async function onSaveProduct(ev){
   try{
     if(editing){
       var fields = {
-        name: fd.get('name'), category: fd.get('category'),
+        name: fd.get('name'), category: fd.get('category'), barcode: (fd.get('barcode')||'').trim(),
         costPrice: parseFloat(fd.get('costPrice')), sellingPrice: parseFloat(fd.get('sellingPrice')),
         openingStock: parseFloat(fd.get('openingStock')), reorderLevel: parseFloat(fd.get('reorderLevel'))||0
       };
@@ -1682,9 +1841,9 @@ async function onSaveProduct(ev){
     } else {
       var opening = parseFloat(fd.get('openingStock'))||0;
       await saveProductDoc({
-        name:fd.get('name'), category:fd.get('category'),
+        name:fd.get('name'), category:fd.get('category'), barcode:(fd.get('barcode')||'').trim(),
         costPrice:parseFloat(fd.get('costPrice')), sellingPrice:parseFloat(fd.get('sellingPrice')),
-        openingStock:opening, currentStock:opening, reorderLevel:parseFloat(fd.get('reorderLevel'))||0
+        openingStock:opening, currentStock:opening, debt:0, reorderLevel:parseFloat(fd.get('reorderLevel'))||0
       }, null);
     }
     STATE.modal=null;
@@ -1767,6 +1926,7 @@ async function onImportCsv(ev){
           await saveProductDoc({
             name:name,
             category:(r['Category']||r['category']||'').trim(),
+            barcode:(r['Barcode']||r['barcode']||r['SKU']||r['sku']||'').trim(),
             costPrice:parseFloat(r['Cost Price']||r['costPrice']||r['Cost price']||0)||0,
             sellingPrice:parseFloat(r['Selling Price']||r['sellingPrice']||r['Selling price']||0)||0,
             openingStock:parseFloat(r['Opening Stock']||r['openingStock']||r['Opening stock']||0)||0,
@@ -1869,7 +2029,7 @@ async function exportExcel(){
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(stockRows.length?stockRows:[{Date:'',Product:'',Quantity:'',"Unit Cost":'',"Total Cost":'',Supplier:'',Notes:''}]), 'Stock Purchases');
 
   var prodRows = STATE.data.products.map(function(p){
-    return {Name:p.name, Category:p.category, 'Cost Price':p.costPrice, 'Selling Price':p.sellingPrice, 'Opening Stock':p.openingStock, 'Current Stock':p.currentStock, 'Reorder Level':p.reorderLevel};
+    return {Name:p.name, Category:p.category, 'Cost Price':p.costPrice, 'Selling Price':p.sellingPrice, 'Opening Stock':p.openingStock, 'Current Stock':p.currentStock, 'Owed (pending stock)':p.debt||0, 'Reorder Level':p.reorderLevel};
   });
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(prodRows.length?prodRows:[{Name:'',Category:'',"Cost Price":'',"Selling Price":'',"Opening Stock":'',"Current Stock":'',"Reorder Level":''}]), 'Products');
 
@@ -1939,9 +2099,9 @@ async function exportCSV(){
     lines.push(csvRow([sp.date,sp.productName,sp.quantity,sp.unitCost,sp.totalCost,sp.supplier]));
   });
   lines.push(''); lines.push('PRODUCTS');
-  lines.push(csvRow(['Name','Category','Cost Price','Selling Price','Opening Stock','Current Stock','Reorder Level']));
+  lines.push(csvRow(['Name','Category','Cost Price','Selling Price','Opening Stock','Current Stock','Owed (pending stock)','Reorder Level']));
   STATE.data.products.forEach(function(p){
-    lines.push(csvRow([p.name,p.category,p.costPrice,p.sellingPrice,p.openingStock,p.currentStock,p.reorderLevel]));
+    lines.push(csvRow([p.name,p.category,p.costPrice,p.sellingPrice,p.openingStock,p.currentStock,p.debt||0,p.reorderLevel]));
   });
   var csv = '\uFEFF'+lines.join('\r\n');
   var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
