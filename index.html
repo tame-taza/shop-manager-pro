@@ -11,7 +11,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
@@ -57,12 +56,6 @@
   --paper:#0d1917; --green-50:#0d1917; --green-100:#132825; --ink:#eaf3ee; --ink-soft:#a9bcb2; --ink-faint:#71877b;
   --border:#25392f; --amber-bg:#2b2210; --red-bg:#2c1717; --success:#2fbf7a; --success-bg:#123626; --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
 }
-/* Color palettes — only restyle the brand hues (sidebar/buttons/headings); light/dark stays independent */
-[data-palette="blue"]{ --green-900:#0b2d52; --green-700:#1b4f85; --green-600:#2f74b8; }
-[data-palette="green"]{ --green-900:#0b3d2e; --green-700:#146c43; --green-600:#1a8a58; }
-[data-palette="purple"]{ --green-900:#2e1a47; --green-700:#5b3b8c; --green-600:#7c56b5; }
-[data-palette="orange"]{ --green-900:#5a2c0d; --green-700:#b1591c; --green-600:#d97b2e; }
-[data-palette="slate"]{ --green-900:#1f2937; --green-700:#374151; --green-600:#4b5563; }
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
 body{
@@ -188,18 +181,6 @@ tbody tr:hover{background:var(--green-50);}
 .err-text{color:var(--red);font-size:12.5px;margin-top:10px;background:var(--red-bg);padding:8px 10px;border-radius:8px;}
 .ok-text{color:var(--success);font-size:12.5px;margin-top:10px;background:var(--success-bg);padding:8px 10px;border-radius:8px;}
 .link-btn{background:none;border:none;color:var(--green-700);font-weight:700;font-size:12.5px;cursor:pointer;padding:0;text-decoration:underline;}
-.palette-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
-.palette-swatch{display:flex;align-items:center;gap:8px;padding:9px 10px;border:1px solid var(--border);border-radius:10px;background:var(--paper);cursor:pointer;font-size:12.5px;font-weight:700;color:var(--ink);}
-.palette-swatch.active{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold-light);}
-.swatch-dot{width:18px;height:18px;border-radius:50%;flex-shrink:0;box-shadow:inset 0 0 0 2px rgba(255,255,255,.4);}
-.swatch-dot[data-swatch="default"]{background:linear-gradient(135deg,#1d3a5f,#0f1b2e);}
-.swatch-dot[data-swatch="blue"]{background:linear-gradient(135deg,#1b4f85,#0b2d52);}
-.swatch-dot[data-swatch="green"]{background:linear-gradient(135deg,#146c43,#0b3d2e);}
-.swatch-dot[data-swatch="purple"]{background:linear-gradient(135deg,#5b3b8c,#2e1a47);}
-.swatch-dot[data-swatch="orange"]{background:linear-gradient(135deg,#b1591c,#5a2c0d);}
-.swatch-dot[data-swatch="slate"]{background:linear-gradient(135deg,#374151,#1f2937);}
-.pw-wrap{position:relative;}
-.pw-toggle{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--green-700);font-size:11.5px;font-weight:800;padding:6px 8px;}
 .lowstock-banner{display:flex;align-items:center;gap:10px;background:var(--amber-bg);color:var(--amber);border:1px solid #f0d9a8;border-radius:var(--radius-md);padding:12px 16px;margin-bottom:16px;font-size:13px;font-weight:600;}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;}
 .cal-dow{font-size:10.5px;font-weight:800;color:var(--ink-faint);text-align:center;padding-bottom:4px;}
@@ -312,15 +293,6 @@ function applyTheme(theme){
   else document.documentElement.setAttribute('data-theme', theme);
 }
 applyTheme(THEME);
-var PALETTE_NAMES = {default:'Navy & Gold', blue:'Ocean Blue', green:'Classic Green', purple:'Royal Purple', orange:'Sunset Orange', slate:'Professional Slate'};
-var PALETTE = localStorage.getItem('ssr_palette') || 'default';
-function applyPalette(p){
-  PALETTE = p;
-  localStorage.setItem('ssr_palette', p);
-  if(p==='default') document.documentElement.removeAttribute('data-palette');
-  else document.documentElement.setAttribute('data-palette', p);
-}
-applyPalette(PALETTE);
 var T = {
   en:{app_name:"Shop Sales Record", tagline:"Taza Technology", dashboard:"Dashboard", quick_sale:"Quick Sale", sales:"Sales", invoice:"Invoice", calendar:"Calendar", products:"Products", stock_purchase:"Stock Purchase", expenses:"Expenses", reports:"Reports", settings:"Settings", logout:"Log out"},
   am:{app_name:"የሽያጭ መዝገብ", tagline:"ታዛ ቴክኖሎጂ", dashboard:"ዳሽቦርድ", quick_sale:"ፈጣን ሽያጭ", sales:"ሽያጮች", invoice:"ደረሰኝ", calendar:"የቀን መቁጠሪያ", products:"ምርቶች", stock_purchase:"የስቶክ ግዢ", expenses:"ወጪዎች", reports:"ሪፖርቶች", settings:"ቅንብሮች", logout:"ውጣ"}
@@ -365,35 +337,8 @@ function friendlyAuthError(err){
 }
 
 /* live Firestore listeners for the logged-in shop */
-var UNSUB = {products:null, sales:null, stockPurchases:null, expenses:null, invoices:null, profile:null, backupSavings:null, branches:null, staff:null};
-function shopRef(){ return db.collection('shops').doc(STATE.session.shopId); }
-function myRole(){ return STATE.session ? STATE.session.role : null; }
-function isCeo(){ return myRole()==='ceo'; }
-function canManage(){ return myRole()==='ceo' || myRole()==='manager'; }
-function canDelete(){ return myRole()==='ceo' || myRole()==='manager'; }
-
-/* Resolve who this authenticated user is: look up staffLookup/{uid} to find their
-   shop, role and branch. Existing single-shop accounts (pre-V2) are migrated
-   automatically the first time they sign in: they become 'ceo' of their own shop. */
-async function resolveStaffSession(uid){
-  var lookupSnap = await db.collection('staffLookup').doc(uid).get();
-  if(lookupSnap.exists){
-    return lookupSnap.data();
-  }
-  /* Migration fallback: an account that existed before the staff system.
-     If a shop document already exists at shops/{uid}, this user is its CEO. */
-  var info = {shopId: uid, role:'ceo', branchId:null, status:'active'};
-  try{
-    await db.collection('staffLookup').doc(uid).set(info);
-    var shopSnap = await db.collection('shops').doc(uid).get();
-    if(shopSnap.exists){
-      await db.collection('shops').doc(uid).collection('staff').doc(uid).set({
-        name: shopSnap.data().ownerName||'', email: shopSnap.data().email||'', role:'ceo', branchId:null, status:'active', createdAt:new Date().toISOString()
-      }, {merge:true});
-    }
-  }catch(e){ /* rules may reject if this truly isn't a valid owner; handled by caller */ }
-  return info;
-}
+var UNSUB = {products:null, sales:null, stockPurchases:null, expenses:null, invoices:null, profile:null};
+function shopRef(){ return db.collection('shops').doc(STATE.session.userId); }
 function subscribeAll(uidStr){
   var base = db.collection('shops').doc(uidStr);
   UNSUB.profile = base.onSnapshot(function(doc){
@@ -417,18 +362,6 @@ function subscribeAll(uidStr){
   }, function(){});
   UNSUB.invoices = base.collection('invoices').onSnapshot(function(snap){
     STATE.data.invoices = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); }).sort(function(a,b){return (b.createdAt||'').localeCompare(a.createdAt||'');});
-    render();
-  }, function(){});
-  UNSUB.backupSavings = base.collection('backupSavings').onSnapshot(function(snap){
-    STATE.data.backupSavings = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
-    render();
-  }, function(){});
-  UNSUB.branches = base.collection('branches').onSnapshot(function(snap){
-    STATE.data.branches = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
-    render();
-  }, function(){});
-  UNSUB.staff = base.collection('staff').onSnapshot(function(snap){
-    STATE.data.staff = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
     render();
   }, function(){});
 }
@@ -459,10 +392,6 @@ var STATE = {
   authError:'',
   authMsg:'',
   authBusy:false,
-  resendCooldown:0,
-  pwChangeError:'',
-  pwChangeMsg:'',
-  staffInviteError:'',
   forgotMode:false,
   editingSale:null,
   editingProduct:null,
@@ -480,7 +409,6 @@ var STATE = {
   quickSaleSelectedId:'',
   invoiceDraft:{customerName:'',phone:'',address:'',items:[{name:'',qty:1,unitPrice:0}]},
   invoicePreview:null,
-  editingInvoiceId:null,
   stockMode:'single',
   bulkStockDraft:{date:todayStr(),supplier:'',notes:'',rows:[{name:'',qty:1,unitCost:0}]},
   sidebarOpen:false,
@@ -508,28 +436,17 @@ function creditProduct(stock, debt, qty){
   if(debt >= qty) return {currentStock: round2(stock), debt: round2(debt-qty)};
   return {currentStock: round2(stock + (qty-debt)), debt: 0};
 }
-/* By default a sale just floors displayed stock at 0 with no automatic debt —
-   debt/backorder tracking only kicks in when the sale is explicitly marked as Owed. */
-function applySaleEffect(stock, debt, qty, markedOwed){
-  if(markedOwed) return debitProduct(stock, debt, qty);
-  return {currentStock: Math.max(0, round2((stock||0)-qty)), debt: round2(debt||0)};
-}
-function revertSaleEffect(stock, debt, qty, markedOwed){
-  if(markedOwed) return creditProduct(stock, debt, qty);
-  return {currentStock: round2((stock||0)+qty), debt: round2(debt||0)};
-}
 
 async function addSale(saleInput){
   var base = shopRef();
   var saleRef = base.collection('sales').doc();
   var productRef = base.collection('products').doc(saleInput.productId);
-  var markedOwed = !!saleInput.markedOwed;
-  var sale = recomputeSale(Object.assign({createdAt:new Date().toISOString(), markedOwed:markedOwed}, saleInput));
+  var sale = recomputeSale(Object.assign({createdAt:new Date().toISOString()}, saleInput));
   await db.runTransaction(async function(tx){
     var prodSnap = await tx.get(productRef);
     var stock = prodSnap.exists ? (prodSnap.data().currentStock||0) : 0;
     var debt = prodSnap.exists ? (prodSnap.data().debt||0) : 0;
-    var after = applySaleEffect(stock, debt, saleInput.quantity, markedOwed);
+    var after = debitProduct(stock, debt, saleInput.quantity);
     tx.set(saleRef, sale);
     tx.update(productRef, {currentStock: after.currentStock, debt: after.debt});
   });
@@ -542,17 +459,15 @@ async function updateSale(saleId, patch){
     var saleSnap = await tx.get(saleRef);
     if(!saleSnap.exists) return;
     var oldSale = saleSnap.data();
-    var oldOwed = !!oldSale.markedOwed;
-    var newOwed = patch.markedOwed!==undefined ? !!patch.markedOwed : oldOwed;
-    var recomputed = recomputeSale(Object.assign({}, oldSale, patch, {markedOwed:newOwed}));
+    var recomputed = recomputeSale(Object.assign({}, oldSale, patch));
     var oldProductId = oldSale.productId, newProductId = recomputed.productId;
     if(oldProductId === newProductId){
       var ref = base.collection('products').doc(oldProductId);
       var snap = await tx.get(ref);
       if(snap.exists){
         var d0 = snap.data();
-        var reverted = revertSaleEffect(d0.currentStock||0, d0.debt||0, oldSale.quantity, oldOwed);
-        var applied = applySaleEffect(reverted.currentStock, reverted.debt, recomputed.quantity, newOwed);
+        var reverted = creditProduct(d0.currentStock||0, d0.debt||0, oldSale.quantity);
+        var applied = debitProduct(reverted.currentStock, reverted.debt, recomputed.quantity);
         tx.update(ref, {currentStock: applied.currentStock, debt: applied.debt});
       }
     } else {
@@ -562,12 +477,12 @@ async function updateSale(saleId, patch){
       var newSnap = await tx.get(newRef);
       if(oldSnap.exists){
         var od = oldSnap.data();
-        var revertedOld = revertSaleEffect(od.currentStock||0, od.debt||0, oldSale.quantity, oldOwed);
+        var revertedOld = creditProduct(od.currentStock||0, od.debt||0, oldSale.quantity);
         tx.update(oldRef, {currentStock: revertedOld.currentStock, debt: revertedOld.debt});
       }
       if(newSnap.exists){
         var nd = newSnap.data();
-        var appliedNew = applySaleEffect(nd.currentStock||0, nd.debt||0, recomputed.quantity, newOwed);
+        var appliedNew = debitProduct(nd.currentStock||0, nd.debt||0, recomputed.quantity);
         tx.update(newRef, {currentStock: appliedNew.currentStock, debt: appliedNew.debt});
       }
     }
@@ -586,7 +501,7 @@ async function deleteSale(saleId){
     var prodSnap = await tx.get(prodRef);
     if(prodSnap.exists){
       var d = prodSnap.data();
-      var after = revertSaleEffect(d.currentStock||0, d.debt||0, sale.quantity, !!sale.markedOwed);
+      var after = creditProduct(d.currentStock||0, d.debt||0, sale.quantity);
       tx.update(prodRef, {currentStock: after.currentStock, debt: after.debt});
     }
     tx.delete(saleRef);
@@ -626,45 +541,6 @@ async function deleteStockPurchase(spId){
   });
 }
 
-async function updateStockPurchase(spId, patch){
-  var base = shopRef();
-  var spRef = base.collection('stockPurchases').doc(spId);
-  await db.runTransaction(async function(tx){
-    var spSnap = await tx.get(spRef);
-    if(!spSnap.exists) return;
-    var oldSp = spSnap.data();
-    var merged = Object.assign({}, oldSp, patch);
-    merged.totalCost = round2((merged.quantity||0)*(merged.unitCost||0));
-    var oldProductId = oldSp.productId, newProductId = merged.productId;
-    if(oldProductId === newProductId){
-      var ref = base.collection('products').doc(oldProductId);
-      var snap = await tx.get(ref);
-      if(snap.exists){
-        var d0 = snap.data();
-        var reverted = debitProduct(d0.currentStock||0, d0.debt||0, oldSp.quantity);
-        var applied = creditProduct(reverted.currentStock, reverted.debt, merged.quantity);
-        tx.update(ref, {currentStock: applied.currentStock, debt: applied.debt});
-      }
-    } else {
-      var oldRef = base.collection('products').doc(oldProductId);
-      var newRef = base.collection('products').doc(newProductId);
-      var oldSnap = await tx.get(oldRef);
-      var newSnap = await tx.get(newRef);
-      if(oldSnap.exists){
-        var od = oldSnap.data();
-        var revertedOld = debitProduct(od.currentStock||0, od.debt||0, oldSp.quantity);
-        tx.update(oldRef, {currentStock: revertedOld.currentStock, debt: revertedOld.debt});
-      }
-      if(newSnap.exists){
-        var nd = newSnap.data();
-        var appliedNew = creditProduct(nd.currentStock||0, nd.debt||0, merged.quantity);
-        tx.update(newRef, {currentStock: appliedNew.currentStock, debt: appliedNew.debt});
-      }
-    }
-    tx.set(spRef, merged);
-  });
-}
-
 async function saveProductDoc(fields, existingId){
   var base = shopRef();
   if(existingId) await base.collection('products').doc(existingId).update(fields);
@@ -696,22 +572,6 @@ function periodStats(fromStr,toStr){
   return { totalSales:totalSales, cogs:cogs, gross:gross, expenses:expTotal, net:round2(gross-expTotal), count:s.length };
 }
 
-/* Current Store Balance: a cash-reality figure, separate from accounting Net Profit.
-   Net Profit = Gross Profit - Expenses (COGS only, inventory is an asset until sold).
-   Store Balance = Sales - full Stock Purchase cost - Expenses (actual cash in/out). */
-function currentStoreBalance(){
-  var allSales = sumBy(STATE.data.sales, 'totalSales');
-  var allStock = sumBy(STATE.data.stockPurchases, 'totalCost');
-  var allExp = sumBy(STATE.data.expenses, 'amount');
-  return round2(allSales - allStock - allExp);
-}
-function cashDeltaForRange(fromStr, toStr){
-  var sales = sumBy(salesInRange(fromStr,toStr), 'totalSales');
-  var stock = sumBy(stockPurchasesInRange(fromStr,toStr), 'totalCost');
-  var exp = sumBy(expensesInRange(fromStr,toStr), 'amount');
-  return round2(sales - stock - exp);
-}
-
 function topDay(metric){
   var map = {};
   STATE.data.sales.forEach(function(s){
@@ -736,34 +596,10 @@ function render(){
   }
   if(!STATE.session){
     root.innerHTML = renderAuth();
-  } else if(auth.currentUser && !auth.currentUser.emailVerified){
-    root.innerHTML = renderVerifyGate();
   } else {
     root.innerHTML = renderShell();
   }
   bindEvents();
-}
-
-function startResendCooldown(){
-  STATE.resendCooldown = 60;
-  var iv = setInterval(function(){
-    STATE.resendCooldown--;
-    if(STATE.resendCooldown<=0){ clearInterval(iv); STATE.resendCooldown=0; }
-    render();
-  }, 1000);
-}
-
-function renderVerifyGate(){
-  var email = auth.currentUser ? auth.currentUser.email : '';
-  return '<div class="auth-wrap"><div class="auth-card">'+
-    '<div class="auth-brand"><div class="brand-mark">TT</div><div><b style="display:block;font-weight:800;">Verify your email</b><span class="muted">Taza Technology™</span></div></div>'+
-    '<p class="muted">We sent a verification link to <b>'+esc(email)+'</b>. Please check your inbox (and spam folder) and click the link, then come back here.</p>'+
-    (STATE.authMsg?'<div class="ok-text">'+esc(STATE.authMsg)+'</div>':'')+
-    (STATE.authError?'<div class="err-text">'+esc(STATE.authError)+'</div>':'')+
-    '<button class="btn btn-block" data-act="check-verify" style="margin-top:14px;" '+(STATE.authBusy?'disabled':'')+'>'+(STATE.authBusy?'Checking…':"I've verified — Check again")+'</button>'+
-    '<button class="btn btn-outline btn-block" data-act="resend-verify-gate" style="margin-top:10px;" '+(STATE.resendCooldown>0?'disabled':'')+'>'+(STATE.resendCooldown>0?('Resend in '+STATE.resendCooldown+'s'):'Resend verification email')+'</button>'+
-    '<div style="text-align:center;margin-top:14px;"><button class="link-btn" data-act="logout">← Back to login</button></div>'+
-  '</div></div>';
 }
 
 /* ---------------- AUTH VIEW ---------------- */
@@ -793,14 +629,10 @@ function renderAuth(){
     (tab==='login' ? renderLoginForm() : renderSignupForm())+
     '</div></div>';
 }
-function pwField(id, name, placeholder, minlen){
-  return '<div class="pw-wrap"><input id="'+id+'" name="'+name+'" type="password" required'+(minlen?(' minlength="'+minlen+'"'):'')+' placeholder="'+placeholder+'" style="padding-right:56px;">'+
-    '<button type="button" class="pw-toggle" data-act="toggle-pw" data-target="'+id+'">Show</button></div>';
-}
 function renderLoginForm(){
   return '<form id="loginForm">'+
     '<label>Email</label><input name="email" type="email" required placeholder="you@example.com">'+
-    '<label>Password</label>'+pwField('loginPw','password','Password')+
+    '<label>Password</label><input name="password" type="password" required placeholder="Password">'+
     (STATE.authError?'<div class="err-text">'+esc(STATE.authError)+'</div>':'')+
     '<button type="submit" class="btn btn-block" style="margin-top:16px;" '+(STATE.authBusy?'disabled':'')+'>'+(STATE.authBusy?'Logging in…':'Log in')+'</button>'+
     '</form>'+
@@ -811,8 +643,8 @@ function renderSignupForm(){
     '<label>Shop name</label><input name="shopName" required placeholder="e.g. Selam General Store">'+
     '<label>Owner name</label><input name="ownerName" required placeholder="Your full name">'+
     '<label>Email</label><input name="email" type="email" required placeholder="you@example.com">'+
-    '<label>Password</label>'+pwField('signupPw','password','At least 8 characters',8)+
-    '<label>Confirm password</label>'+pwField('signupPw2','confirmPassword','Repeat password',8)+
+    '<label>Password</label><input name="password" type="password" required minlength="6" placeholder="At least 6 characters">'+
+    '<label>Confirm password</label><input name="confirmPassword" type="password" required minlength="6" placeholder="Repeat password">'+
     (STATE.authError?'<div class="err-text">'+esc(STATE.authError)+'</div>':'')+
     '<button type="submit" class="btn btn-block" style="margin-top:16px;" '+(STATE.authBusy?'disabled':'')+'>'+(STATE.authBusy?'Creating…':'Create account')+'</button>'+
     '</form>';
@@ -934,7 +766,6 @@ function renderDashboard(){
   var tProfit = topDay('profit');
   var goal = goalFor(period);
   var pct = goal>0 ? Math.min(100, round2((stats.totalSales/goal)*100)) : null;
-  var storeBalance = currentStoreBalance();
 
   var labels = {today:'Today',week:'Weekly',month:'Monthly',year:'Yearly'};
   var tabs = ['today','week','month','year'].map(function(p){
@@ -948,9 +779,6 @@ function renderDashboard(){
       ' <button class="link-btn" data-nav="products" style="margin-left:auto;">View products</button></div>';
   }
 
-  var grossMargin = stats.totalSales>0 ? round2((stats.gross/stats.totalSales)*100) : 0;
-  var netMargin = stats.totalSales>0 ? round2((stats.net/stats.totalSales)*100) : 0;
-
   html += '<div class="tabs">'+tabs+'</div>';
   html += '<div class="section-title">'+range.label+' <span class="muted" style="font-weight:600;">— '+stats.count+' sale'+(stats.count!==1?'s':'')+'</span></div>'+
     '<div class="grid grid-4">'+
@@ -958,21 +786,7 @@ function renderDashboard(){
       statCard('Gross Profit', fmtETB(stats.gross), null, 'sv-green')+
       statCard('Expenses', fmtETB(stats.expenses), null, 'sv-red')+
       statCard('Net Profit', fmtETB(stats.net), null, netProfitColorClass(pct, stats.net))+
-    '</div>'+
-    '<div class="grid grid-4" style="margin-top:14px;">'+
-      statCard('Gross Margin', grossMargin+'%', 'Gross profit as % of sales', 'sv-green')+
-      statCard('Net Margin', netMargin+'%', 'Net profit as % of sales', netProfitColorClass(pct, stats.net))+
-      statCard('Current Store Balance', fmtETB(storeBalance), 'All-time cash: sales − stock purchases − expenses', storeBalance>=0?'sv-green':'sv-red')+
     '</div>';
-
-  if(period==='month' || period==='year'){
-    var periodCashDelta = cashDeltaForRange(range.from, range.to);
-    if(periodCashDelta < 0){
-      html += '<div class="lowstock-banner" style="background:var(--red-bg);color:var(--red);border-color:#f0b8b8;">'+uiIcon('alert','icon-md')+
-        '<span><b>Stock purchases + expenses exceeded sales by '+fmtETB(Math.abs(periodCashDelta))+' this '+(period==='month'?'month':'year')+'.</b> '+
-        'This was funded from your Store Balance reserve — your accounting Net Profit above is not affected by this, it only reflects COGS, not full stock purchase cost.</span></div>';
-    }
-  }
 
   if(goal>0){
     var remaining = Math.max(0, round2(goal-stats.totalSales));
@@ -1117,11 +931,6 @@ function renderQuickSale(){
   '<form id="quickSaleForm" data-mode="'+mode+'">'+
     '<label>Date</label><input type="date" name="date" value="'+todayStr()+'" max="'+todayStr()+'" required>'+
     productFields+
-    '<label style="display:flex;align-items:center;gap:8px;margin-top:14px;cursor:pointer;">'+
-      '<input type="checkbox" name="markedOwed" style="width:auto;"> '+
-      '<span style="font-size:12.5px;font-weight:700;color:var(--ink-soft);">Not in stock yet — mark as Owed</span>'+
-    '</label>'+
-    '<p class="field-note">Leave unchecked for normal sales — stock just won\'t go below 0. Only check this if you are selling something you have not received yet; it will show as "Owed" on that product until a matching Stock Purchase is logged.</p>'+
     '<div id="qsPreview" class="card" style="margin-top:16px;background:var(--green-50);border-style:dashed;">'+
       '<div class="list-item"><span>Total sales</span><b id="pvTotal">0 ETB</b></div>'+
       '<div class="list-item"><span>COGS</span><b id="pvCogs">0 ETB</b></div>'+
@@ -1151,7 +960,7 @@ function renderSales(){
   var rows = list.map(function(s){
     return '<tr>'+
       '<td>'+fmtDateLong(s.date)+'</td>'+
-      '<td>'+esc(s.productName)+(s.markedOwed?' <span class="pill pill-amber">Owed</span>':'')+'</td>'+
+      '<td>'+esc(s.productName)+'</td>'+
       '<td>'+s.quantity+'</td>'+
       '<td>'+fmtETB(s.costPrice)+'</td>'+
       '<td>'+fmtETB(s.sellingPrice)+'</td>'+
@@ -1159,8 +968,8 @@ function renderSales(){
       '<td>'+fmtETB(s.cogs)+'</td>'+
       '<td style="color:var(--success);font-weight:700;">'+fmtETB(s.grossProfit)+'</td>'+
       '<td><div class="row-actions">'+
-        (canManage()?'<button class="btn btn-outline btn-sm" data-act="edit-sale" data-id="'+s.id+'">Edit</button>':'')+
-        (canDelete()?'<button class="btn btn-danger btn-sm" data-act="delete-sale" data-id="'+s.id+'">Delete</button>':'')+
+        '<button class="btn btn-outline btn-sm" data-act="edit-sale" data-id="'+s.id+'">Edit</button>'+
+        '<button class="btn btn-danger btn-sm" data-act="delete-sale" data-id="'+s.id+'">Delete</button>'+
       '</div></td>'+
     '</tr>';
   }).join('');
@@ -1212,15 +1021,11 @@ function renderInvoice(){
     '<div class="card" style="margin-top:14px;background:var(--green-50);border-style:dashed;display:flex;justify-content:space-between;align-items:center;">'+
       '<span style="font-weight:700;">Grand total</span><span class="stat-value" style="font-size:18px;">'+fmtETB(grandTotal)+'</span>'+
     '</div>'+
-    '<form id="invoiceForm"><button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('receipt','icon-sm')+(STATE.editingInvoiceId?' Update invoice':' Generate invoice preview')+'</button></form>'+
+    '<form id="invoiceForm"><button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('receipt','icon-sm')+' Generate invoice preview</button></form>'+
   '</div>'+
   '<div class="card"><h3 style="margin-bottom:10px;">Recent invoices</h3>'+
-    ((STATE.data.invoices||[]).slice(0,10).map(function(inv){
-      return '<div class="list-item"><span>'+esc(inv.invoiceNo||'')+' · '+esc(inv.customerName||'Walk-in')+' · '+(inv.createdAt?fmtDateLong(inv.createdAt.slice(0,10)):'')+'</span>'+
-        '<span style="display:flex;align-items:center;gap:8px;"><b>'+fmtETB(inv.total)+'</b>'+
-        '<button class="btn btn-outline btn-sm" data-act="view-invoice" data-id="'+inv.id+'">View</button>'+
-        (canManage()?'<button class="btn btn-outline btn-sm" data-act="edit-invoice" data-id="'+inv.id+'">Edit</button>':'')+
-        (canDelete()?'<button class="btn btn-danger btn-sm" data-act="delete-invoice" data-id="'+inv.id+'">Delete</button>':'')+'</span></div>';
+    ((STATE.data.invoices||[]).slice(0,8).map(function(inv){
+      return '<div class="list-item"><span>'+esc(inv.customerName||'Walk-in')+' · '+(inv.createdAt?fmtDateLong(inv.createdAt.slice(0,10)):'')+'</span><b>'+fmtETB(inv.total)+'</b></div>';
     }).join('') || '<div class="muted">No invoices yet.</div>')+
   '</div>'+
   '</div>';
@@ -1323,8 +1128,8 @@ function renderProducts(){
       '<td>'+p.reorderLevel+'</td>'+
       '<td>'+(low?'<span class="pill pill-amber">Low stock</span>':'<span class="pill pill-green">OK</span>')+'</td>'+
       '<td><div class="row-actions">'+
-        (canManage()?'<button class="btn btn-outline btn-sm" data-act="edit-product" data-id="'+p.id+'">Edit</button>':'')+
-        (canDelete()?'<button class="btn btn-danger btn-sm" data-act="delete-product" data-id="'+p.id+'">Delete</button>':'')+
+        '<button class="btn btn-outline btn-sm" data-act="edit-product" data-id="'+p.id+'">Edit</button>'+
+        '<button class="btn btn-danger btn-sm" data-act="delete-product" data-id="'+p.id+'">Delete</button>'+
       '</div></td>'+
     '</tr>';
   }).join('');
@@ -1344,42 +1149,8 @@ function renderProducts(){
 }
 
 /* ---------------- STOCK PURCHASE ---------------- */
-function renderBudgetCard(label, used, budget){
-  if(!budget || budget<=0) return '';
-  var remaining = round2(budget - used);
-  var pct = Math.min(100, round2((used/budget)*100));
-  var over = used > budget;
-  return '<div class="card" style="margin-bottom:16px;">'+
-    '<div class="goal-label"><span>'+esc(label)+'</span><b>'+fmtETB(used)+' / '+fmtETB(budget)+'</b></div>'+
-    '<div class="progress-track"><div class="progress-fill'+(over?' over':'')+'" style="width:'+pct+'%;'+(over?'background:var(--red);':'')+'"></div></div>'+
-    '<div class="stat-sub" style="margin-top:6px;'+(over?'color:var(--red);font-weight:700;':'')+'">'+
-      (over ? ('Over budget by '+fmtETB(Math.abs(remaining))) : (fmtETB(remaining)+' remaining'))+
-    '</div>'+
-  '</div>';
-}
 function renderStockPurchase(){
   var mode = STATE.stockMode||'single';
-  var wkStart = isoDate(startOfWeek(new Date()));
-  var moStart = isoDate(startOfMonth(new Date()));
-  var yrStart = isoDate(startOfYear(new Date()));
-  var t = todayStr();
-  var weekTotal = sumBy(stockPurchasesInRange(wkStart,t),'totalCost');
-  var monthTotal = sumBy(stockPurchasesInRange(moStart,t),'totalCost');
-  var yearTotal = sumBy(stockPurchasesInRange(yrStart,t),'totalCost');
-  var allTimeTotal = sumBy(STATE.data.stockPurchases,'totalCost');
-  var balanceNow = currentStoreBalance();
-  var summaryGrid = '<div class="grid grid-4" style="margin-bottom:10px;">'+
-    statCard('This Month', fmtETB(monthTotal))+
-    statCard('This Year', fmtETB(yearTotal))+
-    statCard('All-time Total', fmtETB(allTimeTotal))+
-    statCard('Purchases logged', STATE.data.stockPurchases.length)+
-    '</div>'+
-    '<div class="card premium" style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">'+
-      '<div><h3 style="margin-bottom:2px;">Current Store Balance</h3><span class="muted" style="font-size:11.5px;">Available cash: sales − stock purchases − expenses, all-time</span></div>'+
-      '<div class="stat-value '+(balanceNow>=0?'sv-green':'sv-red')+'" style="font-size:22px;">'+fmtETB(balanceNow)+'</div>'+
-    '</div>'+
-    renderBudgetCard('Weekly budget', weekTotal, parseFloat((STATE.shopProfile||{}).weeklyStockBudget)||0)+
-    renderBudgetCard('Monthly budget', monthTotal, parseFloat((STATE.shopProfile||{}).monthlyStockBudget)||0);
   var tabs = '<div class="tabs" style="margin-bottom:14px;">'+
       '<button type="button" class="tab-btn'+(mode==='single'?' active':'')+'" data-act="stock-mode" data-mode="single">Single item</button>'+
       '<button type="button" class="tab-btn'+(mode==='bulk'?' active':'')+'" data-act="stock-mode" data-mode="bulk">'+uiIcon('box','icon-sm')+' Bulk entry</button>'+
@@ -1388,7 +1159,7 @@ function renderStockPurchase(){
   var list = STATE.data.stockPurchases.slice().sort(function(a,b){return b.date.localeCompare(a.date);});
   var rows = list.map(function(sp){
     return '<tr><td>'+fmtDateLong(sp.date)+'</td><td>'+esc(sp.productName)+'</td><td>'+sp.quantity+'</td><td>'+fmtETB(sp.unitCost)+'</td><td>'+fmtETB(sp.totalCost)+'</td><td>'+esc(sp.supplier||'—')+'</td>'+
-      '<td><div class="row-actions">'+(canManage()?'<button class="btn btn-outline btn-sm" data-act="edit-stock" data-id="'+sp.id+'">Edit</button>':'')+(canDelete()?'<button class="btn btn-danger btn-sm" data-act="delete-stock" data-id="'+sp.id+'">Delete</button>':'')+'</div></td></tr>';
+      '<td><button class="btn btn-danger btn-sm" data-act="delete-stock" data-id="'+sp.id+'">Delete</button></td></tr>';
   }).join('');
   var historyCard = '<div class="card"><h3 style="margin-bottom:10px;">Purchase history</h3>'+
     (list.length? '<div class="table-wrap" style="border:none;"><table style="min-width:0;"><thead><tr><th>Date</th><th>Product</th><th>Qty</th><th>Unit cost</th><th>Total</th><th>Supplier</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>' : '<div class="muted">No purchases recorded yet.</div>')+
@@ -1397,7 +1168,7 @@ function renderStockPurchase(){
   if(mode==='bulk'){
     var d = STATE.bulkStockDraft;
     var itemRows = d.rows.map(renderBulkStockRow).join('');
-    return summaryGrid + tabs + '<div class="two-col">'+
+    return tabs + '<div class="two-col">'+
       '<div class="card"><h3 style="margin-bottom:10px;">'+uiIcon('box','icon-sm')+' Bulk stock entry</h3>'+
         '<p class="field-note" style="margin-bottom:10px;">Register a wholesale delivery of several products at once. New product names are created automatically.</p>'+
         '<form id="bulkStockForm">'+
@@ -1416,10 +1187,10 @@ function renderStockPurchase(){
   }
 
   if(!STATE.data.products.length){
-    return summaryGrid + tabs + emptyState('box','No products yet','Add a product first, or switch to Bulk entry to add new ones on the fly.', 'products','Go to Products');
+    return tabs + emptyState('box','No products yet','Add a product first, or switch to Bulk entry to add new ones on the fly.', 'products','Go to Products');
   }
   var options = STATE.data.products.map(function(p){return '<option value="'+p.id+'">'+esc(p.name)+'</option>';}).join('');
-  return summaryGrid + tabs + '<div class="two-col">'+
+  return tabs + '<div class="two-col">'+
   '<div class="card"><h3 style="margin-bottom:10px;">Record stock purchase</h3>'+
   '<form id="stockForm">'+
     '<label>Date</label><input type="date" name="date" value="'+todayStr()+'" max="'+todayStr()+'" required>'+
@@ -1452,7 +1223,7 @@ function renderExpenses(){
   var list = STATE.data.expenses.slice().sort(function(a,b){return b.date.localeCompare(a.date);});
   var rows = list.map(function(e){
     return '<tr><td>'+fmtDateLong(e.date)+'</td><td><span class="pill pill-green">'+esc(e.category)+'</span></td><td>'+esc(e.description||'—')+'</td><td>'+fmtETB(e.amount)+'</td>'+
-      '<td><div class="row-actions">'+(canManage()?'<button class="btn btn-outline btn-sm" data-act="edit-expense" data-id="'+e.id+'">Edit</button>':'')+(canDelete()?'<button class="btn btn-danger btn-sm" data-act="delete-expense" data-id="'+e.id+'">Delete</button>':'')+'</div></td></tr>';
+      '<td><div class="row-actions"><button class="btn btn-outline btn-sm" data-act="edit-expense" data-id="'+e.id+'">Edit</button><button class="btn btn-danger btn-sm" data-act="delete-expense" data-id="'+e.id+'">Delete</button></div></td></tr>';
   }).join('');
   var catOptions = EXPENSE_CATS.map(function(c){return '<option>'+c+'</option>';}).join('');
   return '<div class="two-col">'+
@@ -1528,103 +1299,10 @@ function renderReports(){
         '</div>'+
       '</div>'+
     '</div>'+
-    '<div class="grid grid-4" style="margin-top:14px;">'+
-      statCard('Gross Margin', (stats.totalSales>0?round2((stats.gross/stats.totalSales)*100):0)+'%', null, 'sv-green')+
-      statCard('Net Margin', (stats.totalSales>0?round2((stats.net/stats.totalSales)*100):0)+'%', null, netProfitColorClass(reportPct, stats.net))+
-      statCard('Current Store Balance', fmtETB(currentStoreBalance()), 'As of today', currentStoreBalance()>=0?'sv-green':'sv-red')+
-    '</div>'+
     '<div class="grid grid-2" style="margin-top:20px;">'+
       '<div class="card trophy-card"><div class="icon-badge badge-gold trophy-emoji">'+uiIcon('award','icon-lg')+'</div><div><h3>Top Sales Day</h3>'+(tSales?('<div class="trophy-date">'+fmtDateLong(tSales.date)+'</div><div class="trophy-amt">'+fmtETB(tSales.amount)+'</div>'):'<div class="muted">No sales in range</div>')+'</div></div>'+
       '<div class="card trophy-card"><div class="icon-badge badge-gold trophy-emoji">'+uiIcon('award','icon-lg')+'</div><div><h3>Top Profit Day</h3>'+(tProfit?('<div class="trophy-date">'+fmtDateLong(tProfit.date)+'</div><div class="trophy-amt">'+fmtETB(tProfit.amount)+'</div>'):'<div class="muted">No sales in range</div>')+'</div></div>'+
-    '</div>'+
-    renderTopProductLists(salesInR)+
-    '<div class="section-title" style="margin-top:26px;">'+uiIcon('chart','icon-sm')+' Sales &amp; Profit Trend</div>'+
-    '<div class="card"><canvas id="reportTrendChart" height="90"></canvas></div>';
-}
-
-function renderTopProductLists(salesInR){
-  var agg = {};
-  salesInR.forEach(function(s){
-    if(!agg[s.productId]) agg[s.productId] = {name:s.productName, qty:0, revenue:0, cogs:0, profit:0};
-    agg[s.productId].qty += s.quantity;
-    agg[s.productId].revenue += s.totalSales;
-    agg[s.productId].cogs += s.cogs;
-    agg[s.productId].profit += s.grossProfit;
-  });
-  var list = Object.keys(agg).map(function(k){ return agg[k]; });
-  var topSelling = list.slice().sort(function(a,b){return b.qty-a.qty;}).slice(0,10);
-  var topProfit = list.slice().sort(function(a,b){return b.profit-a.profit;}).slice(0,10);
-
-  function rankedList(items, valueKey, subLabel){
-    if(!items.length) return '<div class="muted">No sales in this range.</div>';
-    return items.map(function(it,i){
-      var margin = it.revenue>0 ? round2((it.profit/it.revenue)*100) : 0;
-      return '<div class="list-item"><span><b style="color:var(--gold-dark);">#'+(i+1)+'</b> '+esc(it.name)+
-        '<br><span class="muted" style="font-size:10.5px;">qty '+it.qty+(subLabel==='profit'?(' · margin '+margin+'%'):'')+'</span></span>'+
-        '<b>'+fmtETB(it[valueKey])+'</b></div>';
-    }).join('');
-  }
-
-  return '<div class="section-title" style="margin-top:26px;">'+uiIcon('award','icon-sm')+' Top Products</div>'+
-    '<div class="two-col">'+
-      '<div class="card"><h3 style="margin-bottom:10px;">Top 10 Selling Products <span class="muted" style="font-weight:600;">(by quantity)</span></h3>'+rankedList(topSelling,'revenue','qty')+'</div>'+
-      '<div class="card"><h3 style="margin-bottom:10px;">Top 10 Highest-Profit Products</h3>'+rankedList(topProfit,'profit','profit')+'</div>'+
     '</div>';
-}
-
-function buildTrendBuckets(fromStr, toStr){
-  var fromD = parseISO(fromStr), toD = parseISO(toStr);
-  var spanDays = Math.round((toD-fromD)/86400000)+1;
-  var byMonth = spanDays > 45;
-  var buckets = {}, order = [];
-  if(byMonth){
-    var cursor = new Date(fromD.getFullYear(), fromD.getMonth(), 1);
-    while(cursor <= toD){
-      var key = cursor.getFullYear()+'-'+pad(cursor.getMonth()+1);
-      order.push(key); buckets[key] = {sales:0, profit:0};
-      cursor = new Date(cursor.getFullYear(), cursor.getMonth()+1, 1);
-    }
-  } else {
-    var c2 = new Date(fromD);
-    while(c2 <= toD){
-      var key2 = isoDate(c2);
-      order.push(key2); buckets[key2] = {sales:0, profit:0};
-      c2 = addDays(c2,1);
-    }
-  }
-  salesInRange(fromStr,toStr).forEach(function(s){
-    var key = byMonth ? s.date.slice(0,7) : s.date;
-    if(buckets[key]){ buckets[key].sales += s.totalSales; buckets[key].profit += s.grossProfit; }
-  });
-  return {
-    labels: order.map(function(k){ return byMonth ? k : k.slice(5); }),
-    sales: order.map(function(k){ return round2(buckets[k].sales); }),
-    profit: order.map(function(k){ return round2(buckets[k].profit); })
-  };
-}
-
-var REPORT_CHART = null;
-function renderReportChart(){
-  var canvas = document.getElementById('reportTrendChart');
-  if(!canvas || typeof Chart === 'undefined') return;
-  var range = reportRangeDates();
-  var data = buildTrendBuckets(range.from, range.to);
-  if(REPORT_CHART){ REPORT_CHART.destroy(); REPORT_CHART = null; }
-  REPORT_CHART = new Chart(canvas.getContext('2d'), {
-    type: 'bar',
-    data: {
-      labels: data.labels,
-      datasets: [
-        {label:'Sales', data:data.sales, backgroundColor:'#0e7c72'},
-        {label:'Gross Profit', data:data.profit, backgroundColor:'#c9a227'}
-      ]
-    },
-    options: {
-      responsive:true,
-      plugins:{ legend:{position:'bottom'} },
-      scales:{ y:{ beginAtZero:true } }
-    }
-  });
 }
 
 /* ---------------- SETTINGS ---------------- */
@@ -1640,20 +1318,8 @@ function renderSettings(){
       '<div class="list-item"><span>Shop name</span><b>'+esc(u.shopName)+'</b></div>'+
       '<div class="list-item"><span>Owner</span><b>'+esc(u.ownerName)+'</b></div>'+
       '<div class="list-item"><span>Email</span><b>'+esc(u.email)+'</b></div>'+
-      '<div class="list-item"><span>Email verified</span><b>'+(auth.currentUser&&auth.currentUser.emailVerified?('<span class="pill pill-green">'+uiIcon('check','icon-sm')+' Verified</span>'):'<span class="pill pill-amber">Not verified</span>')+'</b></div>'+
-      (auth.currentUser&&!auth.currentUser.emailVerified ? '<button class="btn btn-outline btn-sm" data-act="resend-verify" style="margin-top:4px;">Resend verification email</button>' : '')+
       '<div class="list-item"><span>Member since</span><b>'+(u.createdAt?fmtDateLong(u.createdAt.slice(0,10)):'—')+'</b></div>'+
       '<button class="btn btn-outline btn-block" style="margin-top:16px;" data-act="logout">'+uiIcon('logout','icon-sm')+' Log out</button>'+
-    '</div>'+
-    '<div class="card"><h3 style="margin-bottom:10px;">Security</h3>'+
-      '<form id="changePasswordForm">'+
-        '<label>Current password</label>'+pwField('cpCurrent','currentPassword','Your current password')+
-        '<label>New password</label>'+pwField('cpNew','newPassword','At least 8 characters',8)+
-        '<label>Confirm new password</label>'+pwField('cpConfirm','confirmNewPassword','Repeat new password',8)+
-        (STATE.pwChangeError?'<div class="err-text">'+esc(STATE.pwChangeError)+'</div>':'')+
-        (STATE.pwChangeMsg?'<div class="ok-text">'+esc(STATE.pwChangeMsg)+'</div>':'')+
-        '<button type="submit" class="btn btn-block" style="margin-top:16px;">Change password</button>'+
-      '</form>'+
     '</div>'+
     '<div class="card"><h3 style="margin-bottom:10px;">Business info</h3>'+
       '<p class="muted" style="margin-bottom:10px;">Shown on your printed invoices.</p>'+
@@ -1678,14 +1344,6 @@ function renderSettings(){
         '<button class="tab-btn'+(THEME==='dark'?' active':'')+'" data-act="set-theme" data-theme="dark">Dark</button>'+
         '<button class="tab-btn'+(THEME==='system'?' active':'')+'" data-act="set-theme" data-theme="system">System</button>'+
       '</div>'+
-      '<h3 style="margin:16px 0 8px;">Color theme</h3>'+
-      '<div class="palette-grid">'+
-        Object.keys(PALETTE_NAMES).map(function(key){
-          return '<button type="button" class="palette-swatch'+(PALETTE===key?' active':'')+'" data-act="set-palette" data-palette="'+key+'" title="'+PALETTE_NAMES[key]+'">'+
-            '<span class="swatch-dot" data-swatch="'+key+'"></span><span class="swatch-label">'+PALETTE_NAMES[key]+'</span>'+
-          '</button>';
-        }).join('')+
-      '</div>'+
     '</div>'+
     '<div class="card premium"><h3 style="margin-bottom:10px;">'+uiIcon('target','icon-sm')+' Sales Goals</h3>'+
       '<p class="muted" style="margin-bottom:10px;">Set targets to track progress on your Dashboard.</p>'+
@@ -1697,99 +1355,6 @@ function renderSettings(){
         '<button type="submit" class="btn btn-block" style="margin-top:16px;">Save goals</button>'+
       '</form>'+
     '</div>'+
-    '<div class="card"><h3 style="margin-bottom:10px;">'+uiIcon('cart','icon-sm')+' Stock Purchase Budget</h3>'+
-      '<p class="muted" style="margin-bottom:10px;">Set a spending guide for restocking. This is advisory — purchases are never blocked.</p>'+
-      '<form id="budgetForm">'+
-        '<label>Weekly budget (ETB)</label><input type="number" min="0" step="0.01" name="weeklyStockBudget" value="'+esc(u.weeklyStockBudget||'')+'">'+
-        '<label>Monthly budget (ETB)</label><input type="number" min="0" step="0.01" name="monthlyStockBudget" value="'+esc(u.monthlyStockBudget||'')+'">'+
-        '<button type="submit" class="btn btn-block" style="margin-top:16px;">Save budget</button>'+
-      '</form>'+
-    '</div>'+
-    renderBackupSavingSettings(u)+
-    (isCeo() ? renderBranchesSettings() : '')+
-    (isCeo() ? renderStaffSettings() : '')+
-    '<div class="card" style="grid-column:1/-1;">'+
-      '<h3 style="margin-bottom:10px;">About / Developer</h3>'+
-      '<div class="list-item"><span>App</span><b>Taza DSR — Shop Manager Pro</b></div>'+
-      '<div class="list-item"><span>Developer</span><b>Tamrat Zemecha</b></div>'+
-      '<div class="list-item"><span>Company</span><b>Taza Technology™</b></div>'+
-      '<div class="list-item"><span>Country</span><b>Ethiopia</b></div>'+
-      '<div class="list-item"><span>Email</span><b><a href="mailto:Tamratzemechatilahun@gmail.com" style="color:var(--green-700);">Tamratzemechatilahun@gmail.com</a></b></div>'+
-    '</div>'+
-  '</div>';
-}
-
-function renderBackupSavingSettings(u){
-  var enabled = !!u.backupSavingEnabled;
-  var html = '<div class="card"><h3 style="margin-bottom:10px;">'+uiIcon('dollar','icon-sm')+' Backup Saving</h3>'+
-    '<p class="muted" style="margin-bottom:10px;">An optional emergency/reserve fund, tracked separately from Net Profit and Store Balance.</p>'+
-    '<button type="button" class="btn '+(enabled?'btn-outline':'')+' btn-block" data-act="toggle-backup-saving">'+(enabled?'Turn off Backup Saving':'Turn on Backup Saving')+'</button>';
-  if(enabled){
-    var txs = (STATE.data.backupSavings||[]).slice().sort(function(a,b){return (b.date||'').localeCompare(a.date||'');});
-    var balance = sumBy(txs.filter(function(t){return t.type==='Deposit';}),'amount') - sumBy(txs.filter(function(t){return t.type==='Withdrawal';}),'amount');
-    html += '<div class="goal-label" style="margin-top:16px;"><span>Current balance</span><b style="font-size:17px;color:'+(balance>=0?'var(--green-700)':'var(--red)')+';">'+fmtETB(balance)+'</b></div>'+
-      '<form id="backupSavingForm" style="margin-top:10px;">'+
-        '<div class="form-row">'+
-          '<div><label>Type</label><select name="type"><option>Deposit</option><option>Withdrawal</option></select></div>'+
-          '<div><label>Amount</label><input type="number" min="0" step="0.01" name="amount" required></div>'+
-        '</div>'+
-        '<label>Reason</label><input type="text" name="reason" placeholder="e.g. Emergency repair, Monthly reserve">'+
-        '<button type="submit" class="btn btn-sm" style="margin-top:10px;">Add transaction</button>'+
-      '</form>'+
-      '<h3 style="margin:16px 0 6px;">History</h3>'+
-      (txs.length ? txs.slice(0,10).map(function(t){
-        return '<div class="list-item"><span>'+fmtDateLong(t.date)+' · '+esc(t.reason||t.type)+'</span><b style="color:'+(t.type==='Deposit'?'var(--green-700)':'var(--red)')+';">'+(t.type==='Deposit'?'+':'-')+fmtETB(t.amount)+'</b></div>';
-      }).join('') : '<div class="muted">No transactions yet.</div>');
-  }
-  html += '</div>';
-  return html;
-}
-
-function renderBranchesSettings(){
-  var branches = STATE.data.branches||[];
-  var rows = branches.map(function(b){
-    return '<div class="list-item"><span><b>'+esc(b.name)+'</b>'+(b.code?(' · '+esc(b.code)):'')+(b.status==='inactive'?' <span class="pill pill-amber">Inactive</span>':'')+
-      '<br><span class="muted" style="font-size:10.5px;">'+esc(b.address||'')+(b.phone?(' · '+esc(b.phone)):'')+'</span></span>'+
-      '<span class="row-actions"><button class="btn btn-outline btn-sm" data-act="edit-branch" data-id="'+b.id+'">Edit</button>'+
-      '<button class="btn btn-outline btn-sm" data-act="toggle-branch" data-id="'+b.id+'">'+(b.status==='inactive'?'Activate':'Deactivate')+'</button></span></div>';
-  }).join('');
-  return '<div class="card" style="grid-column:1/-1;"><h3 style="margin-bottom:10px;">'+uiIcon('box','icon-sm')+' Branches</h3>'+
-    '<p class="muted" style="margin-bottom:10px;">Add branches so sales, stock and staff can be tied to a location.</p>'+
-    (rows || '<div class="muted">No branches yet.</div>')+
-    '<form id="branchForm" style="margin-top:14px;border-top:1px solid var(--border);padding-top:14px;">'+
-      '<div class="form-row"><div><label>Branch name</label><input type="text" name="name" required placeholder="e.g. Main Branch"></div>'+
-      '<div><label>Branch code</label><input type="text" name="code" placeholder="Optional, e.g. BR-01"></div></div>'+
-      '<label>Address</label><input type="text" name="address" placeholder="Optional">'+
-      '<label>Phone</label><input type="text" name="phone" placeholder="Optional">'+
-      '<button type="submit" class="btn btn-sm" style="margin-top:10px;">Add branch</button>'+
-    '</form>'+
-  '</div>';
-}
-
-function renderStaffSettings(){
-  var staff = (STATE.data.staff||[]).filter(function(s){ return s.role!=='ceo'; });
-  var branches = STATE.data.branches||[];
-  var branchName = function(id){ var b=branches.find(function(x){return x.id===id;}); return b?b.name:'Unassigned'; };
-  var rows = staff.map(function(s){
-    return '<div class="list-item"><span><b>'+esc(s.name)+'</b> <span class="pill pill-green" style="text-transform:capitalize;">'+esc(s.role)+'</span>'+(s.status==='inactive'?' <span class="pill pill-amber">Inactive</span>':'')+
-      '<br><span class="muted" style="font-size:10.5px;">'+esc(s.email)+' · '+esc(branchName(s.branchId))+'</span></span>'+
-      '<span class="row-actions"><button class="btn btn-outline btn-sm" data-act="edit-staff" data-id="'+s.id+'">Edit</button>'+
-      '<button class="btn btn-outline btn-sm" data-act="toggle-staff" data-id="'+s.id+'">'+(s.status==='inactive'?'Activate':'Deactivate')+'</button></span></div>';
-  }).join('');
-  var branchOptions = '<option value="">No branch</option>'+branches.map(function(b){return '<option value="'+b.id+'">'+esc(b.name)+'</option>';}).join('');
-  return '<div class="card" style="grid-column:1/-1;"><h3 style="margin-bottom:10px;">'+uiIcon('check','icon-sm')+' Users &amp; Roles</h3>'+
-    '<p class="muted" style="margin-bottom:10px;">Manager: full add/edit/delete on records. Sales: can record sales, quick sales and invoices, but cannot delete financial records or manage users/branches.</p>'+
-    (rows || '<div class="muted">No team members yet — just you as CEO.</div>')+
-    '<form id="staffForm" style="margin-top:14px;border-top:1px solid var(--border);padding-top:14px;">'+
-      '<label>Full name</label><input type="text" name="name" required placeholder="Staff member\'s name">'+
-      '<label>Email</label><input type="email" name="email" required placeholder="their@email.com">'+
-      '<label>Temporary password</label>'+pwField('staffPw','password','At least 8 characters',8)+
-      '<div class="form-row"><div><label>Role</label><select name="role"><option value="manager">Manager</option><option value="sales">Sales</option></select></div>'+
-      '<div><label>Branch</label><select name="branchId">'+branchOptions+'</select></div></div>'+
-      (STATE.staffInviteError?'<div class="err-text">'+esc(STATE.staffInviteError)+'</div>':'')+
-      '<button type="submit" class="btn btn-sm" style="margin-top:10px;">Create account</button>'+
-      '<p class="field-note">They will sign in with this email and password, and will need to verify their email before using the app — same as any account.</p>'+
-    '</form>'+
   '</div>';
 }
 
@@ -1869,10 +1434,6 @@ function renderModal(){
       '<div class="form-row"><div><label>Quantity</label><input type="number" name="quantity" min="1" step="1" value="'+s.quantity+'" required></div>'+
       '<div><label>Cost price</label><input type="number" name="costPrice" min="0" step="0.01" value="'+s.costPrice+'" required></div></div>'+
       '<label>Selling price</label><input type="number" name="sellingPrice" min="0" step="0.01" value="'+s.sellingPrice+'" required>'+
-      '<label style="display:flex;align-items:center;gap:8px;margin-top:14px;cursor:pointer;">'+
-        '<input type="checkbox" name="markedOwed" style="width:auto;" '+(s.markedOwed?'checked':'')+'> '+
-        '<span style="font-size:12.5px;font-weight:700;color:var(--ink-soft);">Not in stock yet — mark as Owed</span>'+
-      '</label>'+
       '<div class="modal-foot"><button type="button" class="btn btn-outline" data-act="close-modal">Cancel</button><button type="submit" class="btn">Save changes</button></div>'+
     '</form>';
   } else if(m.type==='expense'){
@@ -1891,43 +1452,6 @@ function renderModal(){
     body = '<div id="scanStatus" class="muted" style="margin-bottom:8px;">Point the camera at a barcode…</div>'+
       '<video id="scanVideo" playsinline autoplay muted style="width:100%;border-radius:10px;background:#000;"></video>'+
       '<div class="modal-foot"><button type="button" class="btn btn-outline btn-block" data-act="close-modal">Cancel</button></div>';
-  } else if(m.type==='editStock'){
-    var sp = m.data;
-    title = 'Edit stock purchase';
-    var prodOptions = STATE.data.products.map(function(pp){return '<option value="'+pp.id+'"'+(pp.id===sp.productId?' selected':'')+'>'+esc(pp.name)+'</option>';}).join('');
-    body = '<form id="editStockForm">'+
-      '<label>Date</label><input type="date" name="date" value="'+sp.date+'" max="'+todayStr()+'" required>'+
-      '<label>Product</label><select name="productId" required>'+prodOptions+'</select>'+
-      '<div class="form-row"><div><label>Quantity</label><input type="number" name="quantity" min="1" step="1" value="'+sp.quantity+'" required></div>'+
-      '<div><label>Unit cost</label><input type="number" name="unitCost" min="0" step="0.01" value="'+sp.unitCost+'" required></div></div>'+
-      '<label>Supplier / source</label><input type="text" name="supplier" value="'+esc(sp.supplier||'')+'">'+
-      '<label>Notes</label><textarea name="notes" rows="2">'+esc(sp.notes||'')+'</textarea>'+
-      '<div class="modal-foot"><button type="button" class="btn btn-outline" data-act="close-modal">Cancel</button><button type="submit" class="btn">Save changes</button></div>'+
-    '</form>';
-  } else if(m.type==='editBranch'){
-    var br2 = m.data;
-    title = 'Edit branch';
-    body = '<form id="editBranchForm">'+
-      '<label>Branch name</label><input type="text" name="name" required value="'+esc(br2.name||'')+'">'+
-      '<label>Branch code</label><input type="text" name="code" value="'+esc(br2.code||'')+'">'+
-      '<label>Address</label><input type="text" name="address" value="'+esc(br2.address||'')+'">'+
-      '<label>Phone</label><input type="text" name="phone" value="'+esc(br2.phone||'')+'">'+
-      '<div class="modal-foot"><button type="button" class="btn btn-outline" data-act="close-modal">Cancel</button><button type="submit" class="btn">Save changes</button></div>'+
-    '</form>';
-  } else if(m.type==='editStaff'){
-    var st2 = m.data;
-    title = 'Edit team member';
-    var branchOpts2 = '<option value="">No branch</option>'+(STATE.data.branches||[]).map(function(b){return '<option value="'+b.id+'"'+(b.id===st2.branchId?' selected':'')+'>'+esc(b.name)+'</option>';}).join('');
-    body = '<form id="editStaffForm">'+
-      '<label>Full name</label><input type="text" name="name" required value="'+esc(st2.name||'')+'">'+
-      '<div class="form-row"><div><label>Role</label><select name="role">'+
-        '<option value="manager"'+(st2.role==='manager'?' selected':'')+'>Manager</option>'+
-        '<option value="sales"'+(st2.role==='sales'?' selected':'')+'>Sales</option>'+
-      '</select></div>'+
-      '<div><label>Branch</label><select name="branchId">'+branchOpts2+'</select></div></div>'+
-      '<p class="field-note">Email: '+esc(st2.email)+' (cannot be changed here)</p>'+
-      '<div class="modal-foot"><button type="button" class="btn btn-outline" data-act="close-modal">Cancel</button><button type="submit" class="btn">Save changes</button></div>'+
-    '</form>';
   }
   return '<div class="modal-back" data-act="close-modal-back"><div class="modal"><h2>'+title+'</h2>'+body+'</div></div>';
 }
@@ -1935,12 +1459,6 @@ function renderModal(){
 /* ---------------- EVENT BINDING ---------------- */
 function bindEvents(){
   var app = document.getElementById('app');
-
-  if(STATE.session && STATE.view==='reports'){
-    setTimeout(renderReportChart, 0);
-  } else if(REPORT_CHART){
-    REPORT_CHART.destroy(); REPORT_CHART = null;
-  }
 
   app.querySelectorAll('[data-nav]').forEach(function(el){
     el.addEventListener('click', function(){ STATE.view = el.getAttribute('data-nav'); STATE.sidebarOpen=false; render(); });
@@ -2001,26 +1519,10 @@ function bindEvents(){
   if(editSaleForm) editSaleForm.addEventListener('submit', onSaveEditSale);
   var editExpenseForm = document.getElementById('editExpenseForm');
   if(editExpenseForm) editExpenseForm.addEventListener('submit', onSaveEditExpense);
-  var editStockForm = document.getElementById('editStockForm');
-  if(editStockForm) editStockForm.addEventListener('submit', onSaveEditStock);
-  var editBranchForm = document.getElementById('editBranchForm');
-  if(editBranchForm) editBranchForm.addEventListener('submit', onSaveEditBranch);
-  var editStaffForm = document.getElementById('editStaffForm');
-  if(editStaffForm) editStaffForm.addEventListener('submit', onSaveEditStaff);
   var goalsForm = document.getElementById('goalsForm');
   if(goalsForm) goalsForm.addEventListener('submit', onSaveGoals);
-  var budgetForm = document.getElementById('budgetForm');
-  if(budgetForm) budgetForm.addEventListener('submit', onSaveBudget);
-  var backupSavingForm = document.getElementById('backupSavingForm');
-  if(backupSavingForm) backupSavingForm.addEventListener('submit', onAddBackupSaving);
-  var branchForm = document.getElementById('branchForm');
-  if(branchForm) branchForm.addEventListener('submit', onAddBranch);
-  var staffForm = document.getElementById('staffForm');
-  if(staffForm) staffForm.addEventListener('submit', onInviteStaff);
   var businessInfoForm = document.getElementById('businessInfoForm');
   if(businessInfoForm) businessInfoForm.addEventListener('submit', onSaveBusinessInfo);
-  var changePasswordForm = document.getElementById('changePasswordForm');
-  if(changePasswordForm) changePasswordForm.addEventListener('submit', onChangePassword);
   var importCsvInput = document.getElementById('importCsvInput');
   if(importCsvInput) importCsvInput.addEventListener('change', onImportCsv);
   var invoiceForm = document.getElementById('invoiceForm');
@@ -2085,75 +1587,8 @@ function handleAction(act, el, ev){
   if(act==='forgot'){ STATE.forgotMode=true; STATE.authError=''; STATE.authMsg=''; render(); return; }
   if(act==='back-to-login'){ STATE.forgotMode=false; STATE.authError=''; STATE.authMsg=''; render(); return; }
   if(act==='logout'){ auth.signOut(); return; }
-  if(act==='resend-verify'){
-    if(auth.currentUser){
-      auth.currentUser.sendEmailVerification().then(function(){ alert('Verification email sent — check your inbox.'); }).catch(function(err){ showActionError(err); });
-    }
-    return;
-  }
-  if(act==='toggle-backup-saving'){
-    var cur = !!(STATE.shopProfile && STATE.shopProfile.backupSavingEnabled);
-    shopRef().update({backupSavingEnabled: !cur}).then(function(){
-      STATE.shopProfile = Object.assign({}, STATE.shopProfile, {backupSavingEnabled: !cur});
-      render();
-    }).catch(showActionError);
-    return;
-  }
-  if(act==='toggle-branch'){
-    var bId = el.getAttribute('data-id');
-    var br = (STATE.data.branches||[]).find(function(x){return x.id===bId;});
-    if(br){ shopRef().collection('branches').doc(bId).update({status: br.status==='inactive'?'active':'inactive'}).catch(showActionError); }
-    return;
-  }
-  if(act==='edit-branch'){
-    var ebr = (STATE.data.branches||[]).find(function(x){return x.id===el.getAttribute('data-id');});
-    STATE.modal={type:'editBranch', data:Object.assign({},ebr)}; render(); return;
-  }
-  if(act==='toggle-staff'){
-    var sId = el.getAttribute('data-id');
-    var st = (STATE.data.staff||[]).find(function(x){return x.id===sId;});
-    if(st){
-      var newStatus = st.status==='inactive'?'active':'inactive';
-      Promise.all([
-        shopRef().collection('staff').doc(sId).update({status:newStatus}),
-        db.collection('staffLookup').doc(sId).update({status:newStatus})
-      ]).catch(showActionError);
-    }
-    return;
-  }
-  if(act==='edit-staff'){
-    var est = (STATE.data.staff||[]).find(function(x){return x.id===el.getAttribute('data-id');});
-    STATE.modal={type:'editStaff', data:Object.assign({},est)}; render(); return;
-  }
-  if(act==='check-verify'){
-    STATE.authBusy = true; STATE.authError=''; STATE.authMsg=''; render();
-    auth.currentUser.reload().then(function(){
-      STATE.authBusy = false;
-      if(auth.currentUser.emailVerified){ STATE.authError=''; STATE.authMsg=''; }
-      else { STATE.authError = 'Your email is not verified yet.'; }
-      render();
-    }).catch(function(err){ STATE.authBusy=false; STATE.authError=friendlyAuthError(err); render(); });
-    return;
-  }
-  if(act==='resend-verify-gate'){
-    if(STATE.resendCooldown>0) return;
-    STATE.authMsg=''; STATE.authError='';
-    auth.currentUser.sendEmailVerification().then(function(){
-      STATE.authMsg = 'Verification email sent. Please wait 60 seconds before requesting another.';
-      startResendCooldown();
-      render();
-    }).catch(function(err){ STATE.authError = friendlyAuthError(err); render(); });
-    return;
-  }
   if(act==='toggle-lang'){ LANG = LANG==='en'?'am':'en'; localStorage.setItem('ssr_lang',LANG); render(); return; }
   if(act==='set-theme'){ applyTheme(el.getAttribute('data-theme')); render(); return; }
-  if(act==='set-palette'){
-    var pal = el.getAttribute('data-palette');
-    applyPalette(pal);
-    render();
-    if(STATE.session){ shopRef().update({colorPalette: pal}).catch(function(){}); }
-    return;
-  }
   if(act==='open-sidebar'){ STATE.sidebarOpen=true; render(); return; }
   if(act==='close-sidebar'){ STATE.sidebarOpen=false; render(); return; }
   if(act==='close-modal' || act==='close-modal-back'){ stopScan(); STATE.modal=null; render(); return; }
@@ -2165,14 +1600,6 @@ function handleAction(act, el, ev){
   if(act==='dash-period'){ STATE.dashboardPeriod = el.getAttribute('data-period'); render(); return; }
   if(act==='qs-mode'){ STATE.quickSaleMode = el.getAttribute('data-mode'); STATE.quickSaleQuery=''; STATE.quickSaleSelectedId=''; render(); return; }
   if(act==='qs-pick-product'){ STATE.quickSaleSelectedId = el.getAttribute('data-id'); STATE.quickSaleQuery=''; render(); return; }
-  if(act==='toggle-pw'){
-    var pwInp = document.getElementById(el.getAttribute('data-target'));
-    if(pwInp){
-      if(pwInp.type==='password'){ pwInp.type='text'; el.textContent='Hide'; }
-      else { pwInp.type='password'; el.textContent='Show'; }
-    }
-    return;
-  }
   if(act==='qs-clear-product'){ STATE.quickSaleSelectedId=''; STATE.quickSaleQuery=''; render(); return; }
   if(act==='qs-scan-barcode'){
     if(!('BarcodeDetector' in window)){
@@ -2204,10 +1631,6 @@ function handleAction(act, el, ev){
     if(confirm('Delete this stock purchase? Stock quantity will be reversed.')){ deleteStockPurchase(el.getAttribute('data-id')).catch(showActionError); }
     return;
   }
-  if(act==='edit-stock'){
-    var spd = STATE.data.stockPurchases.find(function(x){return x.id===el.getAttribute('data-id');});
-    STATE.modal={type:'editStock', data:Object.assign({},spd)}; render(); return;
-  }
   if(act==='edit-expense'){
     var ex = STATE.data.expenses.find(function(x){return x.id===el.getAttribute('data-id');});
     STATE.modal={type:'expense', data:Object.assign({},ex)}; render(); return;
@@ -2226,42 +1649,9 @@ function handleAction(act, el, ev){
     if(!STATE.invoiceDraft.items.length) STATE.invoiceDraft.items.push({name:'',qty:1,unitPrice:0});
     render(); return;
   }
-  if(act==='inv-edit'){
-    if(STATE.invoicePreview && STATE.invoicePreview.id && !STATE.editingInvoiceId){
-      STATE.editingInvoiceId = STATE.invoicePreview.id;
-      STATE.invoiceDraft = {
-        customerName: STATE.invoicePreview.customerName||'', phone: STATE.invoicePreview.phone||'', address: STATE.invoicePreview.address||'',
-        items: STATE.invoicePreview.items.map(function(it){return {name:it.name,qty:it.qty,unitPrice:it.unitPrice};})
-      };
-    }
-    STATE.invoicePreview=null; render(); return;
-  }
-  if(act==='inv-new'){ STATE.invoicePreview=null; STATE.editingInvoiceId=null; STATE.invoiceDraft={customerName:'',phone:'',address:'',items:[{name:'',qty:1,unitPrice:0}]}; render(); return; }
+  if(act==='inv-edit'){ STATE.invoicePreview=null; render(); return; }
+  if(act==='inv-new'){ STATE.invoicePreview=null; STATE.invoiceDraft={customerName:'',phone:'',address:'',items:[{name:'',qty:1,unitPrice:0}]}; render(); return; }
   if(act==='inv-print'){ window.print(); return; }
-  if(act==='view-invoice'){
-    var vInv = (STATE.data.invoices||[]).find(function(x){return x.id===el.getAttribute('data-id');});
-    if(vInv){ STATE.invoicePreview = vInv; STATE.editingInvoiceId = null; render(); }
-    return;
-  }
-  if(act==='edit-invoice'){
-    var eInv = (STATE.data.invoices||[]).find(function(x){return x.id===el.getAttribute('data-id');});
-    if(eInv){
-      STATE.editingInvoiceId = eInv.id;
-      STATE.invoicePreview = null;
-      STATE.invoiceDraft = {
-        customerName: eInv.customerName||'', phone: eInv.phone||'', address: eInv.address||'',
-        items: eInv.items.map(function(it){ return {name:it.name, qty:it.qty, unitPrice:it.unitPrice}; })
-      };
-      render();
-    }
-    return;
-  }
-  if(act==='delete-invoice'){
-    if(confirm('Delete this invoice? This cannot be undone.')){
-      shopRef().collection('invoices').doc(el.getAttribute('data-id')).delete().catch(showActionError);
-    }
-    return;
-  }
   if(act==='inv-save-pdf'){ exportInvoicePDF(STATE.invoicePreview); return; }
   if(act==='stock-mode'){ STATE.stockMode = el.getAttribute('data-mode'); render(); return; }
   if(act==='bulk-add-row'){ STATE.bulkStockDraft.rows.push({name:'',qty:1,unitCost:0}); render(); return; }
@@ -2304,11 +1694,6 @@ async function onSignup(ev){
     await db.collection('shops').doc(cred.user.uid).set({
       shopName:shopName, ownerName:ownerName, email:email, createdAt:new Date().toISOString()
     });
-    await db.collection('staffLookup').doc(cred.user.uid).set({shopId:cred.user.uid, role:'ceo', branchId:null, status:'active'});
-    await db.collection('shops').doc(cred.user.uid).collection('staff').doc(cred.user.uid).set({
-      name:ownerName, email:email, role:'ceo', branchId:null, status:'active', createdAt:new Date().toISOString()
-    });
-    try{ await cred.user.sendEmailVerification(); }catch(e){ /* non-fatal */ }
     /* onAuthStateChanged takes it from here */
   }catch(err){
     STATE.authError = friendlyAuthError(err);
@@ -2321,18 +1706,13 @@ async function onResetPassword(ev){
   ev.preventDefault();
   var fd = new FormData(ev.target);
   var email = fd.get('email').trim().toLowerCase();
-  var btn = ev.target.querySelector('button[type=submit]');
-  if(btn){ btn.disabled = true; btn.textContent = 'Sending…'; }
-  STATE.authError=''; STATE.authMsg='';
   try{
     await auth.sendPasswordResetEmail(email);
-    STATE.authMsg = 'Reset email sent — check your inbox (and spam folder). It can take a minute to arrive.';
+    STATE.authMsg = 'Reset email sent — check your inbox (and spam folder).';
+    STATE.authError='';
   }catch(err){
-    var msg = friendlyAuthError(err);
-    if(err && err.code === 'auth/network-request-failed'){
-      msg += ' This usually means your device lost connection right as the request was sent — try switching between Wi-Fi and mobile data, then tap Send again.';
-    }
-    STATE.authError = msg;
+    STATE.authError = friendlyAuthError(err);
+    STATE.authMsg='';
   }
   render();
 }
@@ -2370,7 +1750,7 @@ async function onQuickSale(ev){
       var p = findProduct(productId);
       productName = p ? p.name : '';
     }
-    await addSale({date:date, productId:productId, productName:productName, quantity:qty, costPrice:costPrice, sellingPrice:sellingPrice, markedOwed: fd.get('markedOwed')==='on'});
+    await addSale({date:date, productId:productId, productName:productName, quantity:qty, costPrice:costPrice, sellingPrice:sellingPrice});
     STATE.view='sales';
     render();
   }catch(err){
@@ -2384,20 +1764,13 @@ async function onAddStock(ev){
   var fd = new FormData(ev.target);
   var productId = fd.get('productId');
   var p = findProduct(productId);
-  var qty = parseFloat(fd.get('quantity'));
-  var unitCost = parseFloat(fd.get('unitCost'));
-  var balanceBefore = currentStoreBalance();
   try{
     await addStockPurchase({
       date: fd.get('date'), productId: productId, productName: p?p.name:'',
-      quantity: qty, unitCost: unitCost,
+      quantity: parseFloat(fd.get('quantity')), unitCost: parseFloat(fd.get('unitCost')),
       supplier: fd.get('supplier')||'', notes: fd.get('notes')||''
     });
     ev.target.reset();
-    var balanceAfter = round2(balanceBefore - qty*unitCost);
-    if(balanceAfter < 0 && balanceBefore >= 0){
-      setTimeout(function(){ alert('Heads up: this purchase brings your Current Store Balance to '+fmtETB(balanceAfter)+' (negative). The excess is being funded from your store reserve — your accounting Net Profit is not affected.'); }, 100);
-    }
   }catch(err){ showActionError(err); }
 }
 
@@ -2412,8 +1785,6 @@ async function onBulkStockSubmit(ev){
   var submitBtn = ev.target.querySelector('button[type=submit]');
   if(submitBtn) submitBtn.disabled = true;
   var added = 0;
-  var balanceBefore = currentStoreBalance();
-  var bulkTotalCost = round2(validRows.reduce(function(a,r){return a+(r.qty||0)*(r.unitCost||0);},0));
   try{
     for(var i=0;i<validRows.length;i++){
       var r = validRows[i];
@@ -2439,10 +1810,6 @@ async function onBulkStockSubmit(ev){
     STATE.bulkStockDraft = {date:todayStr(), supplier:'', notes:'', rows:[{name:'',qty:1,unitCost:0}]};
     STATE.stockMode = 'single';
     render();
-    var balanceAfter = round2(balanceBefore - bulkTotalCost);
-    if(balanceAfter < 0 && balanceBefore >= 0){
-      setTimeout(function(){ alert('Heads up: this bulk purchase brings your Current Store Balance to '+fmtETB(balanceAfter)+' (negative). The excess is being funded from your store reserve — your accounting Net Profit is not affected.'); }, 100);
-    }
   }catch(err){
     showActionError(err);
     if(submitBtn) submitBtn.disabled = false;
@@ -2492,8 +1859,7 @@ async function onSaveEditSale(ev){
   try{
     await updateSale(STATE.modal.data.id, {
       date: fd.get('date'), productId: productId, productName: p?p.name:'',
-      quantity: parseFloat(fd.get('quantity')), costPrice: parseFloat(fd.get('costPrice')), sellingPrice: parseFloat(fd.get('sellingPrice')),
-      markedOwed: fd.get('markedOwed')==='on'
+      quantity: parseFloat(fd.get('quantity')), costPrice: parseFloat(fd.get('costPrice')), sellingPrice: parseFloat(fd.get('sellingPrice'))
     });
     STATE.modal=null;
     render();
@@ -2507,49 +1873,6 @@ async function onSaveEditExpense(ev){
     await updateExpenseDoc(STATE.modal.data.id, {
       date:fd.get('date'), category:fd.get('category'), description:fd.get('description')||'', amount:parseFloat(fd.get('amount'))
     });
-    STATE.modal=null;
-    render();
-  }catch(err){ showActionError(err); }
-}
-
-async function onSaveEditStock(ev){
-  ev.preventDefault();
-  var fd = new FormData(ev.target);
-  var productId = fd.get('productId');
-  var p = findProduct(productId);
-  try{
-    await updateStockPurchase(STATE.modal.data.id, {
-      date: fd.get('date'), productId: productId, productName: p?p.name:'',
-      quantity: parseFloat(fd.get('quantity')), unitCost: parseFloat(fd.get('unitCost')),
-      supplier: fd.get('supplier')||'', notes: fd.get('notes')||''
-    });
-    STATE.modal=null;
-    render();
-  }catch(err){ showActionError(err); }
-}
-
-async function onSaveEditBranch(ev){
-  ev.preventDefault();
-  var fd = new FormData(ev.target);
-  try{
-    await shopRef().collection('branches').doc(STATE.modal.data.id).update({
-      name: fd.get('name').trim(), code: (fd.get('code')||'').trim(),
-      address: (fd.get('address')||'').trim(), phone: (fd.get('phone')||'').trim()
-    });
-    STATE.modal=null;
-    render();
-  }catch(err){ showActionError(err); }
-}
-
-async function onSaveEditStaff(ev){
-  ev.preventDefault();
-  var fd = new FormData(ev.target);
-  var id = STATE.modal.data.id;
-  var role = fd.get('role');
-  var branchId = fd.get('branchId') || null;
-  try{
-    await shopRef().collection('staff').doc(id).update({ name: fd.get('name').trim(), role: role, branchId: branchId });
-    await db.collection('staffLookup').doc(id).update({ role: role, branchId: branchId });
     STATE.modal=null;
     render();
   }catch(err){ showActionError(err); }
@@ -2570,81 +1893,6 @@ async function onSaveGoals(ev){
   }catch(err){ showActionError(err); }
 }
 
-async function onSaveBudget(ev){
-  ev.preventDefault();
-  var fd = new FormData(ev.target);
-  var fields = {};
-  ['weeklyStockBudget','monthlyStockBudget'].forEach(function(k){
-    var v = fd.get(k);
-    fields[k] = (v===''||v===null) ? 0 : parseFloat(v);
-  });
-  try{
-    await shopRef().update(fields);
-    STATE.shopProfile = Object.assign({}, STATE.shopProfile, fields);
-    render();
-  }catch(err){ showActionError(err); }
-}
-
-async function onAddBranch(ev){
-  ev.preventDefault();
-  var fd = new FormData(ev.target);
-  try{
-    await shopRef().collection('branches').add({
-      name: fd.get('name').trim(), code: (fd.get('code')||'').trim(),
-      address: (fd.get('address')||'').trim(), phone: (fd.get('phone')||'').trim(),
-      status: 'active', createdAt: new Date().toISOString()
-    });
-    ev.target.reset();
-  }catch(err){ showActionError(err); }
-}
-
-async function onInviteStaff(ev){
-  ev.preventDefault();
-  var fd = new FormData(ev.target);
-  var name = fd.get('name').trim();
-  var email = fd.get('email').trim().toLowerCase();
-  var password = fd.get('password');
-  var role = fd.get('role');
-  var branchId = fd.get('branchId') || null;
-  STATE.staffInviteError = '';
-  var submitBtn = ev.target.querySelector('button[type=submit]');
-  if(submitBtn){ submitBtn.disabled = true; submitBtn.textContent = 'Creating…'; }
-  var secondaryApp = null;
-  try{
-    secondaryApp = firebase.initializeApp(firebaseConfig, 'Secondary_'+Date.now());
-    var secondaryAuth = secondaryApp.auth();
-    var cred = await secondaryAuth.createUserWithEmailAndPassword(email, password);
-    try{ await cred.user.sendEmailVerification(); }catch(e){}
-    await secondaryAuth.signOut();
-    var newUid = cred.user.uid;
-    await db.collection('staffLookup').doc(newUid).set({shopId: STATE.session.shopId, role: role, branchId: branchId, status:'active'});
-    await shopRef().collection('staff').doc(newUid).set({
-      name:name, email:email, role:role, branchId:branchId, status:'active', createdAt:new Date().toISOString()
-    });
-    ev.target.reset();
-    alert(name+' can now log in with the email and password you set.');
-  }catch(err){
-    STATE.staffInviteError = friendlyAuthError(err);
-    render();
-  } finally {
-    if(secondaryApp){ try{ await secondaryApp.delete(); }catch(e){} }
-    if(submitBtn){ submitBtn.disabled = false; submitBtn.textContent = 'Create account'; }
-  }
-}
-
-async function onAddBackupSaving(ev){
-  ev.preventDefault();
-  var fd = new FormData(ev.target);
-  var amount = parseFloat(fd.get('amount'));
-  if(!amount || amount<=0){ alert('Enter an amount greater than 0.'); return; }
-  try{
-    await shopRef().collection('backupSavings').add({
-      date: todayStr(), type: fd.get('type'), amount: amount, reason: (fd.get('reason')||'').trim()
-    });
-    ev.target.reset();
-  }catch(err){ showActionError(err); }
-}
-
 async function onSaveBusinessInfo(ev){
   ev.preventDefault();
   var fd = new FormData(ev.target);
@@ -2657,30 +1905,6 @@ async function onSaveBusinessInfo(ev){
     STATE.shopProfile = Object.assign({}, STATE.shopProfile, fields);
     render();
   }catch(err){ showActionError(err); }
-}
-
-async function onChangePassword(ev){
-  ev.preventDefault();
-  var fd = new FormData(ev.target);
-  var current = fd.get('currentPassword');
-  var next = fd.get('newPassword');
-  var confirm = fd.get('confirmNewPassword');
-  STATE.pwChangeError=''; STATE.pwChangeMsg='';
-  if(next !== confirm){ STATE.pwChangeError = 'New passwords do not match.'; render(); return; }
-  if(next.length < 8){ STATE.pwChangeError = 'New password should be at least 8 characters.'; render(); return; }
-  var submitBtn = ev.target.querySelector('button[type=submit]');
-  if(submitBtn){ submitBtn.disabled = true; submitBtn.textContent = 'Changing…'; }
-  try{
-    var user = auth.currentUser;
-    var cred = firebase.auth.EmailAuthProvider.credential(user.email, current);
-    await user.reauthenticateWithCredential(cred);
-    await user.updatePassword(next);
-    STATE.pwChangeMsg = 'Password changed successfully.';
-    render();
-  }catch(err){
-    STATE.pwChangeError = friendlyAuthError(err);
-    render();
-  }
 }
 
 async function onImportCsv(ev){
@@ -2727,30 +1951,16 @@ async function onGenerateInvoice(ev){
   });
   if(!items.length){ alert('Add at least one item with a name and quantity.'); return; }
   var total = round2(items.reduce(function(a,it){return a+it.lineTotal;},0));
+  var invoiceNo = 'INV-'+String((STATE.data.invoices||[]).length+1).padStart(4,'0');
+  var invoice = {
+    invoiceNo: invoiceNo,
+    customerName: d.customerName||'', phone: d.phone||'', address: d.address||'',
+    items: items, total: total,
+    createdAt: new Date().toISOString()
+  };
   try{
-    if(STATE.editingInvoiceId){
-      var existing = (STATE.data.invoices||[]).find(function(x){return x.id===STATE.editingInvoiceId;}) || {};
-      var updated = {
-        invoiceNo: existing.invoiceNo || ('INV-'+String((STATE.data.invoices||[]).length+1).padStart(4,'0')),
-        customerName: d.customerName||'', phone: d.phone||'', address: d.address||'',
-        items: items, total: total,
-        createdAt: existing.createdAt || new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-      await shopRef().collection('invoices').doc(STATE.editingInvoiceId).set(updated);
-      STATE.invoicePreview = Object.assign({id:STATE.editingInvoiceId}, updated);
-      STATE.editingInvoiceId = null;
-    } else {
-      var invoiceNo = 'INV-'+String((STATE.data.invoices||[]).length+1).padStart(4,'0');
-      var invoice = {
-        invoiceNo: invoiceNo,
-        customerName: d.customerName||'', phone: d.phone||'', address: d.address||'',
-        items: items, total: total,
-        createdAt: new Date().toISOString()
-      };
-      var ref = await shopRef().collection('invoices').add(invoice);
-      STATE.invoicePreview = Object.assign({id:ref.id}, invoice);
-    }
+    var ref = await shopRef().collection('invoices').add(invoice);
+    STATE.invoicePreview = Object.assign({id:ref.id}, invoice);
     render();
   }catch(err){ showActionError(err); }
 }
@@ -2949,32 +2159,19 @@ if(FIREBASE_OK){
   auth.onAuthStateChanged(async function(user){
     unsubscribeAll();
     if(user){
+      STATE.session = {userId:user.uid};
+      STATE.data = {products:[],sales:[],stockPurchases:[],expenses:[],invoices:[]};
       try{
-        var staffInfo = await resolveStaffSession(user.uid);
-        if(staffInfo.status !== 'active'){
-          STATE.session = null; STATE.data = null; STATE.shopProfile = null;
-          STATE.authLoading = false; STATE.authBusy = false;
-          STATE.authError = 'Your account has been deactivated. Please contact the CEO/administrator.';
-          auth.signOut();
-          render();
-          return;
-        }
-        STATE.session = {userId:user.uid, shopId:staffInfo.shopId, role:staffInfo.role, branchId:staffInfo.branchId||null};
-        STATE.data = {products:[],sales:[],stockPurchases:[],expenses:[],invoices:[],backupSavings:[],branches:[],staff:[]};
-        var profSnap = await db.collection('shops').doc(staffInfo.shopId).get();
+        var profSnap = await db.collection('shops').doc(user.uid).get();
         STATE.shopProfile = profSnap.exists ? profSnap.data() : {shopName:'',ownerName:'',email:user.email,createdAt:new Date().toISOString()};
-        if(STATE.shopProfile.colorPalette && STATE.shopProfile.colorPalette !== PALETTE){ applyPalette(STATE.shopProfile.colorPalette); }
-        subscribeAll(staffInfo.shopId);
-        STATE.authLoading = false;
-        STATE.authBusy = false;
-        STATE.authError=''; STATE.authMsg='';
-        render();
       }catch(e){
-        STATE.session = null; STATE.data = null; STATE.shopProfile = null;
-        STATE.authLoading = false; STATE.authBusy = false;
-        STATE.authError = friendlyAuthError(e);
-        render();
+        STATE.shopProfile = {shopName:'',ownerName:'',email:user.email,createdAt:new Date().toISOString()};
       }
+      subscribeAll(user.uid);
+      STATE.authLoading = false;
+      STATE.authBusy = false;
+      STATE.authError=''; STATE.authMsg='';
+      render();
     } else {
       STATE.session = null;
       STATE.data = null;
