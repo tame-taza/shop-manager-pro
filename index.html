@@ -276,6 +276,16 @@ tbody tr:hover{background:var(--green-50);}
 .invoice-item-row:last-child{border-bottom:none;}
 .invoice-item-row input{padding:6px 8px;font-size:12.5px;}
 .invoice-item-row .ln-total{font-size:12.5px;font-weight:700;text-align:right;}
+.bulk-sale-row{grid-template-columns:1fr 55px 75px 75px 85px 30px;}
+@media(max-width:640px){
+  .bulk-sale-row{grid-template-columns:1fr 1fr;grid-template-areas:"name name" "qty cost" "sell total" "remove remove";}
+  .bulk-sale-row input:nth-child(1){grid-area:name;}
+  .bulk-sale-row input:nth-child(2){grid-area:qty;}
+  .bulk-sale-row input:nth-child(3){grid-area:cost;}
+  .bulk-sale-row input:nth-child(4){grid-area:sell;}
+  .bulk-sale-row .ln-total{grid-area:total;text-align:right;}
+  .bulk-sale-row .remove-line{grid-area:remove;justify-self:end;}
+}
 .remove-line{background:var(--red-bg);color:var(--red);border:none;border-radius:6px;width:26px;height:26px;cursor:pointer;font-weight:800;}
 .invoice-preview{background:#fff;color:#1a2620;border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-lg);max-width:640px;margin:0 auto;}
 .invoice-preview .inv-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid var(--gold);padding-bottom:14px;margin-bottom:16px;}
@@ -326,6 +336,93 @@ var T = {
   am:{app_name:"የሽያጭ መዝገብ", tagline:"ታዛ ቴክኖሎጂ", dashboard:"ዳሽቦርድ", quick_sale:"ፈጣን ሽያጭ", sales:"ሽያጮች", invoice:"ደረሰኝ", calendar:"የቀን መቁጠሪያ", products:"ምርቶች", stock_purchase:"የስቶክ ግዢ", expenses:"ወጪዎች", reports:"ሪፖርቶች", settings:"ቅንብሮች", logout:"ውጣ"}
 };
 function tr(k){ return (T[LANG]&&T[LANG][k]) || T.en[k] || k; }
+
+/* Full-app translation: a phrase dictionary applied as a pass over the rendered
+   HTML text, so the whole screen translates without rewriting every render
+   function individually. Keys are case-sensitive UI phrases (Title Case / Sentence
+   case) which never collide with this app's lowercase HTML attributes/data-act
+   values, so this never touches markup — only visible text. */
+var PHRASES = {
+  // page titles
+  "Dashboard":"ዳሽቦርድ","Quick Add Sale":"ፈጣን ሽያጭ ጨምር","Sales Record":"የሽያጭ መዝገብ","Invoice Maker":"ደረሰኝ ፈጣሪ",
+  "Sales Calendar":"የሽያጭ የቀን መቁጠሪያ","Products":"ምርቶች","Stock Purchase":"የስቶክ ግዢ","Expenses":"ወጪዎች","Reports":"ሪፖርቶች","Settings":"ቅንብሮች",
+  // auth
+  "Log in":"ግባ","Sign up":"መዝግብ","Create account":"አካውንት ፍጠር","Email":"ኢሜይል","Password":"የይለፍ ቃል",
+  "Confirm password":"የይለፍ ቃል ድገም","Shop name":"የሱቅ ስም","Owner name":"የባለቤት ስም","Forgot password?":"የይለፍ ቃል ረሳህ?",
+  "Reset password":"የይለፍ ቃል ዳግም አስጀምር","Send reset email":"ዳግም ማስጀመሪያ ኢሜይል ላክ","← Back to login":"← ወደ መግቢያ ተመለስ",
+  "We will send a password reset link to this email.":"የይለፍ ቃል ዳግም ማስጀመሪያ ሊንክ ወደዚህ ኢሜይል እንልካለን።",
+  "Logging in…":"በመግባት ላይ…","Creating…":"በመፍጠር ላይ…","Show":"አሳይ","Hide":"ደብቅ",
+  "Verify your email":"ኢሜይልህን አረጋግጥ","I've verified — Check again":"አረጋግጫለሁ — እንደገና አረጋግጥ",
+  "Checking…":"በማረጋገጥ ላይ…","Resend verification email":"የማረጋገጫ ኢሜይል እንደገና ላክ",
+  // dashboard / periods
+  "Today":"ዛሬ","Yesterday":"ትናንት","Weekly":"ሳምንታዊ","Monthly":"ወርሃዊ","Yearly":"ዓመታዊ",
+  "This Week":"በዚህ ሳምንት","This Month":"በዚህ ወር","This Year":"በዚህ ዓመት","Custom Range":"በተለየ ጊዜ ገደብ",
+  "Total Sales":"ጠቅላላ ሽያጭ","Gross Profit":"ጥቅል ትርፍ","Net Profit":"ተጣራ ትርፍ","Gross Margin":"ጥቅል የትርፍ መጠን","Net Margin":"ተጣራ የትርፍ መጠን",
+  "Current Store Balance":"የአሁኑ የሱቅ ቀሪ ሂሳብ","Top Sales Day":"ከፍተኛ ሽያጭ ቀን","Top Profit Day":"ከፍተኛ ትርፍ ቀን","Top records":"ከፍተኛ መዝገቦች",
+  "Store Success Planner":"የሱቅ ስኬት እቅድ አውጪ","No sales recorded yet":"እስካሁን የተመዘገበ ሽያጭ የለም","Weekly routine":"ሳምንታዊ ልማድ",
+  "Sales Goal":"የሽያጭ ግብ","of goal reached":"ግብ ተሳክቷል","more to reach your goal":"ለግብህ ይቀራል","Goal reached":"ግብ ተሳክቷል",
+  // quick sale
+  "Existing product":"ነባር ምርት","New product":"አዲስ ምርት","Search by name or scan a barcode…":"በስም ፈልግ ወይም barcode ስካን አድርግ…",
+  "Scan barcode":"Barcode ስካን","Product name":"የምርት ስም","Category":"ምድብ","Quantity":"ብዛት",
+  "Cost price (per unit)":"የዋጋ ዋጋ (በ1)","Selling price (per unit)":"የሽያጭ ዋጋ (በ1)",
+  "Not in stock yet — mark as Owed":"ገና ክምችት ውስጥ የለም — Owed ብለህ ምልክት አድርግ",
+  "Total sales":"ጠቅላላ ሽያጭ","Gross profit":"ጥቅል ትርፍ","Record sale":"ሽያጭ መዝግብ","Recent sales":"የቅርብ ጊዜ ሽያጮች",
+  "Date":"ቀን","Product":"ምርት","Change":"ቀይር","No matching products":"የሚመሳሰል ምርት የለም",
+  // sales record
+  "Search product…":"ምርት ፈልግ…","All products":"ሁሉም ምርቶች","Clear":"አጽዳ","Add sale":"ሽያጭ ጨምር",
+  "Qty":"ብዛት","Cost":"ዋጋ","Sell":"ሽያጭ","Edit":"አርትዕ","Delete":"ሰርዝ","Owed":"ባለእዳ","No sales match":"ምንም ሽያጭ አልተገኘም",
+  // invoice
+  "Customer name":"የደንበኛ ስም","Phone":"ስልክ","Address":"አድራሻ","Items":"እቃዎች","Add line":"መስመር ጨምር",
+  "Generate invoice preview":"ደረሰኝ ቅድመ-እይታ ፍጠር","Update invoice":"ደረሰኝ አዘምን","New invoice":"አዲስ ደረሰኝ",
+  "Print":"አትም","Save PDF":"PDF አስቀምጥ","Recent invoices":"የቅርብ ጊዜ ደረሰኞች","View":"ይመልከቱ","No invoices yet.":"እስካሁን ደረሰኝ የለም።",
+  // calendar
+  "Prev":"ወደኋላ","Next":"ወደፊት","Number of sales":"የሽያጮች ብዛት","Sales that day":"በዚያ ቀን የተደረጉ ሽያጮች","No sales on this date.":"በዚህ ቀን ምንም ሽያጭ የለም።",
+  // products
+  "No products yet":"እስካሁን ምርት የለም","Add product":"ምርት ጨምር","Import CSV":"CSV አስገባ","Name":"ስም","Opening":"መነሻ",
+  "Current":"አሁን ያለው","Reorder":"ዳግም ማዘዣ","Status":"ሁኔታ","Low stock":"ዝቅተኛ ክምችት",
+  // stock purchase
+  "Single item":"ነጠላ እቃ","Bulk entry":"በጅምላ ማስገቢያ","All-time Total":"ጠቅላላ ድምር","Purchases logged":"የተመዘገቡ ግዢዎች",
+  "Record stock purchase":"የስቶክ ግዢ መዝግብ","Unit cost":"የአንድ ዋጋ","Supplier / source":"አቅራቢ / ምንጭ","Notes":"ማስታወሻ",
+  "Save purchase":"ግዢ አስቀምጥ","Purchase history":"የግዢ ታሪክ","No purchases recorded yet.":"እስካሁን የተመዘገበ ግዢ የለም።",
+  "Bulk stock entry":"በጅምላ የስቶክ ምዝገባ","Save all items":"ሁሉንም እቃዎች አስቀምጥ","Add another item":"ሌላ እቃ ጨምር",
+  "Single sale":"ነጠላ ሽያጭ","Bulk sale entry":"በጅምላ ሽያጭ ማስገቢያ","Save all sales":"ሁሉንም ሽያጮች አስቀምጥ",
+  "Total for this batch":"ለዚህ ጅምላ ጠቅላላ ድምር","Not in stock yet — mark all as Owed":"ገና ክምችት ውስጥ የለም — ሁሉንም Owed ብለህ ምልክት አድርግ",
+  "Weekly budget":"ሳምንታዊ በጀት","Monthly budget":"ወርሃዊ በጀት","remaining":"ቀሪ","Over budget by":"ከበጀት በላይ በ",
+  // expenses
+  "Add expense":"ወጪ ጨምር","Description":"መግለጫ","Amount":"መጠን","Save expense":"ወጪ አስቀምጥ",
+  "Expense history":"የወጪ ታሪክ","No expenses recorded yet.":"እስካሁን የተመዘገበ ወጪ የለም።",
+  // reports
+  "From":"ከ","To":"እስከ","Number of Sales":"የሽያጮች ብዛት","Stock Purchased":"የተገዛ ስቶክ","Export report":"ሪፖርት ላክ",
+  "Top 10 Selling Products":"ከፍተኛ 10 የተሸጡ ምርቶች","Top 10 Highest-Profit Products":"ከፍተኛ 10 ትርፋማ ምርቶች",
+  "No sales in this range.":"በዚህ ጊዜ ገደብ ውስጥ ምንም ሽያጭ የለም።","Sales & Profit Trend":"የሽያጭ እና ትርፍ አዝማሚያ","No sales in range":"በዚህ ጊዜ ገደብ ምንም ሽያጭ የለም",
+  // settings
+  "Account":"አካውንት","Owner":"ባለቤት","Member since":"አባል የሆነበት","Log out":"ውጣ","Email verified":"ኢሜይል ተረጋግጧል",
+  "Verified":"ተረጋግጧል","Not verified":"አልተረጋገጠም","Security":"ደህንነት","Current password":"አሁን ያለው የይለፍ ቃል",
+  "New password":"አዲስ የይለፍ ቃል","Confirm new password":"አዲስ የይለፍ ቃል ድገም","Change password":"የይለፍ ቃል ቀይር",
+  "Business info":"የንግድ መረጃ","Business address":"የንግድ አድራሻ","Business phone":"የንግድ ስልክ","Save business info":"የንግድ መረጃ አስቀምጥ",
+  "Data & export":"ዳታ እና ላክ","Language":"ቋንቋ","Appearance":"ገጽታ","Light":"ብሩህ","Dark":"ጨለማ","System":"ሲስተም","Color theme":"የቀለም ገጽታ",
+  "Sales Goals":"የሽያጭ ግቦች","Daily goal (ETB)":"ዕለታዊ ግብ (ETB)","Weekly goal (ETB)":"ሳምንታዊ ግብ (ETB)",
+  "Monthly goal (ETB)":"ወርሃዊ ግብ (ETB)","Yearly goal (ETB)":"ዓመታዊ ግብ (ETB)","Save goals":"ግቦች አስቀምጥ",
+  "Stock Purchase Budget":"የስቶክ ግዢ በጀት","Save budget":"በጀት አስቀምጥ","Backup Saving":"መጠባበቂያ ቁጠባ",
+  "Turn on Backup Saving":"መጠባበቂያ ቁጠባ አብራ","Turn off Backup Saving":"መጠባበቂያ ቁጠባ አጥፋ","Current balance":"አሁን ያለው ቀሪ ሂሳብ",
+  "Type":"ዓይነት","Reason":"ምክንያት","Add transaction":"ግብይት ጨምር","History":"ታሪክ","No transactions yet.":"እስካሁን ግብይት የለም።",
+  "Branches":"ቅርንጫፎች","Branch name":"የቅርንጫፍ ስም","Branch code":"የቅርንጫፍ ኮድ","Add branch":"ቅርንጫፍ ጨምር",
+  "Deactivate":"አሰናክል","Activate":"አንቃ","Inactive":"ቦዝኗል","Users & Roles":"ተጠቃሚዎች እና ሚናዎች","Full name":"ሙሉ ስም",
+  "Temporary password":"ጊዜያዊ የይለፍ ቃል","Role":"ሚና","Manager":"ማናጀር","Branch":"ቅርንጫፍ","No branch":"ምንም ቅርንጫፍ የለም",
+  "Unassigned":"ያልተመደበ","No branches yet.":"እስካሁን ቅርንጫፍ የለም።","No team members yet — just you as CEO.":"እስካሁን የቡድን አባል የለም — አንተ CEO ብቻ ነህ።",
+  "About / Developer":"ስለ / ገንቢ","Developer":"ገንቢ","Company":"ድርጅት","Country":"ሀገር","Ethiopia":"ኢትዮጵያ",
+  "Shop/House Rent":"ኪራይ (ሱቅ/ቤት)","Electricity":"መብራት","Transport":"ትራንስፖርት","Phone/Internet":"ስልክ/ኢንተርኔት","Repair":"ጥገና","Other":"ሌላ"
+};
+var PHRASE_KEYS_SORTED = Object.keys(PHRASES).sort(function(a,b){ return b.length-a.length; });
+function translateUI(html){
+  if(LANG!=='am') return html;
+  for(var i=0;i<PHRASE_KEYS_SORTED.length;i++){
+    var k = PHRASE_KEYS_SORTED[i];
+    if(html.indexOf(k)===-1) continue;
+    html = html.split(k).join(PHRASES[k]);
+  }
+  return html;
+}
 
 /* ---------------- Firebase setup ---------------- */
 var firebaseConfig = {
@@ -478,6 +575,8 @@ var STATE = {
   dashboardPeriod:'today',
   quickSaleQuery:'',
   quickSaleSelectedId:'',
+  quickSaleTopMode:'single',
+  bulkSaleDraft:{date:todayStr(),markedOwed:false,rows:[{name:'',qty:1,costPrice:0,sellingPrice:0}]},
   invoiceDraft:{customerName:'',phone:'',address:'',items:[{name:'',qty:1,unitPrice:0}]},
   invoicePreview:null,
   editingInvoiceId:null,
@@ -735,11 +834,11 @@ function render(){
     return;
   }
   if(!STATE.session){
-    root.innerHTML = renderAuth();
+    root.innerHTML = translateUI(renderAuth());
   } else if(auth.currentUser && !auth.currentUser.emailVerified){
-    root.innerHTML = renderVerifyGate();
+    root.innerHTML = translateUI(renderVerifyGate());
   } else {
-    root.innerHTML = renderShell();
+    root.innerHTML = translateUI(renderShell());
   }
   bindEvents();
 }
@@ -1069,6 +1168,57 @@ function renderPlanner(){
 
 /* ---------------- QUICK SALE ---------------- */
 function renderQuickSale(){
+  var topMode = STATE.quickSaleTopMode||'single';
+  var topTabs = '<div class="tabs" style="margin-bottom:14px;">'+
+      '<button type="button" class="tab-btn'+(topMode==='single'?' active':'')+'" data-act="qs-top-mode" data-mode="single">Single sale</button>'+
+      '<button type="button" class="tab-btn'+(topMode==='bulk'?' active':'')+'" data-act="qs-top-mode" data-mode="bulk">'+uiIcon('box','icon-sm')+' Bulk sale entry</button>'+
+    '</div>';
+  if(topMode==='bulk') return topTabs + renderBulkSaleForm();
+  return topTabs + renderSingleQuickSale();
+}
+
+function renderBulkSaleForm(){
+  var d = STATE.bulkSaleDraft;
+  var itemRows = d.rows.map(renderBulkSaleRow).join('');
+  var total = d.rows.reduce(function(a,r){return a+((r.qty||0)*(r.sellingPrice||0));},0);
+  return '<div class="two-col">'+
+    '<div class="card"><h3 style="margin-bottom:10px;">'+uiIcon('box','icon-sm')+' Bulk sale entry</h3>'+
+      '<p class="field-note" style="margin-bottom:10px;">Record several sales at once — handy for closing out a busy day in one go. New product names are created automatically.</p>'+
+      '<form id="bulkSaleForm">'+
+      '<label>Date</label><input type="date" id="bulkSaleDate" value="'+esc(d.date)+'" max="'+todayStr()+'">'+
+      '<label style="margin-top:14px;">Items</label>'+
+      '<div class="invoice-items" id="bulkSaleItems">'+itemRows+'</div>'+
+      '<button type="button" class="btn btn-outline btn-sm" data-act="bulk-sale-add-row" style="margin-top:6px;">+ Add another item</button>'+
+      '<label style="display:flex;align-items:center;gap:8px;margin-top:14px;cursor:pointer;">'+
+        '<input type="checkbox" id="bulkSaleOwed" style="width:auto;" '+(d.markedOwed?'checked':'')+'> '+
+        '<span style="font-size:12.5px;font-weight:700;color:var(--ink-soft);">Not in stock yet — mark all as Owed</span>'+
+      '</label>'+
+      '<div class="card" style="margin-top:14px;background:var(--green-50);border-style:dashed;"><div class="list-item"><span>Total for this batch</span><b>'+fmtETB(total)+'</b></div></div>'+
+      '<button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('plus','icon-sm')+' Save all sales</button>'+
+      '</form>'+
+    '</div>'+
+    '<div class="card"><h3 style="margin-bottom:10px;">Recent sales</h3>'+
+      (STATE.data.sales.slice().sort(function(a,b){return b.createdAt.localeCompare(a.createdAt);}).slice(0,8).map(function(s){
+        return '<div class="list-item"><span>'+esc(s.productName)+' · '+fmtDateLong(s.date)+'</span><b>'+fmtETB(s.totalSales)+'</b></div>';
+      }).join('') || '<div class="muted">No sales recorded yet.</div>')+
+    '</div>'+
+  '</div>';
+}
+
+function renderBulkSaleRow(item, idx){
+  var qty = item.qty||0, sell = item.sellingPrice||0;
+  var total = round2(qty*sell);
+  return '<div class="invoice-item-row bulk-sale-row">'+
+    '<input type="text" id="bsName_'+idx+'" placeholder="Product name" value="'+esc(item.name||'')+'" data-bulksale-field="name" data-idx="'+idx+'">'+
+    '<input type="number" id="bsQty_'+idx+'" min="0" step="1" placeholder="Qty" value="'+qty+'" data-bulksale-field="qty" data-idx="'+idx+'">'+
+    '<input type="number" id="bsCost_'+idx+'" min="0" step="0.01" placeholder="Cost" value="'+(item.costPrice||0)+'" data-bulksale-field="costPrice" data-idx="'+idx+'">'+
+    '<input type="number" id="bsSell_'+idx+'" min="0" step="0.01" placeholder="Sell price" value="'+sell+'" data-bulksale-field="sellingPrice" data-idx="'+idx+'">'+
+    '<div class="ln-total">'+fmtETB(total)+'</div>'+
+    '<button type="button" class="remove-line" data-act="bulk-sale-remove-row" data-idx="'+idx+'">×</button>'+
+  '</div>';
+}
+
+function renderSingleQuickSale(){
   var products = STATE.data.products;
   var mode = products.length ? (STATE.quickSaleMode||'existing') : 'new';
 
@@ -1454,7 +1604,7 @@ function renderExpenses(){
     return '<tr><td>'+fmtDateLong(e.date)+'</td><td><span class="pill pill-green">'+esc(e.category)+'</span></td><td>'+esc(e.description||'—')+'</td><td>'+fmtETB(e.amount)+'</td>'+
       '<td><div class="row-actions">'+(canManage()?'<button class="btn btn-outline btn-sm" data-act="edit-expense" data-id="'+e.id+'">Edit</button>':'')+(canDelete()?'<button class="btn btn-danger btn-sm" data-act="delete-expense" data-id="'+e.id+'">Delete</button>':'')+'</div></td></tr>';
   }).join('');
-  var catOptions = EXPENSE_CATS.map(function(c){return '<option>'+c+'</option>';}).join('');
+  var catOptions = EXPENSE_CATS.map(function(c){return '<option value="'+c+'">'+c+'</option>';}).join('');
   return '<div class="two-col">'+
   '<div class="card"><h3 style="margin-bottom:10px;">Add expense</h3>'+
   '<form id="expenseForm">'+
@@ -1730,15 +1880,20 @@ function renderBackupSavingSettings(u){
     html += '<div class="goal-label" style="margin-top:16px;"><span>Current balance</span><b style="font-size:17px;color:'+(balance>=0?'var(--green-700)':'var(--red)')+';">'+fmtETB(balance)+'</b></div>'+
       '<form id="backupSavingForm" style="margin-top:10px;">'+
         '<div class="form-row">'+
-          '<div><label>Type</label><select name="type"><option>Deposit</option><option>Withdrawal</option></select></div>'+
+          '<div><label>Type</label><select name="type"><option value="Deposit">Deposit</option><option value="Withdrawal">Withdrawal</option></select></div>'+
           '<div><label>Amount</label><input type="number" min="0" step="0.01" name="amount" required></div>'+
         '</div>'+
         '<label>Reason</label><input type="text" name="reason" placeholder="e.g. Emergency repair, Monthly reserve">'+
         '<button type="submit" class="btn btn-sm" style="margin-top:10px;">Add transaction</button>'+
       '</form>'+
       '<h3 style="margin:16px 0 6px;">History</h3>'+
-      (txs.length ? txs.slice(0,10).map(function(t){
-        return '<div class="list-item"><span>'+fmtDateLong(t.date)+' · '+esc(t.reason||t.type)+'</span><b style="color:'+(t.type==='Deposit'?'var(--green-700)':'var(--red)')+';">'+(t.type==='Deposit'?'+':'-')+fmtETB(t.amount)+'</b></div>';
+      (txs.length ? txs.slice(0,15).map(function(t){
+        return '<div class="list-item"><span>'+fmtDateLong(t.date)+' · '+esc(t.reason||t.type)+'</span>'+
+          '<span style="display:flex;align-items:center;gap:8px;">'+
+          '<b style="color:'+(t.type==='Deposit'?'var(--green-700)':'var(--red)')+';">'+(t.type==='Deposit'?'+':'-')+fmtETB(t.amount)+'</b>'+
+          '<button class="btn btn-outline btn-sm" data-act="edit-backup-saving" data-id="'+t.id+'">Edit</button>'+
+          '<button class="btn btn-danger btn-sm" data-act="delete-backup-saving" data-id="'+t.id+'">Delete</button>'+
+          '</span></div>';
       }).join('') : '<div class="muted">No transactions yet.</div>');
   }
   html += '</div>';
@@ -1878,7 +2033,7 @@ function renderModal(){
   } else if(m.type==='expense'){
     var e = m.data;
     title='Edit expense';
-    var catOptions = EXPENSE_CATS.map(function(c){return '<option'+(c===e.category?' selected':'')+'>'+c+'</option>';}).join('');
+    var catOptions = EXPENSE_CATS.map(function(c){return '<option value="'+c+'"'+(c===e.category?' selected':'')+'>'+c+'</option>';}).join('');
     body = '<form id="editExpenseForm">'+
       '<label>Date</label><input type="date" name="date" value="'+e.date+'" max="'+todayStr()+'" required>'+
       '<label>Category</label><select name="category">'+catOptions+'</select>'+
@@ -1926,6 +2081,18 @@ function renderModal(){
       '</select></div>'+
       '<div><label>Branch</label><select name="branchId">'+branchOpts2+'</select></div></div>'+
       '<p class="field-note">Email: '+esc(st2.email)+' (cannot be changed here)</p>'+
+      '<div class="modal-foot"><button type="button" class="btn btn-outline" data-act="close-modal">Cancel</button><button type="submit" class="btn">Save changes</button></div>'+
+    '</form>';
+  } else if(m.type==='editBackupSaving'){
+    var bs = m.data;
+    title = 'Edit transaction';
+    body = '<form id="editBackupSavingForm">'+
+      '<label>Date</label><input type="date" name="date" value="'+bs.date+'" max="'+todayStr()+'" required>'+
+      '<div class="form-row"><div><label>Type</label><select name="type">'+
+        '<option value="Deposit"'+(bs.type==='Deposit'?' selected':'')+'>Deposit</option>'+
+        '<option value="Withdrawal"'+(bs.type==='Withdrawal'?' selected':'')+'>Withdrawal</option>'+
+      '</select></div><div><label>Amount</label><input type="number" min="0" step="0.01" name="amount" value="'+bs.amount+'" required></div></div>'+
+      '<label>Reason</label><input type="text" name="reason" value="'+esc(bs.reason||'')+'">'+
       '<div class="modal-foot"><button type="button" class="btn btn-outline" data-act="close-modal">Cancel</button><button type="submit" class="btn">Save changes</button></div>'+
     '</form>';
   }
@@ -2007,6 +2174,8 @@ function bindEvents(){
   if(editBranchForm) editBranchForm.addEventListener('submit', onSaveEditBranch);
   var editStaffForm = document.getElementById('editStaffForm');
   if(editStaffForm) editStaffForm.addEventListener('submit', onSaveEditStaff);
+  var editBackupSavingForm = document.getElementById('editBackupSavingForm');
+  if(editBackupSavingForm) editBackupSavingForm.addEventListener('submit', onSaveEditBackupSaving);
   var goalsForm = document.getElementById('goalsForm');
   if(goalsForm) goalsForm.addEventListener('submit', onSaveGoals);
   var budgetForm = document.getElementById('budgetForm');
@@ -2055,6 +2224,23 @@ function bindEvents(){
       var idx = parseInt(inp.getAttribute('data-idx'),10);
       var field = inp.getAttribute('data-bulk-field');
       STATE.bulkStockDraft.rows[idx][field] = (field==='name') ? inp.value : (parseFloat(inp.value)||0);
+      var focusId = inp.id;
+      render();
+      preserveFocus(focusId);
+    });
+  });
+
+  var bulkSaleForm = document.getElementById('bulkSaleForm');
+  if(bulkSaleForm) bulkSaleForm.addEventListener('submit', onBulkSaleSubmit);
+  var bulkSaleDate = document.getElementById('bulkSaleDate');
+  if(bulkSaleDate) bulkSaleDate.addEventListener('change', function(){ STATE.bulkSaleDraft.date = bulkSaleDate.value; });
+  var bulkSaleOwed = document.getElementById('bulkSaleOwed');
+  if(bulkSaleOwed) bulkSaleOwed.addEventListener('change', function(){ STATE.bulkSaleDraft.markedOwed = bulkSaleOwed.checked; });
+  app.querySelectorAll('[data-bulksale-field]').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var idx = parseInt(inp.getAttribute('data-idx'),10);
+      var field = inp.getAttribute('data-bulksale-field');
+      STATE.bulkSaleDraft.rows[idx][field] = (field==='name') ? inp.value : (parseFloat(inp.value)||0);
       var focusId = inp.id;
       render();
       preserveFocus(focusId);
@@ -2124,6 +2310,16 @@ function handleAction(act, el, ev){
   if(act==='edit-staff'){
     var est = (STATE.data.staff||[]).find(function(x){return x.id===el.getAttribute('data-id');});
     STATE.modal={type:'editStaff', data:Object.assign({},est)}; render(); return;
+  }
+  if(act==='edit-backup-saving'){
+    var ebs = (STATE.data.backupSavings||[]).find(function(x){return x.id===el.getAttribute('data-id');});
+    STATE.modal={type:'editBackupSaving', data:Object.assign({},ebs)}; render(); return;
+  }
+  if(act==='delete-backup-saving'){
+    if(confirm('Delete this transaction?')){
+      shopRef().collection('backupSavings').doc(el.getAttribute('data-id')).delete().catch(showActionError);
+    }
+    return;
   }
   if(act==='check-verify'){
     STATE.authBusy = true; STATE.authError=''; STATE.authMsg=''; render();
@@ -2269,6 +2465,14 @@ function handleAction(act, el, ev){
     var bidx=parseInt(el.getAttribute('data-idx'),10);
     STATE.bulkStockDraft.rows.splice(bidx,1);
     if(!STATE.bulkStockDraft.rows.length) STATE.bulkStockDraft.rows.push({name:'',qty:1,unitCost:0});
+    render(); return;
+  }
+  if(act==='qs-top-mode'){ STATE.quickSaleTopMode = el.getAttribute('data-mode'); render(); return; }
+  if(act==='bulk-sale-add-row'){ STATE.bulkSaleDraft.rows.push({name:'',qty:1,costPrice:0,sellingPrice:0}); render(); return; }
+  if(act==='bulk-sale-remove-row'){
+    var sidx=parseInt(el.getAttribute('data-idx'),10);
+    STATE.bulkSaleDraft.rows.splice(sidx,1);
+    if(!STATE.bulkSaleDraft.rows.length) STATE.bulkSaleDraft.rows.push({name:'',qty:1,costPrice:0,sellingPrice:0});
     render(); return;
   }
 }
@@ -2449,6 +2653,48 @@ async function onBulkStockSubmit(ev){
   }
 }
 
+async function onBulkSaleSubmit(ev){
+  ev.preventDefault();
+  var d = STATE.bulkSaleDraft;
+  var date = d.date || todayStr();
+  var markedOwed = !!d.markedOwed;
+  var validRows = d.rows.filter(function(r){ return (r.name||'').trim() && (r.qty||0)>0; });
+  if(!validRows.length){ alert('Add at least one item with a name and quantity.'); return; }
+  var submitBtn = ev.target.querySelector('button[type=submit]');
+  if(submitBtn) submitBtn.disabled = true;
+  var added = 0;
+  try{
+    for(var i=0;i<validRows.length;i++){
+      var r = validRows[i];
+      var name = r.name.trim();
+      var existing = STATE.data.products.find(function(p){ return p.name.toLowerCase()===name.toLowerCase(); });
+      var productId, productName;
+      if(existing){
+        productId = existing.id; productName = existing.name;
+      } else {
+        var newRef = shopRef().collection('products').doc();
+        await newRef.set({
+          name:name, category:'', costPrice:r.costPrice||0, sellingPrice:r.sellingPrice||0,
+          openingStock:r.qty, currentStock:r.qty, debt:0, reorderLevel:0
+        });
+        productId = newRef.id; productName = name;
+      }
+      await addSale({
+        date: date, productId: productId, productName: productName,
+        quantity: r.qty, costPrice: r.costPrice||0, sellingPrice: r.sellingPrice||0, markedOwed: markedOwed
+      });
+      added++;
+    }
+    STATE.bulkSaleDraft = {date:todayStr(), markedOwed:false, rows:[{name:'',qty:1,costPrice:0,sellingPrice:0}]};
+    STATE.quickSaleTopMode = 'single';
+    STATE.view = 'sales';
+    render();
+  }catch(err){
+    showActionError(err);
+    if(submitBtn) submitBtn.disabled = false;
+  }
+}
+
 async function onAddExpense(ev){
   ev.preventDefault();
   var fd = new FormData(ev.target);
@@ -2550,6 +2796,18 @@ async function onSaveEditStaff(ev){
   try{
     await shopRef().collection('staff').doc(id).update({ name: fd.get('name').trim(), role: role, branchId: branchId });
     await db.collection('staffLookup').doc(id).update({ role: role, branchId: branchId });
+    STATE.modal=null;
+    render();
+  }catch(err){ showActionError(err); }
+}
+
+async function onSaveEditBackupSaving(ev){
+  ev.preventDefault();
+  var fd = new FormData(ev.target);
+  try{
+    await shopRef().collection('backupSavings').doc(STATE.modal.data.id).update({
+      date: fd.get('date'), type: fd.get('type'), amount: parseFloat(fd.get('amount')), reason: (fd.get('reason')||'').trim()
+    });
     STATE.modal=null;
     render();
   }catch(err){ showActionError(err); }
