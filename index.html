@@ -277,6 +277,7 @@ tbody tr:hover{background:var(--green-50);}
 .invoice-item-row input{padding:6px 8px;font-size:12.5px;}
 .invoice-item-row .ln-total{font-size:12.5px;font-weight:700;text-align:right;}
 .bulk-sale-row{grid-template-columns:1fr 55px 75px 75px 85px 30px;}
+.bulk-sale-row.no-cost{grid-template-columns:1fr 55px 85px 85px 30px;}
 @media(max-width:640px){
   .bulk-sale-row{grid-template-columns:1fr 1fr;grid-template-areas:"name name" "qty cost" "sell total" "remove remove";}
   .bulk-sale-row input:nth-child(1){grid-area:name;}
@@ -285,6 +286,8 @@ tbody tr:hover{background:var(--green-50);}
   .bulk-sale-row input:nth-child(4){grid-area:sell;}
   .bulk-sale-row .ln-total{grid-area:total;text-align:right;}
   .bulk-sale-row .remove-line{grid-area:remove;justify-self:end;}
+  .bulk-sale-row.no-cost{grid-template-areas:"name name" "qty sell" "total remove";}
+  .bulk-sale-row.no-cost .ln-total{text-align:left;}
 }
 .remove-line{background:var(--red-bg);color:var(--red);border:none;border-radius:6px;width:26px;height:26px;cursor:pointer;font-weight:800;}
 .invoice-preview{background:#fff;color:#1a2620;border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-lg);max-width:640px;margin:0 auto;}
@@ -385,7 +388,7 @@ var PHRASES = {
   "Record stock purchase":"የስቶክ ግዢ መዝግብ","Unit cost":"የአንድ ዋጋ","Supplier / source":"አቅራቢ / ምንጭ","Notes":"ማስታወሻ",
   "Save purchase":"ግዢ አስቀምጥ","Purchase history":"የግዢ ታሪክ","No purchases recorded yet.":"እስካሁን የተመዘገበ ግዢ የለም።",
   "Bulk stock entry":"በጅምላ የስቶክ ምዝገባ","Save all items":"ሁሉንም እቃዎች አስቀምጥ","Add another item":"ሌላ እቃ ጨምር",
-  "Single sale":"ነጠላ ሽያጭ","Bulk sale entry":"በጅምላ ሽያጭ ማስገቢያ","Save all sales":"ሁሉንም ሽያጮች አስቀምጥ",
+  "Preferences":"ምርጫዎች","Single sale":"ነጠላ ሽያጭ","Bulk sale entry":"በጅምላ ሽያጭ ማስገቢያ","Save all sales":"ሁሉንም ሽያጮች አስቀምጥ",
   "Total for this batch":"ለዚህ ጅምላ ጠቅላላ ድምር","Not in stock yet — mark all as Owed":"ገና ክምችት ውስጥ የለም — ሁሉንም Owed ብለህ ምልክት አድርግ",
   "Weekly budget":"ሳምንታዊ በጀት","Monthly budget":"ወርሃዊ በጀት","remaining":"ቀሪ","Over budget by":"ከበጀት በላይ በ",
   // expenses
@@ -468,6 +471,14 @@ function myRole(){ return STATE.session ? STATE.session.role : null; }
 function isCeo(){ return myRole()==='ceo'; }
 function canManage(){ return myRole()==='ceo' || myRole()==='manager'; }
 function canDelete(){ return myRole()==='ceo' || myRole()==='manager'; }
+/* Sales accounts exist only to record sales: they get Quick Sale, their Sales
+   Record, and a minimal Settings page (language/theme + logout). Everything
+   financial (dashboard, reports, stock, expenses, balances) stays CEO/Manager. */
+function allowedViewsForRole(){
+  if(myRole()==='sales') return ['quickSale','sales','settings'];
+  return ['dashboard','quickSale','sales','invoice','calendar','products','stockPurchase','expenses','reports','settings'];
+}
+function defaultViewForRole(){ return myRole()==='sales' ? 'quickSale' : 'dashboard'; }
 
 /* Resolve who this authenticated user is: look up staffLookup/{uid} to find their
    shop, role and branch. Existing single-shop accounts (pre-V2) are migrated
@@ -493,41 +504,31 @@ async function resolveStaffSession(uid){
 }
 function subscribeAll(uidStr){
   var base = db.collection('shops').doc(uidStr);
+  var isSalesRole = (myRole()==='sales');
+  function listen(key, query, sorter){
+    UNSUB[key] = query.onSnapshot(function(snap){
+      var rows = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
+      STATE.data[key] = sorter ? rows.sort(sorter) : rows;
+      render();
+    }, function(){});
+  }
   UNSUB.profile = base.onSnapshot(function(doc){
     if(doc.exists){ STATE.shopProfile = doc.data(); render(); }
   }, function(){});
-  UNSUB.products = base.collection('products').onSnapshot(function(snap){
-    STATE.data.products = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
-    render();
-  }, function(){});
-  UNSUB.sales = base.collection('sales').onSnapshot(function(snap){
-    STATE.data.sales = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
-    render();
-  }, function(){});
-  UNSUB.stockPurchases = base.collection('stockPurchases').onSnapshot(function(snap){
-    STATE.data.stockPurchases = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
-    render();
-  }, function(){});
-  UNSUB.expenses = base.collection('expenses').onSnapshot(function(snap){
-    STATE.data.expenses = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
-    render();
-  }, function(){});
-  UNSUB.invoices = base.collection('invoices').onSnapshot(function(snap){
-    STATE.data.invoices = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); }).sort(function(a,b){return (b.createdAt||'').localeCompare(a.createdAt||'');});
-    render();
-  }, function(){});
-  UNSUB.backupSavings = base.collection('backupSavings').onSnapshot(function(snap){
-    STATE.data.backupSavings = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
-    render();
-  }, function(){});
-  UNSUB.branches = base.collection('branches').onSnapshot(function(snap){
-    STATE.data.branches = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
-    render();
-  }, function(){});
-  UNSUB.staff = base.collection('staff').onSnapshot(function(snap){
-    STATE.data.staff = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
-    render();
-  }, function(){});
+  /* Everyone needs products (to pick what they are selling). */
+  listen('products', base.collection('products'));
+  /* A Sales account only ever reads sales it recorded itself; the Firestore rules
+     enforce the same restriction, so this filter is required, not cosmetic. */
+  listen('sales', isSalesRole ? base.collection('sales').where('createdByUid','==',STATE.session.userId) : base.collection('sales'));
+  /* Financial / admin collections: CEO and Manager only. Sales never subscribes. */
+  if(!isSalesRole){
+    listen('stockPurchases', base.collection('stockPurchases'));
+    listen('expenses', base.collection('expenses'));
+    listen('invoices', base.collection('invoices'), function(a,b){return (b.createdAt||'').localeCompare(a.createdAt||'');});
+    listen('backupSavings', base.collection('backupSavings'));
+    listen('branches', base.collection('branches'));
+    listen('staff', base.collection('staff'));
+  }
 }
 function unsubscribeAll(){
   Object.keys(UNSUB).forEach(function(k){ if(UNSUB[k]) UNSUB[k](); UNSUB[k]=null; });
@@ -623,7 +624,7 @@ async function addSale(saleInput){
   var saleRef = base.collection('sales').doc();
   var productRef = base.collection('products').doc(saleInput.productId);
   var markedOwed = !!saleInput.markedOwed;
-  var sale = recomputeSale(Object.assign({createdAt:new Date().toISOString(), markedOwed:markedOwed}, saleInput));
+  var sale = recomputeSale(Object.assign({createdAt:new Date().toISOString(), markedOwed:markedOwed, createdByUid:STATE.session.userId, createdByRole:STATE.session.role}, saleInput));
   await db.runTransaction(async function(tx){
     var prodSnap = await tx.get(productRef);
     var stock = prodSnap.exists ? (prodSnap.data().currentStock||0) : 0;
@@ -966,7 +967,8 @@ function uiIcon(name, extraClass){
 
 function renderShell(){
   var u = currentUser();
-  var navHtml = NAV.map(function(n){
+  if(allowedViewsForRole().indexOf(STATE.view)===-1){ STATE.view = defaultViewForRole(); }
+  var navHtml = NAV.filter(function(n){ return allowedViewsForRole().indexOf(n.id)!==-1; }).map(function(n){
     return '<button class="nav-item'+(STATE.view===n.id?' active':'')+'" data-nav="'+n.id+'">'+
       '<span class="nav-icon">'+navIcon(n.icon)+'</span><span'+(LANG==='am'?' lang-am':'')+'>'+esc(tr(n.label))+'</span></button>';
   }).join('');
@@ -999,6 +1001,7 @@ function renderShell(){
 }
 
 function renderView(){
+  if(allowedViewsForRole().indexOf(STATE.view)===-1){ STATE.view = defaultViewForRole(); }
   switch(STATE.view){
     case 'dashboard': return renderDashboard();
     case 'quickSale': return renderQuickSale();
@@ -1183,7 +1186,7 @@ function renderBulkSaleForm(){
   var total = d.rows.reduce(function(a,r){return a+((r.qty||0)*(r.sellingPrice||0));},0);
   return '<div class="two-col">'+
     '<div class="card"><h3 style="margin-bottom:10px;">'+uiIcon('box','icon-sm')+' Bulk sale entry</h3>'+
-      '<p class="field-note" style="margin-bottom:10px;">Record several sales at once — handy for closing out a busy day in one go. New product names are created automatically.</p>'+
+      '<p class="field-note" style="margin-bottom:10px;">Record several sales at once — handy for closing out a busy day in one go.'+(canManage()?' New product names are created automatically.':' Only products that already exist can be sold.')+'</p>'+
       '<form id="bulkSaleForm">'+
       '<label>Date</label><input type="date" id="bulkSaleDate" value="'+esc(d.date)+'" max="'+todayStr()+'">'+
       '<label style="margin-top:14px;">Items</label>'+
@@ -1208,10 +1211,11 @@ function renderBulkSaleForm(){
 function renderBulkSaleRow(item, idx){
   var qty = item.qty||0, sell = item.sellingPrice||0;
   var total = round2(qty*sell);
-  return '<div class="invoice-item-row bulk-sale-row">'+
+  var noCost = !canManage();
+  return '<div class="invoice-item-row bulk-sale-row'+(noCost?' no-cost':'')+'">'+
     '<input type="text" id="bsName_'+idx+'" placeholder="Product name" value="'+esc(item.name||'')+'" data-bulksale-field="name" data-idx="'+idx+'">'+
     '<input type="number" id="bsQty_'+idx+'" min="0" step="1" placeholder="Qty" value="'+qty+'" data-bulksale-field="qty" data-idx="'+idx+'">'+
-    '<input type="number" id="bsCost_'+idx+'" min="0" step="0.01" placeholder="Cost" value="'+(item.costPrice||0)+'" data-bulksale-field="costPrice" data-idx="'+idx+'">'+
+    '<input type="number" id="bsCost_'+idx+'" min="0" step="0.01" placeholder="Cost" value="'+(item.costPrice||0)+'" data-bulksale-field="costPrice" data-idx="'+idx+'"'+(noCost?' style="display:none;"':'')+'>'+
     '<input type="number" id="bsSell_'+idx+'" min="0" step="0.01" placeholder="Sell price" value="'+sell+'" data-bulksale-field="sellingPrice" data-idx="'+idx+'">'+
     '<div class="ln-total">'+fmtETB(total)+'</div>'+
     '<button type="button" class="remove-line" data-act="bulk-sale-remove-row" data-idx="'+idx+'">×</button>'+
@@ -1220,9 +1224,13 @@ function renderBulkSaleRow(item, idx){
 
 function renderSingleQuickSale(){
   var products = STATE.data.products;
-  var mode = products.length ? (STATE.quickSaleMode||'existing') : 'new';
+  var salesOnly = !canManage();   /* Sales accounts can only sell products that already exist */
+  if(salesOnly && !products.length){
+    return emptyState('box','No products yet','Ask a manager or the CEO to add products first, then you can record sales here.');
+  }
+  var mode = salesOnly ? 'existing' : (products.length ? (STATE.quickSaleMode||'existing') : 'new');
 
-  var tabs = products.length ? (
+  var tabs = salesOnly ? '' : products.length ? (
     '<div class="tabs" style="margin-bottom:14px;">'+
       '<button type="button" class="tab-btn'+(mode==='existing'?' active':'')+'" data-act="qs-mode" data-mode="existing">Existing product</button>'+
       '<button type="button" class="tab-btn'+(mode==='new'?' active':'')+'" data-act="qs-mode" data-mode="new">New product</button>'+
@@ -1247,7 +1255,8 @@ function renderSingleQuickSale(){
       ) : '<div class="combo-selected"><span>'+uiIcon('check','icon-sm')+' '+esc(selected.name)+' — stock: '+selected.currentStock+'</span><button type="button" class="link-btn" data-act="qs-clear-product">Change</button></div>')+
       '<div class="form-row">'+
         '<div><label>Quantity</label><input type="number" name="quantity" min="1" step="1" value="1" required></div>'+
-        '<div><label>Cost price (per unit)</label><input type="number" name="costPrice" min="0" step="0.01" required id="qsCost" value="'+(selected?selected.costPrice:'')+'"></div>'+
+        (salesOnly ? '<input type="hidden" name="costPrice" id="qsCost" value="'+(selected?selected.costPrice:0)+'">'
+                   : '<div><label>Cost price (per unit)</label><input type="number" name="costPrice" min="0" step="0.01" required id="qsCost" value="'+(selected?selected.costPrice:'')+'"></div>')+
       '</div>'+
       '<label>Selling price (per unit)</label><input type="number" name="sellingPrice" min="0" step="0.01" required id="qsSell" value="'+(selected?selected.sellingPrice:'')+'">';
   } else {
@@ -1274,8 +1283,8 @@ function renderSingleQuickSale(){
     '<p class="field-note">Leave unchecked for normal sales — stock just won\'t go below 0. Only check this if you are selling something you have not received yet; it will show as "Owed" on that product until a matching Stock Purchase is logged.</p>'+
     '<div id="qsPreview" class="card" style="margin-top:16px;background:var(--green-50);border-style:dashed;">'+
       '<div class="list-item"><span>Total sales</span><b id="pvTotal">0 ETB</b></div>'+
-      '<div class="list-item"><span>COGS</span><b id="pvCogs">0 ETB</b></div>'+
-      '<div class="list-item"><span>Gross profit</span><b id="pvGross" style="color:var(--success);">0 ETB</b></div>'+
+      (canManage() ? '<div class="list-item"><span>COGS</span><b id="pvCogs">0 ETB</b></div>'+
+      '<div class="list-item"><span>Gross profit</span><b id="pvGross" style="color:var(--success);">0 ETB</b></div>' : '')+
     '</div>'+
     '<button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('plus','icon-sm')+' Record sale</button>'+
   '</form>'+
@@ -1303,11 +1312,11 @@ function renderSales(){
       '<td>'+fmtDateLong(s.date)+'</td>'+
       '<td>'+esc(s.productName)+(s.markedOwed?' <span class="pill pill-amber">Owed</span>':'')+'</td>'+
       '<td>'+s.quantity+'</td>'+
-      '<td>'+fmtETB(s.costPrice)+'</td>'+
+      (canManage() ? '<td>'+fmtETB(s.costPrice)+'</td>' : '')+
       '<td>'+fmtETB(s.sellingPrice)+'</td>'+
       '<td>'+fmtETB(s.totalSales)+'</td>'+
-      '<td>'+fmtETB(s.cogs)+'</td>'+
-      '<td style="color:var(--success);font-weight:700;">'+fmtETB(s.grossProfit)+'</td>'+
+      (canManage() ? '<td>'+fmtETB(s.cogs)+'</td>' : '')+
+      (canManage() ? '<td style="color:var(--success);font-weight:700;">'+fmtETB(s.grossProfit)+'</td>' : '')+
       '<td><div class="row-actions">'+
         (canManage()?'<button class="btn btn-outline btn-sm" data-act="edit-sale" data-id="'+s.id+'">Edit</button>':'')+
         (canDelete()?'<button class="btn btn-danger btn-sm" data-act="delete-sale" data-id="'+s.id+'">Delete</button>':'')+
@@ -1327,7 +1336,7 @@ function renderSales(){
   '</div>'+
   (list.length ? (
   '<div class="table-wrap"><table><thead><tr>'+
-    '<th>Date</th><th>Product</th><th>Qty</th><th>Cost</th><th>Sell</th><th>Total sales</th><th>COGS</th><th>Gross profit</th><th></th>'+
+    '<th>Date</th><th>Product</th><th>Qty</th>'+(canManage()?'<th>Cost</th>':'')+'<th>Sell</th><th>Total sales</th>'+(canManage()?'<th>COGS</th><th>Gross profit</th>':'')+'<th></th>'+
   '</tr></thead><tbody>'+rows+'</tbody></table></div>'
   ) : emptyState('list','No sales match','Try clearing your filters, or record a new sale.'));
 }
@@ -1795,7 +1804,7 @@ function renderSettings(){
       '<div class="list-item"><span>Member since</span><b>'+(u.createdAt?fmtDateLong(u.createdAt.slice(0,10)):'—')+'</b></div>'+
       '<button class="btn btn-outline btn-block" style="margin-top:16px;" data-act="logout">'+uiIcon('logout','icon-sm')+' Log out</button>'+
     '</div>'+
-    '<div class="card"><h3 style="margin-bottom:10px;">Security</h3>'+
+    (canManage() ? ('<div class="card"><h3 style="margin-bottom:10px;">Security</h3>'+
       '<form id="changePasswordForm">'+
         '<label>Current password</label>'+pwField('cpCurrent','currentPassword','Your current password')+
         '<label>New password</label>'+pwField('cpNew','newPassword','At least 8 characters',8)+
@@ -1804,23 +1813,25 @@ function renderSettings(){
         (STATE.pwChangeMsg?'<div class="ok-text">'+esc(STATE.pwChangeMsg)+'</div>':'')+
         '<button type="submit" class="btn btn-block" style="margin-top:16px;">Change password</button>'+
       '</form>'+
-    '</div>'+
-    '<div class="card"><h3 style="margin-bottom:10px;">Business info</h3>'+
+    '</div>') : '')+
+    (canManage() ? ('<div class="card"><h3 style="margin-bottom:10px;">Business info</h3>'+
       '<p class="muted" style="margin-bottom:10px;">Shown on your printed invoices.</p>'+
       '<form id="businessInfoForm">'+
         '<label>Business address</label><input type="text" name="shopAddress" value="'+esc(shopAddress)+'" placeholder="e.g. Burayu, Keta">'+
         '<label>Business phone</label><input type="text" name="shopPhone" value="'+esc(shopPhone)+'" placeholder="Optional">'+
         '<button type="submit" class="btn btn-block" style="margin-top:16px;">Save business info</button>'+
       '</form>'+
-    '</div>'+
-    '<div class="card"><h3 style="margin-bottom:10px;">Data & export</h3>'+
+    '</div>') : '')+
+    (canManage() ? ('<div class="card"><h3 style="margin-bottom:10px;">Data & export</h3>'+
       '<p class="muted">Your data is synced to your account in real time and works across every device you sign in on.</p>'+
       '<div style="display:flex;gap:6px;flex-wrap:wrap;">'+
         '<button class="btn btn-sm" data-act="export-excel">'+uiIcon('chart','icon-sm')+' Excel</button>'+
         '<button class="btn btn-outline btn-sm" data-act="export-csv">'+uiIcon('note','icon-sm')+' CSV</button>'+
         '<button class="btn btn-gold btn-sm" data-act="export-pdf">'+uiIcon('receipt','icon-sm')+' PDF</button>'+
       '</div>'+
-      '<h3 style="margin:18px 0 6px;">Language</h3>'+
+    '</div>') : '')+
+    '<div class="card"><h3 style="margin-bottom:10px;">Preferences</h3>'+
+      '<h3 style="margin:0 0 6px;">Language</h3>'+
       '<button class="btn btn-outline btn-block" data-act="toggle-lang">'+(LANG==='en'?'Switch to አማርኛ':'Switch to English')+'</button>'+
       '<h3 style="margin:18px 0 6px;">Appearance</h3>'+
       '<div class="tabs" style="margin-bottom:0;">'+
@@ -1837,7 +1848,7 @@ function renderSettings(){
         }).join('')+
       '</div>'+
     '</div>'+
-    '<div class="card premium"><h3 style="margin-bottom:10px;">'+uiIcon('target','icon-sm')+' Sales Goals</h3>'+
+    (canManage() ? ('<div class="card premium"><h3 style="margin-bottom:10px;">'+uiIcon('target','icon-sm')+' Sales Goals</h3>'+
       '<p class="muted" style="margin-bottom:10px;">Set targets to track progress on your Dashboard.</p>'+
       '<form id="goalsForm">'+
         '<label>Daily goal (ETB)</label><input type="number" min="0" step="0.01" name="dailyGoal" value="'+esc(goals.dailyGoal)+'">'+
@@ -1846,16 +1857,16 @@ function renderSettings(){
         '<label>Yearly goal (ETB)</label><input type="number" min="0" step="0.01" name="yearlyGoal" value="'+esc(goals.yearlyGoal)+'">'+
         '<button type="submit" class="btn btn-block" style="margin-top:16px;">Save goals</button>'+
       '</form>'+
-    '</div>'+
-    '<div class="card"><h3 style="margin-bottom:10px;">'+uiIcon('cart','icon-sm')+' Stock Purchase Budget</h3>'+
+    '</div>') : '')+
+    (canManage() ? ('<div class="card"><h3 style="margin-bottom:10px;">'+uiIcon('cart','icon-sm')+' Stock Purchase Budget</h3>'+
       '<p class="muted" style="margin-bottom:10px;">Set a spending guide for restocking. This is advisory — purchases are never blocked.</p>'+
       '<form id="budgetForm">'+
         '<label>Weekly budget (ETB)</label><input type="number" min="0" step="0.01" name="weeklyStockBudget" value="'+esc(u.weeklyStockBudget||'')+'">'+
         '<label>Monthly budget (ETB)</label><input type="number" min="0" step="0.01" name="monthlyStockBudget" value="'+esc(u.monthlyStockBudget||'')+'">'+
         '<button type="submit" class="btn btn-block" style="margin-top:16px;">Save budget</button>'+
       '</form>'+
-    '</div>'+
-    renderBackupSavingSettings(u)+
+    '</div>') : '')+
+    (canManage() ? renderBackupSavingSettings(u) : '')+
     (isCeo() ? renderBranchesSettings() : '')+
     (isCeo() ? renderStaffSettings() : '')+
     '<div class="card" style="grid-column:1/-1;">'+
@@ -2137,9 +2148,10 @@ function bindEvents(){
     function updatePreview(){
       var qty = parseFloat(qtyI.value)||0, cost=parseFloat(costI.value)||0, sell=parseFloat(sellI.value)||0;
       var total = qty*sell, cogs = qty*cost, gross = total-cogs;
-      document.getElementById('pvTotal').textContent = fmtETB(total);
-      document.getElementById('pvCogs').textContent = fmtETB(cogs);
-      document.getElementById('pvGross').textContent = fmtETB(gross);
+      var pvT = document.getElementById('pvTotal'), pvC = document.getElementById('pvCogs'), pvG = document.getElementById('pvGross');
+      if(pvT) pvT.textContent = fmtETB(total);
+      if(pvC) pvC.textContent = fmtETB(cogs);
+      if(pvG) pvG.textContent = fmtETB(gross);
     }
     [costI,sellI,qtyI].forEach(function(i){ if(i) i.addEventListener('input', updatePreview); });
     updatePreview();
@@ -2347,7 +2359,7 @@ function handleAction(act, el, ev){
     var pal = el.getAttribute('data-palette');
     applyPalette(pal);
     render();
-    if(STATE.session){ shopRef().update({colorPalette: pal}).catch(function(){}); }
+    if(STATE.session && canManage()){ shopRef().update({colorPalette: pal}).catch(function(){}); }
     return;
   }
   if(act==='open-sidebar'){ STATE.sidebarOpen=true; render(); return; }
@@ -2359,6 +2371,7 @@ function handleAction(act, el, ev){
   if(act==='select-cal-date'){ STATE.calSelectedDate = el.getAttribute('data-date'); render(); return; }
   if(act==='report-range'){ STATE.reportRange = el.getAttribute('data-range'); render(); return; }
   if(act==='dash-period'){ STATE.dashboardPeriod = el.getAttribute('data-period'); render(); return; }
+  if(act==='qs-mode' && !canManage()){ return; }
   if(act==='qs-mode'){ STATE.quickSaleMode = el.getAttribute('data-mode'); STATE.quickSaleQuery=''; STATE.quickSaleSelectedId=''; render(); return; }
   if(act==='qs-pick-product'){ STATE.quickSaleSelectedId = el.getAttribute('data-id'); STATE.quickSaleQuery=''; render(); return; }
   if(act==='toggle-pw'){
@@ -2660,6 +2673,15 @@ async function onBulkSaleSubmit(ev){
   var markedOwed = !!d.markedOwed;
   var validRows = d.rows.filter(function(r){ return (r.name||'').trim() && (r.qty||0)>0; });
   if(!validRows.length){ alert('Add at least one item with a name and quantity.'); return; }
+  if(!canManage()){
+    var missing = validRows.filter(function(r){
+      return !STATE.data.products.some(function(p){ return p.name.toLowerCase()===r.name.trim().toLowerCase(); });
+    }).map(function(r){ return r.name.trim(); });
+    if(missing.length){
+      alert('These are not in the Products list yet: '+missing.join(', ')+'. Ask a manager to add them first. Nothing was saved.');
+      return;
+    }
+  }
   var submitBtn = ev.target.querySelector('button[type=submit]');
   if(submitBtn) submitBtn.disabled = true;
   var added = 0;
@@ -2671,6 +2693,7 @@ async function onBulkSaleSubmit(ev){
       var productId, productName;
       if(existing){
         productId = existing.id; productName = existing.name;
+        if(!canManage()){ r = Object.assign({}, r, {costPrice: existing.costPrice||0}); }
       } else {
         var newRef = shopRef().collection('products').doc();
         await newRef.set({
