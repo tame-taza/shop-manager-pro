@@ -233,6 +233,9 @@ tbody tr:hover{background:var(--green-50);}
 .two-col{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;}
 @media(max-width:900px){.two-col{grid-template-columns:1fr;}}
 .list-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.list-item{flex-wrap:wrap;gap:6px 12px;}
+.list-item > span:first-child{flex:1 1 150px;min-width:0;overflow-wrap:anywhere;}
+.list-item > span + span, .list-item > b{flex-shrink:0;}
 .list-item:last-child{border-bottom:none;}
 .field-note{font-size:11px;color:var(--ink-faint);margin-top:4px;}
 .badge-dot{width:7px;height:7px;border-radius:99px;background:var(--red);display:inline-block;margin-right:5px;}
@@ -378,6 +381,24 @@ tbody tr{transition:background .15s ease;}
 
 /* settings tabs */
 .one-col{grid-template-columns:1fr !important;}
+/* settings accordion */
+.acc-list{max-width:760px;}
+.acc-group{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin:22px 4px 8px;}
+.acc-group:first-child{margin-top:4px;}
+.acc{background:var(--paper);border:1px solid var(--border);border-radius:var(--radius-md);box-shadow:var(--shadow);margin-bottom:10px;overflow:hidden;transition:border-color .2s ease,box-shadow .2s ease;}
+.acc.open{border-color:var(--gold);box-shadow:var(--shadow-lg);}
+.acc-head{display:flex;align-items:center;gap:12px;width:100%;padding:13px 14px;background:none;border:none;cursor:pointer;text-align:left;color:var(--ink);font-family:inherit;transition:background .15s ease;}
+.acc-head:hover{background:var(--green-50);}
+.acc-ic{width:36px;height:36px;}
+.acc-title{flex:1;display:flex;flex-direction:column;gap:1px;min-width:0;}
+.acc-title b{font-size:14px;font-weight:800;} .acc-title small{font-size:11.5px;color:var(--ink-soft);font-weight:500;}
+.acc-chev{display:flex;color:var(--ink-faint);transition:transform .25s ease,color .2s ease;}
+.acc.open .acc-chev{transform:rotate(180deg);color:var(--gold-dark);}
+.acc-body{padding:0 16px 16px;border-top:1px solid var(--border);}
+.acc-body.acc-anim{animation:accOpen .28s ease both;}
+.acc-body > .card{border:none;box-shadow:none;background:none !important;border-radius:0;padding:14px 0 0;}
+.acc-body > .card > h3:first-child{display:none;}
+@keyframes accOpen{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:none;}}
 .settings-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:16px;scrollbar-width:thin;}
 .settings-tabs .tab-btn{white-space:nowrap;}
 
@@ -542,7 +563,10 @@ var PHRASES = {
   "Credit sales":"የዱቤ ሽያጮች","Settled":"ተከፍሏል","Due soon":"በቅርቡ ይከፈላል","Open":"ክፍት","Collected in cash":"በጥሬ ገንዘብ የተሰበሰበ","Telebirr / Bank":"ቴሌብር / ባንክ",
   "Customer credit":"የደንበኛ ዱቤ","Cash & Collections":"ገንዘብ እና ስብሰባ","Performance":"አፈጻጸም","Targets":"ግቦች","Records":"መዝገቦች","A4 page":"A4 ወረቀት","80mm receipt":"80mm ደረሰኝ","58mm receipt":"58mm ደረሰኝ",
   "Pay full balance":"ሙሉ ቀሪውን ክፈል","Sales &amp; Profit Trend":"የሽያጭ እና ትርፍ አዝማሚያ","Users &amp; Roles":"ተጠቃሚዎች እና ሚናዎች","Paid by":"የተከፈለው በ","Receipt":"ደረሰኝ","Thank you! Come again.":"እናመሰግናለን! እንደገና ይምጡ።",
-  "Average sale":"አማካይ ሽያጭ","Items sold":"የተሸጡ እቃዎች","Cancel":"ተው","Undo":"ቀልብስ","Undo payment":"ክፍያ ቀልብስ","Delete sale":"ሽያጭ ሰርዝ","Delete product":"ምርት ሰርዝ","Delete purchase":"ግዢ ሰርዝ","Delete expense":"ወጪ ሰርዝ","Delete invoice":"ደረሰኝ ሰርዝ","Single sale":"ነጠላ ሽያጭ","Single sale":"ነጠላ ሽያጭ","Bulk sale entry":"በጅምላ ሽያጭ ማስገቢያ","Save all sales":"ሁሉንም ሽያጮች አስቀምጥ",
+  "Average sale":"አማካይ ሽያጭ","Items sold":"የተሸጡ እቃዎች","Cancel":"ተው","App":"መተግበሪያ","Your profile and sign out":"መገለጫዎ እና መውጫ","Change your password":"የይለፍ ቃልዎን ይቀይሩ","Address and phone on receipts":"በደረሰኝ ላይ የሚታይ አድራሻና ስልክ",
+  "Excel, CSV and PDF":"Excel፣ CSV እና PDF","Daily to yearly targets":"ከዕለታዊ እስከ ዓመታዊ ግቦች","Weekly and monthly spending guide":"ሳምንታዊ እና ወርሃዊ የወጪ መመሪያ",
+  "On — emergency reserve":"በርቷል — የአደጋ መጠባበቂያ","Off — optional reserve fund":"ጠፍቷል — አማራጭ የመጠባበቂያ ገንዘብ","Locations for sales, stock and staff":"ለሽያጭ፣ ክምችት እና ሰራተኞች ቦታዎች",
+  "Add and manage your team":"ቡድንዎን ያክሉ እና ያስተዳድሩ","Language, light/dark and colors":"ቋንቋ፣ ብሩህ/ጨለማ እና ቀለሞች","About this app and its developer":"ስለ መተግበሪያው እና ገንቢው","Undo":"ቀልብስ","Undo payment":"ክፍያ ቀልብስ","Delete sale":"ሽያጭ ሰርዝ","Delete product":"ምርት ሰርዝ","Delete purchase":"ግዢ ሰርዝ","Delete expense":"ወጪ ሰርዝ","Delete invoice":"ደረሰኝ ሰርዝ","Single sale":"ነጠላ ሽያጭ","Single sale":"ነጠላ ሽያጭ","Bulk sale entry":"በጅምላ ሽያጭ ማስገቢያ","Save all sales":"ሁሉንም ሽያጮች አስቀምጥ",
   "Total for this batch":"ለዚህ ጅምላ ጠቅላላ ድምር","Not in stock yet — pending delivery for all":"ገና ክምችት ውስጥ የለም — ለሁሉም በመጠባበቅ ላይ",
   "Weekly budget":"ሳምንታዊ በጀት","Monthly budget":"ወርሃዊ በጀት","remaining":"ቀሪ","Over budget by":"ከበጀት በላይ በ",
   // expenses
@@ -851,6 +875,8 @@ var STATE = {
   quickSaleTopMode:'single',
   creditFilter:'open',
   settingsTab:'account',
+  settingsOpen:'',
+  _accAnim:null,
   _lastKey:'', _animate:false, _lastModal:'', _modalEnter:false,
   creditSearch:'',
   bulkSaleDraft:{date:todayStr(),markedOwed:false,paymentMethod:'cash',txId:'',credit:false,customerName:'',customerPhone:'',dueDate:'',paidNow:0,claimedTx:'',rows:[{name:'',qty:1,costPrice:0,sellingPrice:0}]},
@@ -1385,6 +1411,7 @@ function navIcon(name){
     printer: '<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
     search: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
     barcode: '<path d="M3 5v14M7 5v14M11 5v10M15 5v14M19 5v10M22 5v14M3 5H2M3 19H2"/>',
+    chevron: '<polyline points="6 9 12 15 18 9"/>',
     users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
     upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>'
   };
@@ -2567,15 +2594,6 @@ function renderReportChart(){
 }
 
 /* ---------------- SETTINGS ---------------- */
-function settingsTabsFor(){
-  if(canManage()){
-    var t = [['account','Account'],['business','Business'],['finance','Finance']];
-    if(isCeo()) t.push(['team','Team']);
-    t.push(['prefs','Preferences'],['about','About']);
-    return t;
-  }
-  return [['account','Account'],['prefs','Preferences'],['about','About']];
-}
 
 function settingsAccountCard(u){
   return '<div class="card"><h3 style="margin-bottom:10px;">Account</h3>'+
@@ -2676,22 +2694,46 @@ function settingsAboutCard(){
   '</div>';
 }
 
+/* Settings is a list of collapsed rows, grouped under headings. A row opens only when tapped
+   (one at a time), so the page stays short on a phone instead of one very long scroll. */
+function settingsSections(u){
+  var L = [];
+  L.push({grp:'Account', id:'account', icon:'users', title:'Account', sub:'Your profile and sign out', body:function(){ return settingsAccountCard(u); }});
+  if(canManage()){
+    L.push({grp:'Account', id:'security', icon:'gear', title:'Security', sub:'Change your password', body:settingsSecurityCard});
+    L.push({grp:'Business', id:'business', icon:'receipt', title:'Business info', sub:'Address and phone on receipts', body:function(){ return settingsBusinessCard(u); }});
+    L.push({grp:'Business', id:'export', icon:'download', title:'Data & export', sub:'Excel, CSV and PDF', body:settingsExportCard});
+    L.push({grp:'Finance', id:'goals', icon:'target', title:'Sales Goals', sub:'Daily to yearly targets', body:function(){ return settingsGoalsCard(u); }});
+    L.push({grp:'Finance', id:'budget', icon:'cart', title:'Stock Purchase Budget', sub:'Weekly and monthly spending guide', body:function(){ return settingsBudgetCard(u); }});
+    L.push({grp:'Finance', id:'backup', icon:'dollar', title:'Backup Saving', sub:(u.backupSavingEnabled?'On — emergency reserve':'Off — optional reserve fund'), body:function(){ return renderBackupSavingSettings(u); }});
+  }
+  if(isCeo()){
+    L.push({grp:'Team', id:'branches', icon:'box', title:'Branches', sub:'Locations for sales, stock and staff', body:renderBranchesSettings});
+    L.push({grp:'Team', id:'staff', icon:'users', title:'Users & Roles', sub:'Add and manage your team', body:renderStaffSettings});
+  }
+  L.push({grp:'App', id:'prefs', icon:'gear', title:'Preferences', sub:'Language, light/dark and colors', body:settingsPrefsCard});
+  L.push({grp:'App', id:'about', icon:'note', title:'About / Developer', sub:'About this app and its developer', body:settingsAboutCard});
+  return L;
+}
+
 function renderSettings(){
   var u = currentUser() || {};
-  var tabs = settingsTabsFor();
-  if(!tabs.some(function(t){ return t[0]===STATE.settingsTab; })){ STATE.settingsTab = 'account'; }
-  var cur = STATE.settingsTab;
-  var tabBar = '<div class="settings-tabs">'+tabs.map(function(t){
-    return '<button class="tab-btn'+(cur===t[0]?' active':'')+'" data-act="settings-tab" data-tab="'+t[0]+'">'+t[1]+'</button>';
-  }).join('')+'</div>';
-  var body = '';
-  if(cur==='account') body = settingsAccountCard(u) + (canManage() ? settingsSecurityCard() : '');
-  else if(cur==='business') body = settingsBusinessCard(u) + settingsExportCard();
-  else if(cur==='finance') body = settingsGoalsCard(u) + settingsBudgetCard(u) + renderBackupSavingSettings(u);
-  else if(cur==='team') body = (isCeo() ? renderBranchesSettings() + renderStaffSettings() : '');
-  else if(cur==='prefs') body = settingsPrefsCard();
-  else body = settingsAboutCard();
-  return tabBar + '<div class="two-col'+(cur==='about'?' one-col':'')+'">'+body+'</div>';
+  var list = settingsSections(u);
+  if(STATE.settingsOpen && !list.some(function(x){ return x.id===STATE.settingsOpen; })) STATE.settingsOpen = '';
+  var html = '<div class="acc-list">', lastGrp = '';
+  list.forEach(function(sec){
+    if(sec.grp !== lastGrp){ html += '<div class="acc-group">'+esc(sec.grp)+'</div>'; lastGrp = sec.grp; }
+    var open = STATE.settingsOpen === sec.id;
+    html += '<div class="acc'+(open?' open':'')+'" id="acc_'+sec.id+'">'+
+      '<button type="button" class="acc-head" data-act="acc-toggle" data-acc="'+sec.id+'" aria-expanded="'+(open?'true':'false')+'" aria-controls="accbody_'+sec.id+'">'+
+        '<span class="icon-badge badge-neutral acc-ic">'+uiIcon(sec.icon,'icon-sm')+'</span>'+
+        '<span class="acc-title"><b>'+esc(sec.title)+'</b><small>'+esc(sec.sub)+'</small></span>'+
+        '<span class="acc-chev">'+uiIcon('chevron','icon-sm')+'</span>'+
+      '</button>'+
+      (open ? '<div class="acc-body'+(STATE._accAnim===sec.id?' acc-anim':'')+'" id="accbody_'+sec.id+'">'+sec.body()+'</div>' : '')+
+    '</div>';
+  });
+  return html + '</div>';
 }
 
 function renderBackupSavingSettings(u){
@@ -2931,6 +2973,11 @@ function renderModal(){
 /* ---------------- EVENT BINDING ---------------- */
 function bindEvents(){
   var app = document.getElementById('app');
+  if(STATE._accAnim){
+    var openRow = document.querySelector('.acc.open');
+    STATE._accAnim = null;
+    if(openRow && openRow.scrollIntoView){ setTimeout(function(){ try{ openRow.scrollIntoView({block:'nearest', behavior:'smooth'}); }catch(e){} }, 60); }
+  }
   if(STATE.session && STATE._animate){ STATE._animate = false; setTimeout(animateCounters, 0); }
 
   if(STATE.session && STATE.view==='reports'){
@@ -2940,7 +2987,7 @@ function bindEvents(){
   }
 
   app.querySelectorAll('[data-nav]').forEach(function(el){
-    el.addEventListener('click', function(){ STATE.view = el.getAttribute('data-nav'); STATE.sidebarOpen=false; render(); });
+    el.addEventListener('click', function(){ STATE.view = el.getAttribute('data-nav'); STATE.sidebarOpen=false; STATE.settingsOpen=''; render(); });
   });
   app.querySelectorAll('[data-act]').forEach(function(el){
     el.addEventListener('click', function(ev){
@@ -3389,7 +3436,13 @@ function handleAction(act, el, ev){
     if(!STATE.bulkStockDraft.rows.length) STATE.bulkStockDraft.rows.push({name:'',qty:1,unitCost:0});
     render(); return;
   }
-  if(act==='settings-tab'){ STATE.settingsTab = el.getAttribute('data-tab'); render(); return; }
+  if(act==='acc-toggle'){
+    var accId = el.getAttribute('data-acc');
+    STATE.settingsOpen = (STATE.settingsOpen===accId) ? '' : accId;
+    STATE._accAnim = STATE.settingsOpen || null;
+    render();
+    return;
+  }
   if(act==='undo-payment'){
     var uSale = el.getAttribute('data-sale'), uIdx = parseInt(el.getAttribute('data-idx'),10);
     var us = STATE.data.sales.find(function(x){ return x.id===uSale; });
@@ -3870,6 +3923,7 @@ async function onSaveGoals(ev){
     await shopRef().update(fields);
     STATE.shopProfile = Object.assign({}, STATE.shopProfile, fields);
     render();
+    toast('Sales goals saved.','success');
   }catch(err){ showActionError(err); }
 }
 
@@ -3885,6 +3939,7 @@ async function onSaveBudget(ev){
     await shopRef().update(fields);
     STATE.shopProfile = Object.assign({}, STATE.shopProfile, fields);
     render();
+    toast('Stock purchase budget saved.','success');
   }catch(err){ showActionError(err); }
 }
 
@@ -3959,6 +4014,7 @@ async function onSaveBusinessInfo(ev){
     await shopRef().update(fields);
     STATE.shopProfile = Object.assign({}, STATE.shopProfile, fields);
     render();
+    toast('Business info saved.','success');
   }catch(err){ showActionError(err); }
 }
 
