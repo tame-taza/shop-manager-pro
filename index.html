@@ -444,6 +444,76 @@ tbody tr{transition:background .15s ease;}
 .btn-danger-solid{background:var(--red);color:#fff;box-shadow:0 2px 8px -2px rgba(178,59,59,.55);}
 .btn-danger-solid:hover{filter:brightness(1.08);}
 
+
+/* =================== V4: phone-first fixes =================== */
+/* Grid/flex children may not grow wider than their column. Without this a wide table (or a long
+   nowrap row) stretches the whole page past the screen edge, which is what cut off the forms. */
+.two-col > *, .grid > *, .grid-2 > *, .grid-4 > *, .content > *{min-width:0;}
+.card{min-width:0;max-width:100%;}
+.content{min-width:0;}
+.table-wrap{max-width:100%;}
+
+/* hero card (Dashboard and every section) */
+.hero-card{position:relative;overflow:hidden;border-radius:22px;padding:20px;color:#fff;background:linear-gradient(135deg,var(--green-600),var(--green-900));box-shadow:var(--shadow-lg);margin-bottom:14px;}
+.hero-card::after{content:"";position:absolute;right:-50px;top:-50px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,rgba(201,162,39,.38),transparent 70%);pointer-events:none;}
+.hero-card > *{position:relative;z-index:1;}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px;}
+.hero-label{font-size:12px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;opacity:.85;}
+select.hero-select{appearance:none;-webkit-appearance:none;width:auto;min-height:0;cursor:pointer;color:#fff;font-weight:700;font-size:13px;border:none;border-radius:99px;
+  padding:8px 30px 8px 14px;background:rgba(255,255,255,.2) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") no-repeat right 11px center;}
+select.hero-select option{color:#182620;background:#fff;}
+select.hero-select:focus{box-shadow:0 0 0 3px rgba(255,255,255,.35);}
+.hero-value{font-size:38px;font-weight:800;line-height:1.1;margin:6px 0 16px;letter-spacing:-.01em;overflow-wrap:anywhere;}
+.hero-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.hero-tile{background:rgba(255,255,255,.14);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0;}
+.hero-tile span{font-size:12px;font-weight:600;opacity:.88;} .hero-tile b{font-size:19px;font-weight:800;overflow-wrap:anywhere;}
+.hero-note{margin:10px 2px 0;font-size:12px;opacity:.85;}
+
+/* quick actions, goal strip, "add" button */
+.quick-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
+.qa{display:flex;flex-direction:column;align-items:center;gap:7px;padding:14px 6px;background:var(--paper);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);cursor:pointer;font-weight:700;font-size:12.5px;color:var(--ink);font-family:inherit;transition:transform .15s ease,box-shadow .2s ease;}
+.qa:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);} .qa:active{transform:scale(.97);}
+.qa .icon-badge{width:42px;height:42px;}
+.goal-mini{background:var(--paper);border:1px solid var(--border);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow);margin-bottom:14px;}
+.goal-mini-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13px;font-weight:700;}
+.goal-mini-top b{color:var(--gold-dark);font-size:17px;}
+.add-toggle{margin-bottom:14px;min-height:48px;font-size:14.5px;}
+
+@media(max-width:720px){
+  /* inputs that are comfortable with a thumb; 16px stops phones zooming in when a field is tapped */
+  input,select,textarea{font-size:16px;min-height:48px;padding:12px 14px;}
+  textarea{min-height:84px;}
+  select.hero-select{min-height:0;padding:8px 30px 8px 14px;font-size:13px;}
+  .btn{min-height:46px;} .btn-sm{min-height:40px;}
+  .content{padding:12px;}
+  .card{padding:14px;}
+  label{margin-top:14px;}
+  .hero-value{font-size:34px;}
+  .hm{display:none !important;}
+  .qs-text{display:none;}
+  /* A4 invoice preview: fit the four columns inside a phone screen */
+  .invoice-preview{padding:16px 12px;overflow-x:auto;}
+  .invoice-preview table{width:100%;table-layout:fixed;}
+  .invoice-preview th,.invoice-preview td{white-space:normal;word-break:break-word;padding:8px 5px;font-size:12px;}
+  .invoice-preview th:nth-child(1),.invoice-preview td:nth-child(1){width:38%;}
+  .invoice-preview th:nth-child(2),.invoice-preview td:nth-child(2){width:11%;}
+  .invoice-preview th:nth-child(3),.invoice-preview td:nth-child(3){width:25%;}
+  .invoice-preview th:nth-child(4),.invoice-preview td:nth-child(4){width:26%;}
+  .invoice-preview .inv-head{flex-wrap:wrap;gap:8px;}
+  /* tables become cards */
+  .table-wrap{border:none;background:none;overflow:visible;}
+  table.stackable{min-width:0 !important;display:block;}
+  table.stackable thead{display:none;}
+  table.stackable tbody{display:block;}
+  table.stackable tr{display:block;background:var(--paper);border:1px solid var(--border);border-radius:14px;padding:8px 14px;margin-bottom:10px;box-shadow:var(--shadow);}
+  table.stackable tbody tr:hover{background:var(--paper);}
+  table.stackable td{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:7px 0;border:none;border-bottom:1px dashed var(--border);white-space:normal;text-align:right;font-size:13.5px;}
+  table.stackable td:last-child{border-bottom:none;justify-content:flex-end;padding-top:10px;}
+  table.stackable td::before{content:attr(data-label);font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);text-align:left;flex-shrink:0;}
+  table.stackable td:last-child::before{content:none;}
+  table.stackable td .row-actions{width:100%;justify-content:flex-end;}
+}
+
 /* motion */
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
@@ -563,7 +633,10 @@ var PHRASES = {
   "Credit sales":"የዱቤ ሽያጮች","Settled":"ተከፍሏል","Due soon":"በቅርቡ ይከፈላል","Open":"ክፍት","Collected in cash":"በጥሬ ገንዘብ የተሰበሰበ","Telebirr / Bank":"ቴሌብር / ባንክ",
   "Customer credit":"የደንበኛ ዱቤ","Cash & Collections":"ገንዘብ እና ስብሰባ","Performance":"አፈጻጸም","Targets":"ግቦች","Records":"መዝገቦች","A4 page":"A4 ወረቀት","80mm receipt":"80mm ደረሰኝ","58mm receipt":"58mm ደረሰኝ",
   "Pay full balance":"ሙሉ ቀሪውን ክፈል","Sales &amp; Profit Trend":"የሽያጭ እና ትርፍ አዝማሚያ","Users &amp; Roles":"ተጠቃሚዎች እና ሚናዎች","Paid by":"የተከፈለው በ","Receipt":"ደረሰኝ","Thank you! Come again.":"እናመሰግናለን! እንደገና ይምጡ።",
-  "Average sale":"አማካይ ሽያጭ","Items sold":"የተሸጡ እቃዎች","Cancel":"ተው","App":"መተግበሪያ","Your profile and sign out":"መገለጫዎ እና መውጫ","Change your password":"የይለፍ ቃልዎን ይቀይሩ","Address and phone on receipts":"በደረሰኝ ላይ የሚታይ አድራሻና ስልክ",
+  "Average sale":"አማካይ ሽያጭ","Items sold":"የተሸጡ እቃዎች","Cancel":"ተው","Close":"ዝጋ","Add expense":"ወጪ ጨምር","Stock bought this month":"በዚህ ወር የተገዛ ስቶክ","Expenses this month":"የዚህ ወር ወጪ","Entries":"ግቤቶች","Sales made":"የተደረጉ ሽያጮች",
+  "Collected this month":"በዚህ ወር የተሰበሰበ","Sales today":"የዛሬ ሽያጭ","Sales this week":"የዚህ ሳምንት ሽያጭ","Sales this month":"የዚህ ወር ሽያጭ","Sales this year":"የዚህ ዓመት ሽያጭ","Profit":"ትርፍ","Cash balance":"የሱቅ ገንዘብ",
+  "New sale":"አዲስ ሽያጭ","Stock in":"ስቶክ ግቤት","Expense":"ወጪ","Money received":"የተሰበሰበ ገንዘብ","Customers owe you":"ደንበኞች ያለባቸው","More details":"ተጨማሪ ዝርዝሮች",
+  "Margins, collections, records and tips":"ትርፍ መጠን፣ ስብሰባ፣ መዝገቦች እና ምክሮች","View":"ይመልከቱ","App":"መተግበሪያ","Your profile and sign out":"መገለጫዎ እና መውጫ","Change your password":"የይለፍ ቃልዎን ይቀይሩ","Address and phone on receipts":"በደረሰኝ ላይ የሚታይ አድራሻና ስልክ",
   "Excel, CSV and PDF":"Excel፣ CSV እና PDF","Daily to yearly targets":"ከዕለታዊ እስከ ዓመታዊ ግቦች","Weekly and monthly spending guide":"ሳምንታዊ እና ወርሃዊ የወጪ መመሪያ",
   "On — emergency reserve":"በርቷል — የአደጋ መጠባበቂያ","Off — optional reserve fund":"ጠፍቷል — አማራጭ የመጠባበቂያ ገንዘብ","Locations for sales, stock and staff":"ለሽያጭ፣ ክምችት እና ሰራተኞች ቦታዎች",
   "Add and manage your team":"ቡድንዎን ያክሉ እና ያስተዳድሩ","Language, light/dark and colors":"ቋንቋ፣ ብሩህ/ጨለማ እና ቀለሞች","About this app and its developer":"ስለ መተግበሪያው እና ገንቢው","Undo":"ቀልብስ","Undo payment":"ክፍያ ቀልብስ","Delete sale":"ሽያጭ ሰርዝ","Delete product":"ምርት ሰርዝ","Delete purchase":"ግዢ ሰርዝ","Delete expense":"ወጪ ሰርዝ","Delete invoice":"ደረሰኝ ሰርዝ","Single sale":"ነጠላ ሽያጭ","Single sale":"ነጠላ ሽያጭ","Bulk sale entry":"በጅምላ ሽያጭ ማስገቢያ","Save all sales":"ሁሉንም ሽያጮች አስቀምጥ",
@@ -666,7 +739,7 @@ function alert(msg){
 /* Count-up animation for the big numbers when a screen opens (skipped for reduced-motion users). */
 function animateCounters(){
   if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  document.querySelectorAll('.stat-value[data-count]').forEach(function(el){
+  document.querySelectorAll('[data-count]').forEach(function(el){
     var target = parseFloat(el.getAttribute('data-count'));
     if(isNaN(target)) return;
     var kind = el.getAttribute('data-fmt');
@@ -876,6 +949,8 @@ var STATE = {
   creditFilter:'open',
   settingsTab:'account',
   settingsOpen:'',
+  dashMore:false,
+  formOpen:'',
   _accAnim:null,
   _lastKey:'', _animate:false, _lastModal:'', _modalEnter:false,
   creditSearch:'',
@@ -1457,7 +1532,7 @@ function renderShell(){
         '</div>'+
         '<div class="topbar-right">'+
           '<button class="icon-btn" data-act="toggle-lang">'+(LANG==='en'?'አማ':'EN')+'</button>'+
-          '<button class="icon-btn" data-nav="quickSale">'+uiIcon('plus','icon-sm')+' Quick Sale</button>'+
+          '<button class="icon-btn" data-nav="quickSale">'+uiIcon('plus','icon-sm')+'<span class="qs-text"> Quick Sale</span></button>'+
         '</div>'+
       '</div>'+
       '<div class="content'+(entering?' view-enter':'')+'">'+renderView()+'</div>'+
@@ -1486,11 +1561,7 @@ function renderView(){
 
 /* ---------------- DASHBOARD ---------------- */
 function statCard(title,value,sub,colorClass){
-  var cnt = '';
-  var mE = /^(-?[\d,]+(?:\.\d+)?) ETB$/.exec(String(value));
-  var mP = /^(-?[\d.]+)%$/.exec(String(value));
-  if(mE) cnt = ' data-count="'+mE[1].replace(/,/g,'')+'" data-fmt="etb"';
-  else if(mP) cnt = ' data-count="'+mP[1]+'" data-fmt="pct"';
+  var cnt = countAttr(value);
   return '<div class="card stat-card"><h3>'+esc(title)+'</h3><div class="stat-value '+(colorClass||'')+'"'+cnt+'>'+esc(value)+'</div>'+(sub?'<div class="stat-sub">'+esc(sub)+'</div>':'')+'</div>';
 }
 function netProfitColorClass(pct, net){
@@ -1502,6 +1573,30 @@ function netProfitColorClass(pct, net){
 function sectionHead(title, sub, icon){
   return '<div class="sec-head"><span class="icon-badge badge-neutral sec-ic">'+uiIcon(icon||'chart','icon-sm')+'</span>'+
     '<div><h2>'+esc(title)+'</h2>'+(sub?'<p>'+esc(sub)+'</p>':'')+'</div></div>';
+}
+
+function countAttr(value){
+  var mE = /^(-?[\d,]+(?:\.\d+)?) ETB$/.exec(String(value));
+  var mP = /^(-?[\d.]+)%$/.exec(String(value));
+  if(mE) return ' data-count="'+mE[1].replace(/,/g,'')+'" data-fmt="etb"';
+  if(mP) return ' data-count="'+mP[1]+'" data-fmt="pct"';
+  return '';
+}
+/* One hero card, used on the Dashboard and at the top of every section. */
+/* figures for the hero card at the top of a section */
+function monthRange(){ return {from:isoDate(startOfMonth(new Date())), to:todayStr()}; }
+function unitsSold(arr){ return round2(arr.reduce(function(a,s){ return a+(s.quantity||0); },0)); }
+
+function heroCard(label, value, tiles, opts){
+  opts = opts || {};
+  return '<div class="hero-card">'+
+    '<div class="hero-top"><span class="hero-label">'+esc(label)+'</span>'+(opts.selectHtml||'')+'</div>'+
+    '<div class="hero-value"'+countAttr(value)+'>'+esc(value)+'</div>'+
+    ((tiles&&tiles.length) ? '<div class="hero-tiles">'+tiles.map(function(t){
+      return '<div class="hero-tile"><span>'+esc(t[0])+'</span><b'+countAttr(t[1])+'>'+esc(t[1])+'</b></div>';
+    }).join('')+'</div>' : '')+
+    (opts.note ? '<div class="hero-note">'+esc(opts.note)+'</div>' : '')+
+  '</div>';
 }
 
 function renderDashboard(){
@@ -1521,41 +1616,62 @@ function renderDashboard(){
   var overdueAmt = round2(overdueList.reduce(function(a,c){ return a+c.balance; },0));
   var owing = custs.filter(function(c){ return c.balance>0; }).length;
 
-  var labels = {today:'Today',week:'Weekly',month:'Monthly',year:'Yearly'};
-  var tabs = ['today','week','month','year'].map(function(p){
-    return '<button class="tab-btn'+(period===p?' active':'')+'" data-act="dash-period" data-period="'+p+'">'+labels[p]+'</button>';
-  }).join('');
-  var u = currentUser() || {};
+  var opts = [['today','Today'],['week','This Week'],['month','This Month'],['year','This Year']];
+  var heroLabels = {today:'Sales today', week:'Sales this week', month:'Sales this month', year:'Sales this year'};
+  var select = '<select id="dashPeriod" class="hero-select" aria-label="Period">'+opts.map(function(o){
+    return '<option value="'+o[0]+'"'+(period===o[0]?' selected':'')+'>'+o[1]+'</option>';
+  }).join('')+'</select>';
 
-  var html = '<div class="page-hero">'+
-    '<div><h2>'+esc(u.shopName||'Your shop')+'</h2><p>'+fmtDateLong(todayStr())+' · '+esc(range.label)+' overview</p></div>'+
-    '<div class="tabs" style="margin:0;">'+tabs+'</div>'+
-  '</div>';
+  /* ---- 1. the one thing that matters: sales, with profit and cash beside it ---- */
+  var html = heroCard(heroLabels[period], fmtETB(stats.totalSales), [['Profit', fmtETB(stats.net)], ['Cash balance', fmtETB(storeBalance)]], {selectHtml:select});
 
-  /* ---- alerts ---- */
+  /* ---- 2. only what needs attention ---- */
   if(overdueList.length){
     html += '<div class="lowstock-banner" style="background:var(--red-bg);color:var(--red);border-color:#f0b8b8;">'+uiIcon('alert','icon-md')+
-      '<span><b>'+overdueList.length+' customer'+(overdueList.length>1?'s are':' is')+' overdue — '+fmtETB(overdueAmt)+' past the due date.</b></span>'+
+      '<span><b>'+overdueList.length+' customer'+(overdueList.length>1?'s are':' is')+' overdue — '+fmtETB(overdueAmt)+'</b></span>'+
       '<button class="link-btn" data-nav="credit" style="margin-left:auto;">View credit</button></div>';
   }
   if(lowStock.length){
-    html += '<div class="lowstock-banner">'+uiIcon('alert','icon-md')+'<span>'+lowStock.length+' product'+(lowStock.length>1?'s':'')+' at or below reorder level — '+
-      lowStock.slice(0,4).map(function(p){return esc(p.name);}).join(', ') + (lowStock.length>4?'…':'') + '</span>'+
-      ' <button class="link-btn" data-nav="products" style="margin-left:auto;">View products</button></div>';
+    html += '<div class="lowstock-banner">'+uiIcon('alert','icon-md')+'<span>'+lowStock.length+' product'+(lowStock.length>1?'s':'')+' running low — '+
+      lowStock.slice(0,3).map(function(p){return esc(p.name);}).join(', ') + (lowStock.length>3?'…':'') + '</span>'+
+      ' <button class="link-btn" data-nav="products" style="margin-left:auto;">View</button></div>';
   }
   if(period==='month' || period==='year'){
     var periodCashDelta = cashDeltaForRange(range.from, range.to);
     if(periodCashDelta < 0){
       html += '<div class="lowstock-banner" style="background:var(--red-bg);color:var(--red);border-color:#f0b8b8;">'+uiIcon('alert','icon-md')+
         '<span><b>Stock purchases + expenses exceeded cash collected by '+fmtETB(Math.abs(periodCashDelta))+' this '+(period==='month'?'month':'year')+'.</b> '+
-        'This was funded from your Store Balance reserve — your accounting Net Profit is not affected by this, it only reflects COGS, not full stock purchase cost.</span></div>';
+        'This was funded from your Store Balance reserve — your accounting Net Profit is not affected.</span></div>';
     }
   }
 
-  /* ---- performance ---- */
+  /* ---- 3. quick actions ---- */
+  html += '<div class="quick-actions">'+
+    '<button class="qa" data-nav="quickSale"><span class="icon-badge badge-neutral">'+uiIcon('plus','icon-md')+'</span>New sale</button>'+
+    '<button class="qa" data-nav="stockPurchase"><span class="icon-badge badge-neutral">'+uiIcon('cart','icon-md')+'</span>Stock in</button>'+
+    '<button class="qa" data-nav="expenses"><span class="icon-badge badge-neutral">'+uiIcon('dollar','icon-md')+'</span>Expense</button>'+
+  '</div>';
+
+  /* ---- 4. goal, if one is set ---- */
+  if(goal>0){
+    var remaining = Math.max(0, round2(goal-stats.totalSales));
+    html += '<div class="goal-mini"><div class="goal-mini-top"><span>Sales Goal · '+fmtETB(stats.totalSales)+' of '+fmtETB(goal)+'</span><b>'+pct+'%</b></div>'+
+      '<div class="progress-track lg"><div class="progress-fill'+(pct>=100?' over':'')+'" style="width:'+pct+'%;"></div></div>'+
+      '<div class="stat-sub" style="margin-top:6px;">'+(pct>=100 ? 'Goal reached' : (fmtETB(remaining)+' more to reach your goal'))+'</div></div>';
+  }
+
+  /* ---- 5. money received ---- */
+  html += '<div class="card"><h3 style="margin-bottom:6px;">Money received</h3>'+
+    '<div class="list-item"><span>Cash</span><b>'+fmtETB(coll.cash)+'</b></div>'+
+    '<div class="list-item"><span>Telebirr / Bank</span><b>'+fmtETB(coll.digital)+'</b></div>'+
+    '<div class="list-item"><span>Customers owe you</span><b style="color:'+(creditOut>0?'var(--red)':'var(--success)')+';">'+fmtETB(creditOut)+'</b></div>'+
+  '</div>';
+
+  /* ---- 6. everything else, one tap away ---- */
   var grossMargin = stats.totalSales>0 ? round2((stats.gross/stats.totalSales)*100) : 0;
   var netMargin = stats.totalSales>0 ? round2((stats.net/stats.totalSales)*100) : 0;
-  html += sectionHead('Performance', range.label+' · '+stats.count+' sale'+(stats.count!==1?'s':''), 'chart')+
+  var detailsBody =
+    sectionHead('Performance', range.label+' · '+stats.count+' sale'+(stats.count!==1?'s':''), 'chart')+
     '<div class="grid grid-4">'+
       statCard('Total Sales', fmtETB(stats.totalSales), null, 'sv-black')+
       statCard('Gross Profit', fmtETB(stats.gross), null, 'sv-green')+
@@ -1567,49 +1683,32 @@ function renderDashboard(){
       statCard('Net Margin', netMargin+'%', 'Net profit as % of sales', netProfitColorClass(pct, stats.net))+
       statCard('Average sale', fmtETB(stats.count>0 ? round2(stats.totalSales/stats.count) : 0), 'Per sale in this period', 'sv-black')+
       statCard('Items sold', String(round2(salesInRange(range.from, range.to).reduce(function(a,s){ return a+(s.quantity||0); },0))), 'Units sold in this period', 'sv-black')+
-    '</div>';
-
-  /* ---- cash & collections ---- */
-  html += sectionHead('Cash & Collections', 'Money actually received — separate from profit', 'dollar')+
+    '</div>'+
+    sectionHead('Cash & Collections', 'Money actually received — separate from profit', 'dollar')+
     '<div class="grid grid-4">'+
       statCard('Current Store Balance', fmtETB(storeBalance), 'Cash in − stock purchases − expenses', storeBalance>=0?'sv-green':'sv-red')+
       statCard('Collected in cash', fmtETB(coll.cash), range.label, 'sv-black')+
       statCard('Telebirr / Bank', fmtETB(coll.digital), 'Telebirr '+fmtETB(coll.telebirr)+' · CBE '+fmtETB(coll.cbe)+' · Bank '+fmtETB(coll.bank), 'sv-black')+
       statCard('Customer credit', fmtETB(creditOut), owing+' customer'+(owing!==1?'s':'')+' owe you'+(overdueList.length?(' · '+overdueList.length+' overdue'):''), creditOut>0?'sv-red':'sv-green')+
-    '</div>';
-
-  /* ---- targets ---- */
-  html += sectionHead('Targets', 'Your '+range.label.toLowerCase()+' sales goal', 'target');
-  if(goal>0){
-    var remaining = Math.max(0, round2(goal-stats.totalSales));
-    html += '<div class="goal-hero">'+
-      '<div class="goal-hero-top">'+
-        '<div class="goal-hero-left">'+
-          '<div class="icon-badge badge-gold">'+uiIcon('target','icon-md')+'</div>'+
-          '<div><div class="goal-hero-title">'+range.label+' Sales Goal</div>'+
-          '<div class="goal-hero-sub">'+fmtETB(stats.totalSales)+' of '+fmtETB(goal)+'</div></div>'+
-        '</div>'+
-        '<div class="goal-hero-pct">'+pct+'<span>%</span></div>'+
-      '</div>'+
-      '<div class="progress-track lg"><div class="progress-fill'+(pct>=100?' over':'')+'" style="width:'+pct+'%;"></div></div>'+
-      '<div class="goal-hero-foot">'+(pct>=100 ? ('<span class="goal-badge-done">'+uiIcon('check','icon-sm')+' Goal reached</span>') : ('<span>'+fmtETB(remaining)+' more to reach your goal</span>'))+'</div>'+
-    '</div>';
-  } else {
-    html += '<div class="card muted" style="display:flex;align-items:center;gap:10px;">'+uiIcon('target','icon-md')+'<span>No goal set for this period yet. Add one in Settings → Finance to track your progress here.</span></div>';
-  }
-
-  /* ---- records ---- */
-  html += sectionHead('Records', 'Your best days so far', 'award')+
+    '</div>'+
+    sectionHead('Records', 'Your best days so far', 'award')+
     '<div class="grid grid-2">'+
-    '<div class="card trophy-card"><div class="icon-badge badge-gold trophy-emoji">'+uiIcon('award','icon-lg')+'</div><div><h3 style="margin-bottom:2px;">Top Sales Day</h3>'+
-      (tSales?('<div class="trophy-date">'+fmtDateLong(tSales.date)+'</div><div class="trophy-amt">'+fmtETB(tSales.amount)+'</div>'):'<div class="muted">No sales recorded yet</div>')+
-      '</div></div>'+
-    '<div class="card trophy-card"><div class="icon-badge badge-gold trophy-emoji">'+uiIcon('award','icon-lg')+'</div><div><h3 style="margin-bottom:2px;">Top Profit Day</h3>'+
-      (tProfit?('<div class="trophy-date">'+fmtDateLong(tProfit.date)+'</div><div class="trophy-amt">'+fmtETB(tProfit.amount)+'</div>'):'<div class="muted">No sales recorded yet</div>')+
-      '</div></div>'+
-    '</div>';
-
-  html += renderPlanner();
+      '<div class="card trophy-card"><div class="icon-badge badge-gold trophy-emoji">'+uiIcon('award','icon-lg')+'</div><div><h3 style="margin-bottom:2px;">Top Sales Day</h3>'+
+        (tSales?('<div class="trophy-date">'+fmtDateLong(tSales.date)+'</div><div class="trophy-amt">'+fmtETB(tSales.amount)+'</div>'):'<div class="muted">No sales recorded yet</div>')+
+        '</div></div>'+
+      '<div class="card trophy-card"><div class="icon-badge badge-gold trophy-emoji">'+uiIcon('award','icon-lg')+'</div><div><h3 style="margin-bottom:2px;">Top Profit Day</h3>'+
+        (tProfit?('<div class="trophy-date">'+fmtDateLong(tProfit.date)+'</div><div class="trophy-amt">'+fmtETB(tProfit.amount)+'</div>'):'<div class="muted">No sales recorded yet</div>')+
+        '</div></div>'+
+    '</div>'+
+    renderPlanner();
+  html += '<div class="acc'+(STATE.dashMore?' open':'')+'" style="margin-top:6px;">'+
+    '<button type="button" class="acc-head" data-act="dash-more" aria-expanded="'+(STATE.dashMore?'true':'false')+'">'+
+      '<span class="icon-badge badge-neutral acc-ic">'+uiIcon('chart','icon-sm')+'</span>'+
+      '<span class="acc-title"><b>More details</b><small>Margins, collections, records and tips</small></span>'+
+      '<span class="acc-chev">'+uiIcon('chevron','icon-sm')+'</span>'+
+    '</button>'+
+    (STATE.dashMore ? '<div class="acc-body acc-anim" style="padding-top:4px;">'+detailsBody+'</div>' : '')+
+  '</div>';
   return html;
 }
 
@@ -1689,8 +1788,10 @@ function renderQuickSale(){
       '<button type="button" class="tab-btn'+(topMode==='single'?' active':'')+'" data-act="qs-top-mode" data-mode="single">Single sale</button>'+
       '<button type="button" class="tab-btn'+(topMode==='bulk'?' active':'')+'" data-act="qs-top-mode" data-mode="bulk">'+uiIcon('box','icon-sm')+' Bulk sale entry</button>'+
     '</div>';
-  if(topMode==='bulk') return topTabs + renderBulkSaleForm();
-  return topTabs + renderSingleQuickSale();
+  var td = todayStr(), stToday = periodStats(td, td);
+  var hero = heroCard('Sales today', fmtETB(stToday.totalSales), [['Sales made', String(stToday.count)], ['Average sale', fmtETB(stToday.count>0 ? round2(stToday.totalSales/stToday.count) : 0)]]);
+  if(topMode==='bulk') return hero + topTabs + renderBulkSaleForm();
+  return hero + topTabs + renderSingleQuickSale();
 }
 
 function renderBulkSaleForm(){
@@ -1871,12 +1972,8 @@ function renderCredit(){
     if(!saleIsCredit(s)) return a;
     return a + (s.payments||[]).filter(function(p){ return p.date>=moStart && p.date<=t; }).reduce(function(b,p){ return b+(p.amount||0); },0);
   },0));
-  var cards = '<div class="grid grid-4">'+
-    statCard('Total outstanding', fmtETB(totalCreditOutstanding()), 'Owed to you by customers', 'sv-red')+
-    statCard('Customers owing', String(owing), 'With an open balance', 'sv-black')+
-    statCard('Overdue', fmtETB(overdueAmt), 'Past the due date', overdueAmt>0?'sv-red':'sv-green')+
-    statCard('Collected this month', fmtETB(collectedMonth), 'Credit payments received', 'sv-green')+
-  '</div>';
+  var cards = heroCard('Customers owe you', fmtETB(totalCreditOutstanding()), [['Overdue', fmtETB(overdueAmt)], ['Customers owing', String(owing)]],
+    {note:'Collected this month: '+fmtETB(collectedMonth)});
   var tabs = '<div class="tabs" style="margin:16px 0 12px;">'+
     '<button class="tab-btn'+(filter==='open'?' active':'')+'" data-act="credit-filter" data-filter="open">Open balances</button>'+
     '<button class="tab-btn'+(filter==='all'?' active':'')+'" data-act="credit-filter" data-filter="all">All customers</button>'+
@@ -1966,12 +2063,12 @@ function renderSales(){
       '<td>'+fmtDateLong(s.date)+'</td>'+
       '<td>'+esc(s.productName)+(s.markedOwed?' <span class="pill pill-amber">Pending</span>':'')+'</td>'+
       '<td>'+s.quantity+'</td>'+
-      (canManage() ? '<td>'+fmtETB(s.costPrice)+'</td>' : '')+
-      '<td>'+fmtETB(s.sellingPrice)+'</td>'+
+      (canManage() ? '<td class="hm">'+fmtETB(s.costPrice)+'</td>' : '')+
+      '<td class="hm">'+fmtETB(s.sellingPrice)+'</td>'+
       '<td>'+fmtETB(s.totalSales)+'</td>'+
       '<td>'+paymentCell(s)+'</td>'+
-      (canManage() ? '<td>'+fmtETB(s.cogs)+'</td>' : '')+
-      (canManage() ? '<td style="color:var(--success);font-weight:700;">'+fmtETB(s.grossProfit)+'</td>' : '')+
+      (canManage() ? '<td class="hm">'+fmtETB(s.cogs)+'</td>' : '')+
+      (canManage() ? '<td class="hm" style="color:var(--success);font-weight:700;">'+fmtETB(s.grossProfit)+'</td>' : '')+
       '<td><div class="row-actions">'+
         (canManage()?'<button class="btn btn-outline btn-sm" data-act="edit-sale" data-id="'+s.id+'">Edit</button>':'')+
         (canDelete()?'<button class="btn btn-danger btn-sm" data-act="delete-sale" data-id="'+s.id+'">Delete</button>':'')+
@@ -1979,7 +2076,12 @@ function renderSales(){
     '</tr>';
   }).join('');
 
-  return ''+
+  var mr = monthRange(), stM = periodStats(mr.from, mr.to);
+  var salesHero = heroCard('Sales this month', fmtETB(stM.totalSales), [
+    ['Sales made', String(stM.count)],
+    canManage() ? ['Gross Profit', fmtETB(stM.gross)] : ['Items sold', String(unitsSold(salesInRange(mr.from, mr.to)))]
+  ]);
+  return salesHero +
   '<div class="toolbar">'+
     '<div class="toolbar-filters">'+
       '<input type="text" id="salesSearch" placeholder="Search product…" value="'+esc(f.search)+'">'+
@@ -1991,7 +2093,7 @@ function renderSales(){
   '</div>'+
   (list.length ? (
   '<div class="table-wrap"><table><thead><tr>'+
-    '<th>Date</th><th>Product</th><th>Qty</th>'+(canManage()?'<th>Cost</th>':'')+'<th>Sell</th><th>Total sales</th><th>Payment</th>'+(canManage()?'<th>COGS</th><th>Gross profit</th>':'')+'<th></th>'+
+    '<th>Date</th><th>Product</th><th>Qty</th>'+(canManage()?'<th class="hm">Cost</th>':'')+'<th class="hm">Sell</th><th>Total sales</th><th>Payment</th>'+(canManage()?'<th class="hm">COGS</th><th class="hm">Gross profit</th>':'')+'<th></th>'+
   '</tr></thead><tbody>'+rows+'</tbody></table></div>'
   ) : emptyState('list','No sales match','Try clearing your filters, or record a new sale.'));
 }
@@ -2273,12 +2375,12 @@ function renderProducts(){
     return '<tr>'+
       '<td>'+esc(p.name)+(p.barcode?('<br><span class="muted" style="font-size:10.5px;">'+esc(p.barcode)+'</span>'):'')+'</td>'+
       '<td>'+esc(p.category||'—')+'</td>'+
-      '<td>'+fmtETB(p.costPrice)+'</td>'+
+      '<td class="hm">'+fmtETB(p.costPrice)+'</td>'+
       '<td>'+fmtETB(p.sellingPrice)+'</td>'+
-      '<td>'+p.openingStock+'</td>'+
+      '<td class="hm">'+p.openingStock+'</td>'+
       '<td>'+p.currentStock+'</td>'+
       '<td>'+(debt>0 ? '<span class="pill pill-red">'+debt+' pending</span>' : '—')+'</td>'+
-      '<td>'+p.reorderLevel+'</td>'+
+      '<td class="hm">'+p.reorderLevel+'</td>'+
       '<td>'+(low?'<span class="pill pill-amber">Low stock</span>':'<span class="pill pill-green">OK</span>')+'</td>'+
       '<td><div class="row-actions">'+
         (canManage()?'<button class="btn btn-outline btn-sm" data-act="edit-product" data-id="'+p.id+'">Edit</button>':'')+
@@ -2287,7 +2389,10 @@ function renderProducts(){
     '</tr>';
   }).join('');
   var anyDebt = STATE.data.products.some(function(p){ return (p.debt||0)>0; });
-  return '<div class="toolbar"><div></div><div style="display:flex;gap:8px;">'+
+  var lowCount = STATE.data.products.filter(function(p){ return (p.currentStock||0) <= (p.reorderLevel||0); }).length;
+  var pendCount = STATE.data.products.filter(function(p){ return (p.debt||0)>0; }).length;
+  var prodHero = heroCard('Products', String(STATE.data.products.length), [['Low stock', String(lowCount)], ['Pending', String(pendCount)]]);
+  return prodHero + '<div class="toolbar"><div></div><div style="display:flex;gap:8px;">'+
       '<label class="btn btn-outline" for="importCsvInput" style="cursor:pointer;">'+uiIcon('upload','icon-sm')+' Import CSV</label>'+
       '<input type="file" id="importCsvInput" accept=".csv" style="display:none;">'+
       '<button class="btn" data-act="add-product">'+uiIcon('plus','icon-sm')+' Add product</button>'+
@@ -2296,7 +2401,7 @@ function renderProducts(){
     (anyDebt ? '<div class="lowstock-banner">'+uiIcon('alert','icon-md')+'<span>Some products have sales pending stock delivery — the "Pending" column shows quantity sold that has not yet been received. It will clear automatically once you log the matching Stock Purchase.</span></div>' : '')+
     (STATE.data.products.length ? (
     '<div class="table-wrap"><table><thead><tr>'+
-      '<th>Name</th><th>Category</th><th>Cost</th><th>Sell</th><th>Opening</th><th>Current</th><th>Pending</th><th>Reorder</th><th>Status</th><th></th>'+
+      '<th>Name</th><th>Category</th><th class="hm">Cost</th><th>Sell</th><th class="hm">Opening</th><th>Current</th><th>Pending</th><th class="hm">Reorder</th><th>Status</th><th></th>'+
     '</tr></thead><tbody>'+rows+'</tbody></table></div>'
     ) : emptyState('box','No products yet','Add your first product to start recording sales and stock.'));
 }
@@ -2324,20 +2429,11 @@ function renderStockPurchase(){
   var weekTotal = sumBy(stockPurchasesInRange(wkStart,t),'totalCost');
   var monthTotal = sumBy(stockPurchasesInRange(moStart,t),'totalCost');
   var yearTotal = sumBy(stockPurchasesInRange(yrStart,t),'totalCost');
-  var allTimeTotal = sumBy(STATE.data.stockPurchases,'totalCost');
-  var balanceNow = currentStoreBalance();
-  var summaryGrid = '<div class="grid grid-4" style="margin-bottom:10px;">'+
-    statCard('This Month', fmtETB(monthTotal))+
-    statCard('This Year', fmtETB(yearTotal))+
-    statCard('All-time Total', fmtETB(allTimeTotal))+
-    statCard('Purchases logged', STATE.data.stockPurchases.length)+
-    '</div>'+
-    '<div class="card premium" style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">'+
-      '<div><h3 style="margin-bottom:2px;">Current Store Balance</h3><span class="muted" style="font-size:11.5px;">Available cash: sales − stock purchases − expenses, all-time</span></div>'+
-      '<div class="stat-value '+(balanceNow>=0?'sv-green':'sv-red')+'" style="font-size:22px;">'+fmtETB(balanceNow)+'</div>'+
-    '</div>'+
-    renderBudgetCard('Weekly budget', weekTotal, parseFloat((STATE.shopProfile||{}).weeklyStockBudget)||0)+
+  var hero = heroCard('Stock bought this month', fmtETB(monthTotal), [['This Year', fmtETB(yearTotal)], ['Cash balance', fmtETB(currentStoreBalance())]]);
+  var budgets = renderBudgetCard('Weekly budget', weekTotal, parseFloat((STATE.shopProfile||{}).weeklyStockBudget)||0)+
     renderBudgetCard('Monthly budget', monthTotal, parseFloat((STATE.shopProfile||{}).monthlyStockBudget)||0);
+  var open = STATE.formOpen==='stock';
+  var toggle = '<button type="button" class="btn btn-block add-toggle'+(open?' btn-outline':'')+'" data-act="toggle-form" data-form="stock">'+(open ? 'Close' : (uiIcon('plus','icon-sm')+' Record stock purchase'))+'</button>';
   var tabs = '<div class="tabs" style="margin-bottom:14px;">'+
       '<button type="button" class="tab-btn'+(mode==='single'?' active':'')+'" data-act="stock-mode" data-mode="single">Single item</button>'+
       '<button type="button" class="tab-btn'+(mode==='bulk'?' active':'')+'" data-act="stock-mode" data-mode="bulk">'+uiIcon('box','icon-sm')+' Bulk entry</button>'+
@@ -2345,18 +2441,19 @@ function renderStockPurchase(){
 
   var list = STATE.data.stockPurchases.slice().sort(function(a,b){return b.date.localeCompare(a.date);});
   var rows = list.map(function(sp){
-    return '<tr><td>'+fmtDateLong(sp.date)+'</td><td>'+esc(sp.productName)+'</td><td>'+sp.quantity+'</td><td>'+fmtETB(sp.unitCost)+'</td><td>'+fmtETB(sp.totalCost)+'</td><td>'+esc(sp.supplier||'—')+'</td>'+
+    return '<tr><td>'+fmtDateLong(sp.date)+'</td><td>'+esc(sp.productName)+'</td><td>'+sp.quantity+'</td><td class="hm">'+fmtETB(sp.unitCost)+'</td><td>'+fmtETB(sp.totalCost)+'</td><td>'+esc(sp.supplier||'—')+'</td>'+
       '<td><div class="row-actions">'+(canManage()?'<button class="btn btn-outline btn-sm" data-act="edit-stock" data-id="'+sp.id+'">Edit</button>':'')+(canDelete()?'<button class="btn btn-danger btn-sm" data-act="delete-stock" data-id="'+sp.id+'">Delete</button>':'')+'</div></td></tr>';
   }).join('');
   var historyCard = '<div class="card"><h3 style="margin-bottom:10px;">Purchase history</h3>'+
-    (list.length? '<div class="table-wrap" style="border:none;"><table style="min-width:0;"><thead><tr><th>Date</th><th>Product</th><th>Qty</th><th>Unit cost</th><th>Total</th><th>Supplier</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>' : '<div class="muted">No purchases recorded yet.</div>')+
+    (list.length? '<div class="table-wrap" style="border:none;"><table style="min-width:0;"><thead><tr><th>Date</th><th>Product</th><th>Qty</th><th class="hm">Unit cost</th><th>Total</th><th>Supplier</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>' : '<div class="muted">No purchases recorded yet.</div>')+
     '</div>';
 
-  if(mode==='bulk'){
-    var d = STATE.bulkStockDraft;
-    var itemRows = d.rows.map(renderBulkStockRow).join('');
-    return summaryGrid + tabs + '<div class="two-col">'+
-      '<div class="card"><h3 style="margin-bottom:10px;">'+uiIcon('box','icon-sm')+' Bulk stock entry</h3>'+
+  var formArea = '';
+  if(open){
+    if(mode==='bulk'){
+      var d = STATE.bulkStockDraft;
+      var itemRows = d.rows.map(renderBulkStockRow).join('');
+      formArea = tabs + '<div class="card" style="margin-bottom:14px;"><h3 style="margin-bottom:10px;">'+uiIcon('box','icon-sm')+' Bulk stock entry</h3>'+
         '<p class="field-note" style="margin-bottom:10px;">Register a wholesale delivery of several products at once. New product names are created automatically.</p>'+
         '<form id="bulkStockForm">'+
         '<div class="form-row">'+
@@ -2369,27 +2466,25 @@ function renderStockPurchase(){
         '<label>Notes</label><textarea id="bulkNotes" rows="2" placeholder="Optional">'+esc(d.notes)+'</textarea>'+
         '<button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('box','icon-sm')+' Save all items</button>'+
         '<p class="field-note">Stock purchases increase product stock but are not deducted from Net Profit.</p>'+
-        '</form>'+
-      '</div>'+ historyCard +'</div>';
+        '</form></div>';
+    } else if(!STATE.data.products.length){
+      formArea = tabs + emptyState('box','No products yet','Add a product first, or switch to Bulk entry to add new ones on the fly.', 'products','Go to Products');
+    } else {
+      var options = STATE.data.products.map(function(p){return '<option value="'+p.id+'">'+esc(p.name)+'</option>';}).join('');
+      formArea = tabs + '<div class="card" style="margin-bottom:14px;"><h3 style="margin-bottom:10px;">Record stock purchase</h3>'+
+        '<form id="stockForm">'+
+          '<label>Date</label><input type="date" name="date" value="'+todayStr()+'" max="'+todayStr()+'" required>'+
+          '<label>Product</label><select name="productId" required>'+options+'</select>'+
+          '<div class="form-row"><div><label>Quantity</label><input type="number" name="quantity" min="1" step="1" inputmode="numeric" required></div>'+
+          '<div><label>Unit cost</label><input type="number" name="unitCost" min="0" step="0.01" inputmode="decimal" required></div></div>'+
+          '<label>Supplier / source</label><input type="text" name="supplier" placeholder="Optional">'+
+          '<label>Notes</label><textarea name="notes" rows="2" placeholder="Optional"></textarea>'+
+          '<button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('cart','icon-sm')+' Save purchase</button>'+
+          '<p class="field-note">Stock purchases increase product stock but are not deducted from Net Profit.</p>'+
+        '</form></div>';
+    }
   }
-
-  if(!STATE.data.products.length){
-    return summaryGrid + tabs + emptyState('box','No products yet','Add a product first, or switch to Bulk entry to add new ones on the fly.', 'products','Go to Products');
-  }
-  var options = STATE.data.products.map(function(p){return '<option value="'+p.id+'">'+esc(p.name)+'</option>';}).join('');
-  return summaryGrid + tabs + '<div class="two-col">'+
-  '<div class="card"><h3 style="margin-bottom:10px;">Record stock purchase</h3>'+
-  '<form id="stockForm">'+
-    '<label>Date</label><input type="date" name="date" value="'+todayStr()+'" max="'+todayStr()+'" required>'+
-    '<label>Product</label><select name="productId" required>'+options+'</select>'+
-    '<div class="form-row"><div><label>Quantity</label><input type="number" name="quantity" min="1" step="1" required></div>'+
-    '<div><label>Unit cost</label><input type="number" name="unitCost" min="0" step="0.01" required></div></div>'+
-    '<label>Supplier / source</label><input type="text" name="supplier" placeholder="Optional">'+
-    '<label>Notes</label><textarea name="notes" rows="2" placeholder="Optional"></textarea>'+
-    '<button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('cart','icon-sm')+' Save purchase</button>'+
-    '<p class="field-note">Stock purchases increase product stock but are not deducted from Net Profit.</p>'+
-  '</form></div>'+
-  historyCard +'</div>';
+  return hero + budgets + toggle + formArea + historyCard;
 }
 
 function renderBulkStockRow(item, idx){
@@ -2413,19 +2508,25 @@ function renderExpenses(){
       '<td><div class="row-actions">'+(canManage()?'<button class="btn btn-outline btn-sm" data-act="edit-expense" data-id="'+e.id+'">Edit</button>':'')+(canDelete()?'<button class="btn btn-danger btn-sm" data-act="delete-expense" data-id="'+e.id+'">Delete</button>':'')+'</div></td></tr>';
   }).join('');
   var catOptions = EXPENSE_CATS.map(function(c){return '<option value="'+c+'">'+c+'</option>';}).join('');
-  return '<div class="two-col">'+
-  '<div class="card"><h3 style="margin-bottom:10px;">Add expense</h3>'+
-  '<form id="expenseForm">'+
-    '<label>Date</label><input type="date" name="date" value="'+todayStr()+'" max="'+todayStr()+'" required>'+
-    '<label>Category</label><select name="category">'+catOptions+'</select>'+
-    '<label>Description</label><input type="text" name="description" placeholder="Optional">'+
-    '<label>Amount</label><input type="number" name="amount" min="0" step="0.01" required>'+
-    '<label>Notes</label><textarea name="notes" rows="2" placeholder="Optional"></textarea>'+
-    '<button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('dollar','icon-sm')+' Save expense</button>'+
-  '</form></div>'+
-  '<div class="card"><h3 style="margin-bottom:10px;">Expense history</h3>'+
-  (list.length? '<div class="table-wrap" style="border:none;"><table style="min-width:0;"><thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>' : '<div class="muted">No expenses recorded yet.</div>')+
-  '</div></div>';
+  var t = todayStr();
+  var monthTotal = sumBy(expensesInRange(isoDate(startOfMonth(new Date())), t), 'amount');
+  var yearTotal = sumBy(expensesInRange(isoDate(startOfYear(new Date())), t), 'amount');
+  var hero = heroCard('Expenses this month', fmtETB(monthTotal), [['This Year', fmtETB(yearTotal)], ['Entries', String(list.length)]]);
+  var open = STATE.formOpen==='expense';
+  var toggle = '<button type="button" class="btn btn-block add-toggle'+(open?' btn-outline':'')+'" data-act="toggle-form" data-form="expense">'+(open ? 'Close' : (uiIcon('plus','icon-sm')+' Add expense'))+'</button>';
+  var form = open ? ('<div class="card" style="margin-bottom:14px;"><h3 style="margin-bottom:10px;">Add expense</h3>'+
+    '<form id="expenseForm">'+
+      '<label>Date</label><input type="date" name="date" value="'+todayStr()+'" max="'+todayStr()+'" required>'+
+      '<label>Category</label><select name="category">'+catOptions+'</select>'+
+      '<label>Description</label><input type="text" name="description" placeholder="Optional">'+
+      '<label>Amount</label><input type="number" name="amount" min="0" step="0.01" inputmode="decimal" required>'+
+      '<label>Notes</label><textarea name="notes" rows="2" placeholder="Optional"></textarea>'+
+      '<button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('dollar','icon-sm')+' Save expense</button>'+
+    '</form></div>') : '';
+  return hero + toggle + form +
+    '<div class="card"><h3 style="margin-bottom:10px;">Expense history</h3>'+
+    (list.length? '<div class="table-wrap" style="border:none;"><table style="min-width:0;"><thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>' : '<div class="muted">No expenses recorded yet.</div>')+
+    '</div>';
 }
 
 /* ---------------- REPORTS ---------------- */
@@ -2459,8 +2560,9 @@ function renderReports(){
   var reportGoalField = {today:'dailyGoal', week:'weeklyGoal', month:'monthlyGoal', year:'yearlyGoal'}[STATE.reportRange];
   var reportGoal = reportGoalField ? (parseFloat((STATE.shopProfile||{})[reportGoalField])||0) : 0;
   var reportPct = reportGoal>0 ? Math.min(100, round2((stats.totalSales/reportGoal)*100)) : null;
+  var repHero = heroCard('Total Sales', fmtETB(stats.totalSales), [['Net Profit', fmtETB(stats.net)], ['Cash balance', fmtETB(currentStoreBalance())]]);
   return ''+
-    '<div class="tabs">'+tabs+'</div>'+
+    '<div class="tabs">'+tabs+'</div>'+repHero+
     (STATE.reportRange==='custom' ? (
       '<div class="card" style="margin-bottom:16px;"><div class="form-row">'+
       '<div><label>From</label><input type="date" id="repFrom" value="'+STATE.reportCustomFrom+'"></div>'+
@@ -2971,8 +3073,20 @@ function renderModal(){
 }
 
 /* ---------------- EVENT BINDING ---------------- */
+/* On a phone a wide table becomes a stack of cards: every cell is tagged with its column title. */
+function labelTables(){
+  document.querySelectorAll('.table-wrap table').forEach(function(t){
+    var heads = Array.prototype.map.call(t.querySelectorAll('thead th'), function(th){ return th.textContent.trim(); });
+    t.classList.add('stackable');
+    t.querySelectorAll('tbody tr').forEach(function(tr){
+      Array.prototype.forEach.call(tr.children, function(td, i){ if(heads[i]) td.setAttribute('data-label', heads[i]); });
+    });
+  });
+}
+
 function bindEvents(){
   var app = document.getElementById('app');
+  labelTables();
   if(STATE._accAnim){
     var openRow = document.querySelector('.acc.open');
     STATE._accAnim = null;
@@ -2987,7 +3101,7 @@ function bindEvents(){
   }
 
   app.querySelectorAll('[data-nav]').forEach(function(el){
-    el.addEventListener('click', function(){ STATE.view = el.getAttribute('data-nav'); STATE.sidebarOpen=false; STATE.settingsOpen=''; render(); });
+    el.addEventListener('click', function(){ STATE.view = el.getAttribute('data-nav'); STATE.sidebarOpen=false; STATE.settingsOpen=''; STATE.formOpen=''; render(); });
   });
   app.querySelectorAll('[data-act]').forEach(function(el){
     el.addEventListener('click', function(ev){
@@ -3139,6 +3253,8 @@ function bindEvents(){
     });
   });
 
+  var dashPeriodSel = document.getElementById('dashPeriod');
+  if(dashPeriodSel) dashPeriodSel.addEventListener('change', function(){ STATE.dashboardPeriod = dashPeriodSel.value; render(); });
   var creditSearchIn = document.getElementById('creditSearch');
   if(creditSearchIn) creditSearchIn.addEventListener('input', function(){ STATE.creditSearch = creditSearchIn.value; render(); preserveFocus('creditSearch'); });
   var rpForm = document.getElementById('receivePaymentForm');
@@ -3436,6 +3552,8 @@ function handleAction(act, el, ev){
     if(!STATE.bulkStockDraft.rows.length) STATE.bulkStockDraft.rows.push({name:'',qty:1,unitCost:0});
     render(); return;
   }
+  if(act==='toggle-form'){ var fm = el.getAttribute('data-form'); STATE.formOpen = (STATE.formOpen===fm) ? '' : fm; render(); if(STATE.formOpen){ setTimeout(function(){ var f = document.querySelector('#expenseForm, #stockForm, #bulkStockForm'); if(f && f.scrollIntoView){ try{ f.scrollIntoView({block:'center', behavior:'smooth'}); }catch(e){} } }, 80); } return; }
+  if(act==='dash-more'){ STATE.dashMore = !STATE.dashMore; render(); return; }
   if(act==='acc-toggle'){
     var accId = el.getAttribute('data-acc');
     STATE.settingsOpen = (STATE.settingsOpen===accId) ? '' : accId;
@@ -3619,7 +3737,8 @@ async function onAddStock(ev){
       quantity: qty, unitCost: unitCost,
       supplier: fd.get('supplier')||'', notes: fd.get('notes')||''
     });
-    ev.target.reset();
+    STATE.formOpen = ''; render();
+    toast('Stock purchase saved.','success');
     var balanceAfter = round2(balanceBefore - qty*unitCost);
     if(balanceAfter < 0 && balanceBefore >= 0){
       setTimeout(function(){ alert('Heads up: this purchase brings your Current Store Balance to '+fmtETB(balanceAfter)+' (negative). The excess is being funded from your store reserve — your accounting Net Profit is not affected.'); }, 100);
@@ -3664,7 +3783,9 @@ async function onBulkStockSubmit(ev){
     }
     STATE.bulkStockDraft = {date:todayStr(), supplier:'', notes:'', rows:[{name:'',qty:1,unitCost:0}]};
     STATE.stockMode = 'single';
+    STATE.formOpen = '';
     render();
+    toast('Stock purchases saved.','success');
     var balanceAfter = round2(balanceBefore - bulkTotalCost);
     if(balanceAfter < 0 && balanceBefore >= 0){
       setTimeout(function(){ alert('Heads up: this bulk purchase brings your Current Store Balance to '+fmtETB(balanceAfter)+' (negative). The excess is being funded from your store reserve — your accounting Net Profit is not affected.'); }, 100);
@@ -3798,7 +3919,8 @@ async function onAddExpense(ev){
   var fd = new FormData(ev.target);
   try{
     await addExpenseDoc({date:fd.get('date'), category:fd.get('category'), description:fd.get('description')||'', amount:parseFloat(fd.get('amount')), notes:fd.get('notes')||''});
-    ev.target.reset();
+    STATE.formOpen = ''; render();
+    toast('Expense saved.','success');
   }catch(err){ showActionError(err); }
 }
 
