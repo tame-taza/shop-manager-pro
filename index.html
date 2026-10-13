@@ -369,13 +369,17 @@ tbody tr{transition:background .15s ease;}
 .cust-main{display:flex;flex-direction:column;gap:2px;min-width:0;}
 .cust-main b{font-size:14px;} .cust-main .muted{font-size:11.5px;}
 .cust-bal{display:flex;flex-direction:column;align-items:flex-end;gap:1px;} .cust-bal b{font-size:15px;} .cust-bal .muted{font-size:11px;}
+.cust-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
+.remind-box{margin:12px 0;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--green-50);}
+.remind-btns{display:flex;gap:8px;margin:8px 0;}
+.remind-text{margin:6px 0 0;font-size:12.5px;line-height:1.5;color:var(--ink-soft);white-space:normal;}
 .ledger-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
 .ledger-summary > div{background:var(--green-50);border:1px solid var(--border);border-radius:var(--radius-md);padding:10px 12px;display:flex;flex-direction:column;gap:2px;}
 .ledger-summary .muted{font-size:11px;} .ledger-summary b{font-size:15px;}
 .modal-wide{max-width:640px !important;}
 @media(max-width:720px){
   .cust-row{grid-template-columns:44px 1fr auto;grid-template-areas:"av main bal" "av status btn";row-gap:8px;}
-  .cust-avatar{grid-area:av;} .cust-main{grid-area:main;} .cust-bal{grid-area:bal;} .cust-status{grid-area:status;} .cust-row .btn{grid-area:btn;justify-self:end;}
+  .cust-avatar{grid-area:av;} .cust-main{grid-area:main;} .cust-bal{grid-area:bal;} .cust-status{grid-area:status;} .cust-row .cust-actions{grid-area:btn;justify-self:end;}
   .ledger-summary{grid-template-columns:1fr;}
 }
 
@@ -475,7 +479,7 @@ select.hero-select:focus{box-shadow:0 0 0 3px rgba(255,255,255,.35);}
 .qa:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);} .qa:active{transform:scale(.97);}
 .qa .icon-badge{width:42px;height:42px;}
 .goal-mini{background:var(--paper);border:1px solid var(--border);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow);margin-bottom:14px;}
-.goal-mini-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:13px;font-weight:700;}
+.goal-mini-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px;font-size:13px;font-weight:700;}
 .goal-mini-top b{color:var(--gold-dark);font-size:17px;}
 .add-toggle{margin-bottom:14px;min-height:48px;font-size:14.5px;}
 
@@ -541,7 +545,39 @@ select.hero-select:focus{box-shadow:0 0 0 3px rgba(255,255,255,.35);}
   #printArea, #printArea *{visibility:visible;}
   #printArea{position:absolute;left:0;top:0;width:100%;}
   .invoice-preview{box-shadow:none;max-width:none;width:100%;}
+  #printTemp, #printTemp *{visibility:visible !important;}
+  #printTemp{display:block !important;position:absolute;left:0;top:0;width:100%;}
 }
+#printTemp{display:none;}
+.lock-screen{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;padding:20px;color:#fff;overflow-y:auto;
+  background:radial-gradient(circle at 30% 10%,var(--green-700),var(--green-900) 70%);animation:fadeIn .2s ease both;}
+.lock-screen.unlocking{animation:unlockOut .25s ease forwards;}
+.lock-card{width:100%;max-width:320px;text-align:center;}
+.lock-mark{width:64px;height:64px;margin:0 auto 10px;border-radius:20px;background:var(--grad-gold);color:#3a2c05;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 30px -10px rgba(0,0,0,.5);}
+.lock-card h2{margin:0;font-size:20px;} .lock-shop{font-size:12.5px;opacity:.75;margin-bottom:8px;}
+.lock-card p{font-size:13.5px;opacity:.9;margin:10px 0 4px;}
+.pin-dots{display:flex;gap:16px;justify-content:center;margin:14px 0 6px;}
+.pin-dot{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.75);transition:background .12s ease,transform .12s ease;}
+.pin-dot.on{background:#fff;transform:scale(1.12);}
+.pin-dots.shake{animation:shake .42s ease;}
+.pin-error{min-height:20px;font-size:12.5px;color:#ffb4b4;font-weight:700;margin:2px 0 4px;}
+.numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:8px auto 12px;max-width:264px;}
+.np-key{width:72px;height:72px;justify-self:center;border-radius:50%;border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.1);color:#fff;font-size:24px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .1s ease,transform .08s ease;}
+.np-key:active{background:rgba(255,255,255,.3);transform:scale(.93);}
+.lock-card .link-btn{color:#fff;opacity:.9;margin:2px 6px;}
+.lock-card input{background:rgba(255,255,255,.96);color:#111;text-align:center;}
+@keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-9px);}40%{transform:translateX(9px);}60%{transform:translateX(-6px);}80%{transform:translateX(6px);}}
+@keyframes unlockOut{to{opacity:0;transform:scale(1.05);}}
+.dc-diff{margin:10px 0 0;font-size:15px;font-weight:800;min-height:28px;}
+.dc-diff .pill{font-size:14px;padding:7px 14px;}
+.zreport{font-family:inherit;color:#111;max-width:720px;margin:0 auto;padding:6px;}
+.zreport h1{font-size:22px;margin:0 0 4px;} .zreport h2{font-size:14px;margin:18px 0 6px;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid #111;padding-bottom:3px;}
+.zreport .z-sub{font-size:12.5px;color:#444;margin:2px 0;}
+.zreport table{width:100%;border-collapse:collapse;font-size:13px;} .zreport td{padding:5px 2px;border-bottom:1px dashed #bbb;} .zreport td:last-child{text-align:right;}
+.zreport tr.z-strong td{border-bottom:1px solid #111;} .zreport tr.z-diff td{font-size:15px;border-bottom:2px solid #111;}
+.zreport tr.z-diff.neg td{color:#b23b3b;} .zreport tr.z-diff.pos td{color:#146c43;}
+.z-sign{display:flex;justify-content:space-between;gap:20px;margin-top:46px;font-size:12px;color:#333;}
+.rcpt-preview{max-height:52vh;overflow:auto;padding:6px 0 14px;}
 </style>
 </head>
 <body>
@@ -572,8 +608,8 @@ function applyPalette(p){
 }
 applyPalette(PALETTE);
 var T = {
-  en:{app_name:"Shop Sales Record", tagline:"Taza Technology", dashboard:"Dashboard", quick_sale:"Quick Sale", sales:"Sales", grp_overview:"Overview", grp_sales:"Sales", grp_inventory:"Inventory", grp_finance:"Finance", grp_system:"System", invoice:"Invoice", credit:"Customer Credit", calendar:"Calendar", products:"Products", stock_purchase:"Stock Purchase", expenses:"Expenses", reports:"Reports", settings:"Settings", logout:"Log out"},
-  am:{app_name:"የሽያጭ መዝገብ", tagline:"ታዛ ቴክኖሎጂ", dashboard:"ዳሽቦርድ", quick_sale:"ፈጣን ሽያጭ", sales:"ሽያጮች", grp_overview:"አጠቃላይ", grp_sales:"ሽያጭ", grp_inventory:"ክምችት", grp_finance:"ፋይናንስ", grp_system:"ሲስተም", invoice:"ደረሰኝ", credit:"የደንበኛ ዱቤ", calendar:"የቀን መቁጠሪያ", products:"ምርቶች", stock_purchase:"የስቶክ ግዢ", expenses:"ወጪዎች", reports:"ሪፖርቶች", settings:"ቅንብሮች", logout:"ውጣ"}
+  en:{app_name:"Shop Sales Record", tagline:"Taza Technology", dashboard:"Dashboard", quick_sale:"Quick Sale", sales:"Sales", day_close:"Day Close", grp_overview:"Overview", grp_sales:"Sales", grp_inventory:"Inventory", grp_finance:"Finance", grp_system:"System", invoice:"Invoice", credit:"Customer Credit", calendar:"Calendar", products:"Products", stock_purchase:"Stock Purchase", expenses:"Expenses", reports:"Reports", settings:"Settings", logout:"Log out"},
+  am:{app_name:"የሽያጭ መዝገብ", tagline:"ታዛ ቴክኖሎጂ", dashboard:"ዳሽቦርድ", quick_sale:"ፈጣን ሽያጭ", sales:"ሽያጮች", day_close:"የቀን መዝጊያ", grp_overview:"አጠቃላይ", grp_sales:"ሽያጭ", grp_inventory:"ክምችት", grp_finance:"ፋይናንስ", grp_system:"ሲስተም", invoice:"ደረሰኝ", credit:"የደንበኛ ዱቤ", calendar:"የቀን መቁጠሪያ", products:"ምርቶች", stock_purchase:"የስቶክ ግዢ", expenses:"ወጪዎች", reports:"ሪፖርቶች", settings:"ቅንብሮች", logout:"ውጣ"}
 };
 function tr(k){ return (T[LANG]&&T[LANG][k]) || T.en[k] || k; }
 
@@ -633,7 +669,7 @@ var PHRASES = {
   "Credit sales":"የዱቤ ሽያጮች","Settled":"ተከፍሏል","Due soon":"በቅርቡ ይከፈላል","Open":"ክፍት","Collected in cash":"በጥሬ ገንዘብ የተሰበሰበ","Telebirr / Bank":"ቴሌብር / ባንክ",
   "Customer credit":"የደንበኛ ዱቤ","Cash & Collections":"ገንዘብ እና ስብሰባ","Performance":"አፈጻጸም","Targets":"ግቦች","Records":"መዝገቦች","A4 page":"A4 ወረቀት","80mm receipt":"80mm ደረሰኝ","58mm receipt":"58mm ደረሰኝ",
   "Pay full balance":"ሙሉ ቀሪውን ክፈል","Sales &amp; Profit Trend":"የሽያጭ እና ትርፍ አዝማሚያ","Users &amp; Roles":"ተጠቃሚዎች እና ሚናዎች","Paid by":"የተከፈለው በ","Receipt":"ደረሰኝ","Thank you! Come again.":"እናመሰግናለን! እንደገና ይምጡ።",
-  "Average sale":"አማካይ ሽያጭ","Items sold":"የተሸጡ እቃዎች","Cancel":"ተው","Close":"ዝጋ","Add expense":"ወጪ ጨምር","Stock bought this month":"በዚህ ወር የተገዛ ስቶክ","Expenses this month":"የዚህ ወር ወጪ","Entries":"ግቤቶች","Sales made":"የተደረጉ ሽያጮች",
+  "Average sale":"አማካይ ሽያጭ","Items sold":"የተሸጡ እቃዎች","Cancel":"ተው","Lock":"ቆልፍ","Lock now":"አሁን ቆልፍ","Screen locked":"ማያ ተቆልፏል","Enter your 4-digit PIN":"4 አሃዝ PIN ያስገቡ","Unlock with Password":"በይለፍ ቃል ክፈት","Use PIN instead":"በ PIN ክፈት","Enter your account password":"የመለያዎን የይለፍ ቃል ያስገቡ","Unlock":"ክፈት","Wrong PIN":"የተሳሳተ PIN","Screen lock (PIN)":"የማያ መቆለፊያ (PIN)","Screen lock":"የማያ መቆለፊያ","Set PIN":"PIN አስቀምጥ","Change PIN":"PIN ቀይር","Remove PIN":"PIN አስወግድ","Log out":"ውጣ","Full backup":"ሙሉ መጠባበቂያ","Download Full Backup (.json)":"ሙሉ መጠባበቂያ አውርድ (.json)","Restore from Backup (.json)":"ከመጠባበቂያ መልስ (.json)","Shortage":"ጉድለት","Overage":"ብልጫ","Balanced":"ሚዛን ተመጣጥኗል","Cash received":"የተቀበለ ጥሬ ገንዘብ","Count the cash drawer":"የገንዘብ መሳቢያ ቆጠራ","Opening float":"የመጀመሪያ ገንዘብ","Expected cash in drawer":"በመሳቢያ መኖር ያለበት ገንዘብ","Cash counted in the drawer (ETB)":"በመሳቢያ የተቆጠረ ገንዘብ (ETB)","Save close":"መዝጊያ አስቀምጥ","Update close":"መዝጊያ አዘምን","Print Z-Report":"Z-Report አትም","Previous closings":"ያለፉ መዝጊያዎች","Enter the counted cash":"የተቆጠረውን ገንዘብ ያስገቡ","Remind":"አስታውስ","Send reminder":"ማስታወሻ ላክ","Telegram":"ቴሌግራም","Sale recorded":"ሽያጭ ተመዝግቧል","Print receipt":"ደረሰኝ አትም","Done":"ጨርስ","Show receipt after saving":"ከመዘገብ በኋላ ደረሰኝ አሳይ","Receipt":"ደረሰኝ","Time":"ሰዓት","Paid now":"አሁን የተከፈለ","BALANCE DUE":"ቀሪ ዕዳ","Expiry date":"የማብቂያ ቀን","Expiry":"ማብቂያ","Expired":"ጊዜው አልፏል","Already expired":"ጊዜያቸው አልፏል","Expiring within 30 days":"በ30 ቀናት ውስጥ የሚያልቁ","Expiring within 60 days":"በ60 ቀናት ውስጥ የሚያልቁ","sell or discount them first":"በቅድሚያ ይሽጡ ወይም ቅናሽ ያድርጉ","Discount (ETB)":"ቅናሽ (ETB)","Discount":"ቅናሽ","Subtotal":"ንዑስ ድምር","Discounts given":"የተሰጡ ቅናሾች","Price reductions in this period":"በዚህ ጊዜ የተሰጡ ቅናሾች","Total for this batch":"የጅምላው ጠቅላላ","Close":"ዝጋ","Add expense":"ወጪ ጨምር","Stock bought this month":"በዚህ ወር የተገዛ ስቶክ","Expenses this month":"የዚህ ወር ወጪ","Entries":"ግቤቶች","Sales made":"የተደረጉ ሽያጮች",
   "Collected this month":"በዚህ ወር የተሰበሰበ","Sales today":"የዛሬ ሽያጭ","Sales this week":"የዚህ ሳምንት ሽያጭ","Sales this month":"የዚህ ወር ሽያጭ","Sales this year":"የዚህ ዓመት ሽያጭ","Profit":"ትርፍ","Cash balance":"የሱቅ ገንዘብ",
   "New sale":"አዲስ ሽያጭ","Stock in":"ስቶክ ግቤት","Expense":"ወጪ","Money received":"የተሰበሰበ ገንዘብ","Customers owe you":"ደንበኞች ያለባቸው","More details":"ተጨማሪ ዝርዝሮች",
   "Margins, collections, records and tips":"ትርፍ መጠን፣ ስብሰባ፣ መዝገቦች እና ምክሮች","View":"ይመልከቱ","App":"መተግበሪያ","Your profile and sign out":"መገለጫዎ እና መውጫ","Change your password":"የይለፍ ቃልዎን ይቀይሩ","Address and phone on receipts":"በደረሰኝ ላይ የሚታይ አድራሻና ስልክ",
@@ -718,6 +754,206 @@ function askConfirm(opts){
   });
 }
 
+/* ---------------- SCREEN LOCK (4-digit PIN) ----------------
+   The PIN only hides the screen; it does not sign you out of Firebase. It is stored on this device
+   as a salted PBKDF2 hash (never the PIN itself). Five wrong PINs force the account password. */
+var IDLE_LOCK_MS = (typeof window.__ssrIdleLockMs==='number') ? window.__ssrIdleLockMs : 2*60*1000;
+var lockTimer = null, lastActiveAt = Date.now();
+function uidNow(){ return (STATE.session && STATE.session.userId) || ''; }
+function pinKey(){ return 'ssr_pin_'+uidNow(); }
+function lockFlagKey(){ return 'ssr_locked_'+uidNow(); }
+function cryptoOK(){ return !!(window.crypto && window.crypto.subtle && window.TextEncoder); }
+function hasPin(){ try{ return !!localStorage.getItem(pinKey()); }catch(e){ return false; } }
+function bytesToB64(b){ var s=''; for(var i=0;i<b.length;i++) s += String.fromCharCode(b[i]); return btoa(s); }
+function b64ToBytes(t){ var s=atob(t), b=new Uint8Array(s.length); for(var i=0;i<s.length;i++) b[i]=s.charCodeAt(i); return b; }
+async function derivePin(pin, saltB64, iter){
+  var salt = saltB64 ? b64ToBytes(saltB64) : window.crypto.getRandomValues(new Uint8Array(16));
+  var n = iter || 60000;
+  var key = await window.crypto.subtle.importKey('raw', new TextEncoder().encode(pin), {name:'PBKDF2'}, false, ['deriveBits']);
+  var bits = await window.crypto.subtle.deriveBits({name:'PBKDF2', salt:salt, iterations:n, hash:'SHA-256'}, key, 256);
+  return {s:bytesToB64(salt), h:bytesToB64(new Uint8Array(bits)), i:n};
+}
+async function savePin(pin){ localStorage.setItem(pinKey(), JSON.stringify(await derivePin(pin))); }
+async function checkPin(pin){
+  var rec = null;
+  try{ rec = JSON.parse(localStorage.getItem(pinKey())||'null'); }catch(e){ rec = null; }
+  if(!rec) return false;
+  var h = await derivePin(pin, rec.s, rec.i);
+  return h.h === rec.h;
+}
+function removePin(){ try{ localStorage.removeItem(pinKey()); localStorage.removeItem(lockFlagKey()); }catch(e){} clearTimeout(lockTimer); }
+function clearLockFlag(){ try{ localStorage.removeItem(lockFlagKey()); }catch(e){} }
+function resetLockTimer(){
+  clearTimeout(lockTimer);
+  if(!STATE.session || STATE.locked || !hasPin()) return;
+  lockTimer = setTimeout(function(){ if(STATE.session && !STATE.locked && hasPin()) lockNow(true); }, IDLE_LOCK_MS);
+}
+function lockNow(auto){
+  if(!STATE.session) return;
+  if(!hasPin()){
+    toast('Set a 4-digit PIN first, then you can lock the screen with one tap.','info');
+    STATE.view = 'settings'; STATE.settingsOpen = 'pin'; STATE._accAnim = 'pin'; render();
+    return;
+  }
+  STATE.locked = true; STATE.lockEntry = ''; STATE.lockMode = 'pin'; STATE.lockAttempts = 0; STATE.lockError = ''; STATE._lockBusy = false;
+  try{ localStorage.setItem(lockFlagKey(),'1'); }catch(e){}
+  STATE._lockForce = true;
+  render();
+}
+function unlockNow(){
+  STATE.locked = false; STATE.lockEntry = ''; STATE.lockError = ''; STATE._lockBusy = false;
+  clearLockFlag();
+  lastActiveAt = Date.now(); resetLockTimer();
+  render();
+}
+function initLockState(){
+  var flagged = false;
+  try{ flagged = localStorage.getItem(lockFlagKey())==='1'; }catch(e){}
+  if(hasPin() && flagged){ STATE.locked = true; STATE.lockEntry = ''; STATE.lockMode = 'pin'; STATE.lockAttempts = 0; STATE.lockError = ''; STATE._lockForce = true; }
+  resetLockTimer();
+}
+function renderLockScreen(){
+  var u = currentUser() || {};
+  var inner;
+  if(STATE.lockMode==='password'){
+    inner = '<p>Enter your account password</p>'+
+      '<form id="lockPwForm"><input type="password" id="lockPw" autocomplete="current-password" placeholder="Password" required>'+
+      '<div class="pin-error" id="lockErr">'+esc(STATE.lockError||'')+'</div>'+
+      '<button type="submit" class="btn btn-block">Unlock</button></form>'+
+      (hasPin() ? '<button type="button" class="link-btn" data-lock="pin">Use PIN instead</button>' : '');
+  } else {
+    var dots = ''; for(var i=0;i<4;i++) dots += '<span class="pin-dot'+(i<STATE.lockEntry.length?' on':'')+'"></span>';
+    var keys = ['1','2','3','4','5','6','7','8','9','','0','⌫'];
+    inner = '<p>Enter your 4-digit PIN</p><div class="pin-dots" id="pinDots">'+dots+'</div>'+
+      '<div class="pin-error" id="lockErr">'+esc(STATE.lockError||'')+'</div>'+
+      '<div class="numpad">'+keys.map(function(k){
+        return k==='' ? '<span></span>' : '<button type="button" class="np-key" data-lock-key="'+(k==='⌫'?'back':k)+'" aria-label="'+(k==='⌫'?'Delete':k)+'">'+k+'</button>';
+      }).join('')+'</div>'+
+      '<button type="button" class="link-btn" data-lock="password">Unlock with Password</button>';
+  }
+  return '<div id="lockScreen" class="lock-screen"><div class="lock-card">'+
+    '<div class="lock-mark">'+uiIcon('lock','icon-lg')+'</div><h2>Screen locked</h2><div class="lock-shop">'+esc(u.shopName||'')+'</div>'+
+    inner+
+    '<button type="button" class="link-btn" data-lock="logout" style="margin-top:10px;font-size:12px;">Log out</button>'+
+  '</div></div>';
+}
+function updateLockDots(){
+  var dots = document.querySelectorAll('#pinDots .pin-dot');
+  for(var i=0;i<dots.length;i++){ dots[i].classList.toggle('on', i < STATE.lockEntry.length); }
+}
+function showLockError(msg){
+  STATE.lockError = msg;
+  var el = document.getElementById('lockErr'); if(el) el.innerHTML = translateUI(esc(msg));
+}
+async function verifyPinEntry(){
+  STATE._lockBusy = true;
+  var ok = false;
+  try{ ok = await checkPin(STATE.lockEntry); }catch(e){ ok = false; }
+  STATE._lockBusy = false;
+  if(ok){
+    var scr = document.getElementById('lockScreen'); if(scr) scr.classList.add('unlocking');
+    setTimeout(unlockNow, 250);
+    return;
+  }
+  STATE.lockAttempts++; STATE.lockEntry = '';
+  if(STATE.lockAttempts >= 5){
+    STATE.lockMode = 'password'; STATE.lockError = 'Too many wrong PINs — unlock with your password.'; STATE._lockForce = true; render();
+    return;
+  }
+  var dotsEl = document.getElementById('pinDots');
+  if(dotsEl){ dotsEl.classList.add('shake'); setTimeout(function(){ dotsEl.classList.remove('shake'); }, 450); }
+  updateLockDots();
+  showLockError('Wrong PIN ('+STATE.lockAttempts+' of 5)');
+}
+function pinKeyPress(k){
+  if(STATE._lockBusy || STATE.lockMode!=='pin') return;
+  if(k==='back') STATE.lockEntry = STATE.lockEntry.slice(0,-1);
+  else if(/^\d$/.test(k) && STATE.lockEntry.length<4) STATE.lockEntry += k;
+  else return;
+  if(STATE.lockError){ STATE.lockError = ''; var e0 = document.getElementById('lockErr'); if(e0) e0.textContent = ''; }
+  updateLockDots();
+  if(STATE.lockEntry.length===4) verifyPinEntry();
+}
+async function onLockPassword(ev){
+  ev.preventDefault();
+  var pw = document.getElementById('lockPw').value;
+  var btn = ev.target.querySelector('button[type=submit]'); if(btn) btn.disabled = true;
+  try{
+    var user = auth.currentUser;
+    await user.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(user.email, pw));
+    unlockNow();
+  }catch(err){
+    showLockError(friendlyAuthError(err));
+    if(btn) btn.disabled = false;
+  }
+}
+function bindLock(){
+  var root = document.getElementById('lockScreen'); if(!root) return;
+  root.addEventListener('click', function(e){
+    var k = e.target.closest ? e.target.closest('[data-lock-key]') : null;
+    if(k){ pinKeyPress(k.getAttribute('data-lock-key')); return; }
+    var m = e.target.closest ? e.target.closest('[data-lock]') : null;
+    if(!m) return;
+    var what = m.getAttribute('data-lock');
+    if(what==='logout'){ clearLockFlag(); auth.signOut(); return; }
+    STATE.lockMode = what; STATE.lockError = ''; STATE.lockEntry = ''; STATE._lockForce = true; render();
+    var pw = document.getElementById('lockPw'); if(pw) pw.focus();
+  });
+  var f = document.getElementById('lockPwForm'); if(f) f.addEventListener('submit', onLockPassword);
+}
+document.addEventListener('keydown', function(e){
+  if(!STATE.locked || STATE.lockMode!=='pin') return;
+  if(/^\d$/.test(e.key)) pinKeyPress(e.key); else if(e.key==='Backspace') pinKeyPress('back');
+});
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState==='visible' && STATE.session && !STATE.locked && hasPin() && Date.now()-lastActiveAt > IDLE_LOCK_MS) lockNow(true);
+});
+
+/* ---- PIN settings ---- */
+function pinInput(id, ac){ return '<input type="password" id="'+id+'" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="'+ac+'" placeholder="••••" required>'; }
+function settingsPinCard(){
+  var msg = STATE.pinMsg ? '<div class="err-text">'+esc(STATE.pinMsg)+'</div>' : '';
+  if(!cryptoOK()) return '<div class="card"><h3>Screen lock</h3><p class="muted">Screen lock needs a secure (https) connection and is not available here.</p></div>';
+  if(!hasPin()){
+    return '<div class="card"><h3>Screen lock</h3>'+
+      '<p class="muted">Set a 4-digit PIN to lock the screen with one tap. It hides every figure until the PIN is entered. The PIN is saved on this device only, and the screen also locks by itself after 2 minutes without activity.</p>'+
+      '<form id="pinSetForm"><label>New PIN (4 digits)</label>'+pinInput('pinNew','new-password')+'<label>Confirm PIN</label>'+pinInput('pinConfirm','new-password')+msg+
+      '<button type="submit" class="btn btn-block" style="margin-top:16px;">Set PIN</button></form></div>';
+  }
+  return '<div class="card"><h3>Screen lock</h3>'+
+    '<div class="ok-text">'+uiIcon('check','icon-sm')+' PIN is on — the screen locks after 2 minutes without activity.</div>'+
+    '<button type="button" class="btn btn-block" data-act="lock-now" style="margin-top:10px;">'+uiIcon('lock','icon-sm')+' Lock now</button>'+
+    '<h3 style="margin:18px 0 4px;">Change PIN</h3>'+
+    '<form id="pinChangeForm"><label>Current PIN</label>'+pinInput('pinCur','current-password')+'<label>New PIN (4 digits)</label>'+pinInput('pinNew','new-password')+'<label>Confirm new PIN</label>'+pinInput('pinConfirm','new-password')+
+    msg+'<button type="submit" class="btn btn-outline btn-block" style="margin-top:14px;">Change PIN</button></form>'+
+    '<h3 style="margin:18px 0 4px;">Remove PIN</h3>'+
+    '<form id="pinRemoveForm"><label>Current PIN</label>'+pinInput('pinCurRm','current-password')+
+    '<button type="submit" class="btn btn-danger btn-block" style="margin-top:14px;">Remove PIN</button></form>'+
+  '</div>';
+}
+function pinVal(id){ var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+async function onPinSet(ev){
+  ev.preventDefault();
+  var a = pinVal('pinNew'), b = pinVal('pinConfirm');
+  if(!/^\d{4}$/.test(a)){ STATE.pinMsg = 'The PIN must be exactly 4 digits.'; render(); return; }
+  if(a!==b){ STATE.pinMsg = 'The two PINs do not match.'; render(); return; }
+  try{ await savePin(a); STATE.pinMsg = ''; resetLockTimer(); render(); toast('PIN set. Tap the lock button at the top to lock the screen.','success'); }
+  catch(err){ STATE.pinMsg = 'Could not save the PIN on this device.'; render(); }
+}
+async function onPinChange(ev){
+  ev.preventDefault();
+  var cur = pinVal('pinCur'), a = pinVal('pinNew'), b = pinVal('pinConfirm');
+  if(!(await checkPin(cur))){ STATE.pinMsg = 'The current PIN is wrong.'; render(); return; }
+  if(!/^\d{4}$/.test(a)){ STATE.pinMsg = 'The new PIN must be exactly 4 digits.'; render(); return; }
+  if(a!==b){ STATE.pinMsg = 'The two new PINs do not match.'; render(); return; }
+  await savePin(a); STATE.pinMsg = ''; render(); toast('PIN changed.','success');
+}
+async function onPinRemove(ev){
+  ev.preventDefault();
+  if(!(await checkPin(pinVal('pinCurRm')))){ STATE.pinMsg = 'The current PIN is wrong.'; render(); return; }
+  removePin(); STATE.pinMsg = ''; render(); toast('PIN removed.','success');
+}
+
 /* Non-blocking notifications. The app used the browser's alert() box in many places;
    this local alert() replaces it everywhere inside the app with a smooth toast. */
 function toast(msg, type){
@@ -767,13 +1003,15 @@ function resetIdleTimers(){
   idleTimer = setTimeout(function(){
     if(!STATE.session) return;
     STATE.authError = 'You were signed out after 30 minutes of inactivity.';
+    clearLockFlag();
     auth.signOut();
   }, IDLE_MS);
 }
 function noteActivity(){
   var now = Date.now();
+  lastActiveAt = now;
   if(now - lastActivityMark < 5000) return;   /* throttle */
-  lastActivityMark = now; resetIdleTimers();
+  lastActivityMark = now; resetIdleTimers(); resetLockTimer();
 }
 ['click','keydown','touchstart','mousemove','scroll'].forEach(function(evn){ document.addEventListener(evn, noteActivity, {passive:true}); });
 
@@ -845,7 +1083,7 @@ function canDelete(){ return myRole()==='ceo' || myRole()==='manager'; }
    financial (dashboard, reports, stock, expenses, balances) stays CEO/Manager. */
 function allowedViewsForRole(){
   if(myRole()==='sales') return ['quickSale','sales','settings'];
-  return ['dashboard','quickSale','sales','invoice','credit','calendar','products','stockPurchase','expenses','reports','settings'];
+  return ['dashboard','quickSale','sales','invoice','credit','calendar','products','stockPurchase','expenses','reports','dayClose','settings'];
 }
 function defaultViewForRole(){ return myRole()==='sales' ? 'quickSale' : 'dashboard'; }
 
@@ -895,6 +1133,7 @@ function subscribeAll(uidStr){
     listen('expenses', base.collection('expenses'));
     listen('invoices', base.collection('invoices'), function(a,b){return (b.createdAt||'').localeCompare(a.createdAt||'');});
     listen('backupSavings', base.collection('backupSavings'));
+    listen('dayCloses', base.collection('dayCloses'));
     listen('branches', base.collection('branches'));
     listen('staff', base.collection('staff'));
   }
@@ -951,11 +1190,16 @@ var STATE = {
   settingsOpen:'',
   dashMore:false,
   formOpen:'',
+  locked:false, lockEntry:'', lockMode:'pin', lockAttempts:0, lockError:'', _lockBusy:false, _lockForce:false, pinMsg:'',
+  dayCloseDate:'',
+  dayCloseDraft:null,
+  autoReceipt:(localStorage.getItem('ssr_autorcpt')!=='0'),
+  receiptFormat:(localStorage.getItem('ssr_rcptfmt')||'80'),
   _accAnim:null,
   _lastKey:'', _animate:false, _lastModal:'', _modalEnter:false,
   creditSearch:'',
-  bulkSaleDraft:{date:todayStr(),markedOwed:false,paymentMethod:'cash',txId:'',credit:false,customerName:'',customerPhone:'',dueDate:'',paidNow:0,claimedTx:'',rows:[{name:'',qty:1,costPrice:0,sellingPrice:0}]},
-  invoiceDraft:{customerName:'',phone:'',address:'',items:[{name:'',qty:1,unitPrice:0}]},
+  bulkSaleDraft:{date:todayStr(),markedOwed:false,paymentMethod:'cash',txId:'',discount:0,credit:false,customerName:'',customerPhone:'',dueDate:'',paidNow:0,claimedTx:'',rows:[{name:'',qty:1,costPrice:0,sellingPrice:0}]},
+  invoiceDraft:{customerName:'',phone:'',address:'',discount:0,items:[{name:'',qty:1,unitPrice:0}]},
   invoicePreview:null,
   invoiceFormat:(localStorage.getItem('ssr_invfmt')||'a4'),
   editingInvoiceId:null,
@@ -1041,10 +1285,46 @@ function totalCreditOutstanding(){
   return round2(STATE.data.sales.reduce(function(a,s){ return a+saleBalanceDue(s); },0));
 }
 function recomputeSale(s){
-  var totalSales = round2(s.quantity * s.sellingPrice);
+  var gross = round2(s.quantity * s.sellingPrice);
+  var discount = Math.min(Math.max(round2(parseFloat(s.discount)||0), 0), gross);
+  var totalSales = round2(gross - discount);
   var cogs = round2(s.quantity * s.costPrice);
-  return Object.assign({}, s, {totalSales:totalSales, cogs:cogs, grossProfit:round2(totalSales-cogs)});
+  return Object.assign({}, s, {discount:discount, totalSales:totalSales, cogs:cogs, grossProfit:round2(totalSales-cogs)});
 }
+/* ---- product expiry ---- */
+function daysUntil(dateStr){
+  var a = new Date(dateStr+'T00:00:00'), b = new Date(todayStr()+'T00:00:00');
+  return Math.round((a-b)/86400000);
+}
+function expiryInfo(p){
+  if(!p || !p.expiryDate || !/^\d{4}-\d{2}-\d{2}$/.test(p.expiryDate)) return null;
+  var n = daysUntil(p.expiryDate);
+  return {days:n, level: n<0 ? 'expired' : (n<=30 ? 'd30' : (n<=60 ? 'd60' : 'ok'))};
+}
+function expiryCell(p){
+  var e = expiryInfo(p);
+  if(!e) return '<span class="muted">—</span>';
+  var date = fmtDateLong(p.expiryDate);
+  if(e.level==='expired') return '<span class="pill pill-red">Expired</span><br><span class="muted" style="font-size:10.5px;">'+date+'</span>';
+  if(e.level==='d30') return '<span class="pill pill-red">'+e.days+' days</span><br><span class="muted" style="font-size:10.5px;">'+date+'</span>';
+  if(e.level==='d60') return '<span class="pill pill-amber">'+e.days+' days</span><br><span class="muted" style="font-size:10.5px;">'+date+'</span>';
+  return date;
+}
+/* products that still have stock and are expired / close to expiring */
+function expiryGroups(){
+  var g = {expired:[], d30:[], d60:[]};
+  STATE.data.products.forEach(function(p){
+    if((p.currentStock||0) <= 0) return;
+    var e = expiryInfo(p);
+    if(e && g[e.level]) g[e.level].push(p);
+  });
+  return g;
+}
+function discountField(id, value){
+  return '<label>Discount (ETB) <span class="field-note" style="display:inline;margin:0;">(optional)</span></label>'+
+    '<input type="number" name="discount" id="'+id+'" min="0" step="0.01" inputmode="decimal" value="'+(value||0)+'">';
+}
+function discountsIn(arr){ return round2(arr.reduce(function(a,s){ return a+(s.discount||0); },0)); }
 
 function debitProduct(stock, debt, qty){
   stock = stock||0; debt = debt||0; qty = qty||0;
@@ -1095,6 +1375,7 @@ async function addSale(saleInput, opts){
         method:sale.paymentMethod, date:sale.date, byUid:STATE.session.userId, createdAt:new Date().toISOString()});
     }
   });
+  return Object.assign({id:saleRef.id}, sale);
 }
 
 /* Record money received from a credit customer. The payment is applied to their oldest
@@ -1366,6 +1647,10 @@ function render(){
     root.innerHTML = translateUI(renderAuth());
   } else if(auth.currentUser && !auth.currentUser.emailVerified){
     root.innerHTML = translateUI(renderVerifyGate());
+  } else if(STATE.locked){
+    /* while locked the page holds no figures at all, and live data updates do not redraw it */
+    if(!document.getElementById('lockScreen') || STATE._lockForce){ STATE._lockForce = false; root.innerHTML = translateUI(renderLockScreen()); bindLock(); }
+    return;
   } else {
     root.innerHTML = translateUI(renderShell());
   }
@@ -1458,9 +1743,10 @@ var NAV = [
   {id:'stockPurchase', grp:'inventory', icon:'cart', label:'stock_purchase'},
   {id:'expenses', grp:'finance', icon:'dollar', label:'expenses'},
   {id:'reports', grp:'finance', icon:'chart', label:'reports'},
+  {id:'dayClose', grp:'finance', icon:'dollar', label:'day_close'},
   {id:'settings', grp:'system', icon:'gear', label:'settings'}
 ];
-var VIEW_TITLES = {dashboard:'Dashboard',quickSale:'Quick Add Sale',sales:'Sales Record',invoice:'Invoice Maker',credit:'Customer Credit',calendar:'Sales Calendar',products:'Products',stockPurchase:'Stock Purchase',expenses:'Expenses',reports:'Reports',settings:'Settings'};
+var VIEW_TITLES = {dashboard:'Dashboard',quickSale:'Quick Add Sale',sales:'Sales Record',invoice:'Invoice Maker',credit:'Customer Credit',calendar:'Sales Calendar',products:'Products',stockPurchase:'Stock Purchase',expenses:'Expenses',reports:'Reports',dayClose:'End-of-Day Cash Drawer',settings:'Settings'};
 
 function navIcon(name){
   var paths = {
@@ -1486,6 +1772,8 @@ function navIcon(name){
     printer: '<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
     search: '<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
     barcode: '<path d="M3 5v14M7 5v14M11 5v10M15 5v14M19 5v10M22 5v14M3 5H2M3 19H2"/>',
+    lock: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+    bell: '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
     chevron: '<polyline points="6 9 12 15 18 9"/>',
     users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
     upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>'
@@ -1531,6 +1819,7 @@ function renderShell(){
           '<div>'+(crumb?'<span class="crumb">'+esc(crumb)+'</span>':'')+'<h1>'+esc(VIEW_TITLES[STATE.view]||'')+'</h1></div>'+
         '</div>'+
         '<div class="topbar-right">'+
+          '<button class="icon-btn" data-act="lock-now" aria-label="Lock screen">'+uiIcon('lock','icon-sm')+'<span class="qs-text"> Lock</span></button>'+
           '<button class="icon-btn" data-act="toggle-lang">'+(LANG==='en'?'አማ':'EN')+'</button>'+
           '<button class="icon-btn" data-nav="quickSale">'+uiIcon('plus','icon-sm')+'<span class="qs-text"> Quick Sale</span></button>'+
         '</div>'+
@@ -1549,6 +1838,7 @@ function renderView(){
     case 'sales': return renderSales();
     case 'invoice': return renderInvoice();
     case 'credit': return renderCredit();
+    case 'dayClose': return renderDayClose();
     case 'calendar': return renderCalendar();
     case 'products': return renderProducts();
     case 'stockPurchase': return renderStockPurchase();
@@ -1636,6 +1926,16 @@ function renderDashboard(){
       lowStock.slice(0,3).map(function(p){return esc(p.name);}).join(', ') + (lowStock.length>3?'…':'') + '</span>'+
       ' <button class="link-btn" data-nav="products" style="margin-left:auto;">View</button></div>';
   }
+  var exg = expiryGroups();
+  if(exg.expired.length || exg.d30.length || exg.d60.length){
+    var expParts = [];
+    function expPart(list, label){ if(list.length) expParts.push('<b>'+label+' ('+list.length+'):</b> '+list.slice(0,2).map(function(p){ return esc(p.name); }).join(', ')+(list.length>2?'…':'')); }
+    expPart(exg.expired, 'Already expired'); expPart(exg.d30, 'Expiring within 30 days'); expPart(exg.d60, 'Expiring within 60 days');
+    var expRed = exg.expired.length || exg.d30.length;
+    html += '<div class="lowstock-banner"'+(expRed?' style="background:var(--red-bg);color:var(--red);border-color:#f0b8b8;"':'')+'>'+uiIcon('alert','icon-md')+
+      '<span>'+expParts.join(' · ')+' — sell or discount them first.</span>'+
+      '<button class="link-btn" data-nav="products" style="margin-left:auto;">View</button></div>';
+  }
   if(period==='month' || period==='year'){
     var periodCashDelta = cashDeltaForRange(range.from, range.to);
     if(periodCashDelta < 0){
@@ -1668,8 +1968,6 @@ function renderDashboard(){
   '</div>';
 
   /* ---- 6. everything else, one tap away ---- */
-  var grossMargin = stats.totalSales>0 ? round2((stats.gross/stats.totalSales)*100) : 0;
-  var netMargin = stats.totalSales>0 ? round2((stats.net/stats.totalSales)*100) : 0;
   var detailsBody =
     sectionHead('Performance', range.label+' · '+stats.count+' sale'+(stats.count!==1?'s':''), 'chart')+
     '<div class="grid grid-4">'+
@@ -1679,10 +1977,9 @@ function renderDashboard(){
       statCard('Net Profit', fmtETB(stats.net), null, netProfitColorClass(pct, stats.net))+
     '</div>'+
     '<div class="grid grid-4" style="margin-top:14px;">'+
-      statCard('Gross Margin', grossMargin+'%', 'Gross profit as % of sales', 'sv-green')+
-      statCard('Net Margin', netMargin+'%', 'Net profit as % of sales', netProfitColorClass(pct, stats.net))+
       statCard('Average sale', fmtETB(stats.count>0 ? round2(stats.totalSales/stats.count) : 0), 'Per sale in this period', 'sv-black')+
       statCard('Items sold', String(round2(salesInRange(range.from, range.to).reduce(function(a,s){ return a+(s.quantity||0); },0))), 'Units sold in this period', 'sv-black')+
+      statCard('Discounts given', fmtETB(discountsIn(salesInRange(range.from, range.to))), 'Price reductions in this period', 'sv-black')+
     '</div>'+
     sectionHead('Cash & Collections', 'Money actually received — separate from profit', 'dollar')+
     '<div class="grid grid-4">'+
@@ -1704,7 +2001,7 @@ function renderDashboard(){
   html += '<div class="acc'+(STATE.dashMore?' open':'')+'" style="margin-top:6px;">'+
     '<button type="button" class="acc-head" data-act="dash-more" aria-expanded="'+(STATE.dashMore?'true':'false')+'">'+
       '<span class="icon-badge badge-neutral acc-ic">'+uiIcon('chart','icon-sm')+'</span>'+
-      '<span class="acc-title"><b>More details</b><small>Margins, collections, records and tips</small></span>'+
+      '<span class="acc-title"><b>More details</b><small>Profit, collections, records and tips</small></span>'+
       '<span class="acc-chev">'+uiIcon('chevron','icon-sm')+'</span>'+
     '</button>'+
     (STATE.dashMore ? '<div class="acc-body acc-anim" style="padding-top:4px;">'+detailsBody+'</div>' : '')+
@@ -1757,8 +2054,8 @@ function renderPlanner(){
   }
 
   if(monthStats.totalSales>0){
-    var margin = round2((monthStats.net/monthStats.totalSales)*100);
-    items.push({icon: margin<0?'trendDown':'trendUp', badge: margin<0?'badge-warn':'badge-good', title:'This month\'s net margin: '+margin+'%', text: margin<0 ? 'You are running at a loss this month — check pricing and expenses.' : 'Net profit is '+fmtETB(monthStats.net)+' so far this month.'});
+    var netNow = monthStats.net;
+    items.push({icon: netNow<0?'trendDown':'trendUp', badge: netNow<0?'badge-warn':'badge-good', title:'This month\'s net profit: '+fmtETB(netNow), text: netNow<0 ? 'You are running at a loss this month — check pricing and expenses.' : 'Net profit so far this month, after expenses.'});
   }
 
   var overdueC = creditCustomers().filter(function(c){ return c.overdue; });
@@ -1799,7 +2096,9 @@ function renderBulkSaleForm(){
   var itemRows = d.rows.map(renderBulkSaleRow).join('');
   var total = d.rows.reduce(function(a,r){return a+((r.qty||0)*(r.sellingPrice||0));},0);
   var isCredit = canManage() && !!d.credit;
-  var paid = isCredit ? Math.min(total, d.paidNow||0) : total;
+  var disc = Math.min(Math.max(d.discount||0,0), total);
+  var net = total - disc;
+  var paid = isCredit ? Math.min(net, d.paidNow||0) : net;
   var needsTx = (d.paymentMethod||'cash')!=='cash' && (!isCredit || paid>0);
   return '<div class="two-col">'+
     '<div class="card"><h3 style="margin-bottom:10px;">'+uiIcon('box','icon-sm')+' Bulk sale entry</h3>'+
@@ -1826,9 +2125,12 @@ function renderBulkSaleForm(){
         '<div><label>Paid now (ETB)</label><input type="number" id="bulkPaidNow" min="0" step="0.01" value="'+(d.paidNow||0)+'"></div></div>'+
         '<p class="field-note">Money paid now is shared across the items from the first one down, and goes straight into your Store Balance. The rest stays in Customer Credit.</p>'+
       '</div>' : '')+
-      '<div class="card" style="margin-top:14px;background:var(--green-50);border-style:dashed;"><div class="list-item"><span>Total for this batch</span><b>'+fmtETB(total)+'</b></div>'+
-        (isCredit ? '<div class="list-item"><span>Paid now</span><b>'+fmtETB(paid)+'</b></div><div class="list-item"><span>Balance on credit</span><b style="color:var(--red);">'+fmtETB(Math.max(0,total-paid))+'</b></div>' : '')+
+      '<label>Discount (ETB) <span class="field-note" style="display:inline;margin:0;">(optional, for the whole batch)</span></label><input type="number" id="bulkDiscount" min="0" step="0.01" inputmode="decimal" value="'+(d.discount||0)+'">'+
+      '<div class="card" style="margin-top:14px;background:var(--green-50);border-style:dashed;"><div class="list-item"><span>Total for this batch</span><b>'+fmtETB(net)+'</b></div>'+
+        (disc>0 ? '<div class="list-item"><span>Discount</span><b style="color:var(--amber);">−'+fmtETB(disc)+'</b></div>' : '')+
+        (isCredit ? '<div class="list-item"><span>Paid now</span><b>'+fmtETB(paid)+'</b></div><div class="list-item"><span>Balance on credit</span><b style="color:var(--red);">'+fmtETB(Math.max(0,net-paid))+'</b></div>' : '')+
       '</div>'+
+      '<label class="check-row" style="margin-top:14px;"><input type="checkbox" id="autoReceipt" style="width:auto;"'+(STATE.autoReceipt?' checked':'')+'> <span>Show receipt after saving</span></label>'+
       '<button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('plus','icon-sm')+' Save all sales</button>'+
       '</form>'+
     '</div>'+
@@ -1908,7 +2210,8 @@ function renderSingleQuickSale(){
         (salesOnly ? '<input type="hidden" name="costPrice" id="qsCost" value="'+(selected?selected.costPrice:0)+'">'
                    : '<div><label>Cost price (per unit)</label><input type="number" name="costPrice" min="0" step="0.01" required id="qsCost" value="'+(selected?selected.costPrice:'')+'"></div>')+
       '</div>'+
-      '<label>Selling price (per unit)</label><input type="number" name="sellingPrice" min="0" step="0.01" required id="qsSell" value="'+(selected?selected.sellingPrice:'')+'">';
+      '<label>Selling price (per unit)</label><input type="number" name="sellingPrice" min="0" step="0.01" required id="qsSell" value="'+(selected?selected.sellingPrice:'')+'">'+
+      discountField('qsDiscount');
   } else {
     productFields = '<label>Product name</label><input type="text" name="newProductName" required placeholder="e.g. Coca-Cola 500ml" autocomplete="off">'+
       '<label>Category <span class="field-note" style="display:inline;margin:0;">(optional)</span></label><input type="text" name="newProductCategory" placeholder="Optional">'+
@@ -1917,6 +2220,7 @@ function renderSingleQuickSale(){
         '<div><label>Cost price (per unit)</label><input type="number" name="costPrice" min="0" step="0.01" required id="qsCost"></div>'+
       '</div>'+
       '<label>Selling price (per unit)</label><input type="number" name="sellingPrice" min="0" step="0.01" required id="qsSell">'+
+      discountField('qsDiscount')+
       '<p class="field-note">If this name matches an existing product, that product is used instead of creating a duplicate.</p>';
   }
 
@@ -1933,12 +2237,14 @@ function renderSingleQuickSale(){
     '</label>'+
     '<p class="field-note">Leave unchecked for normal sales — stock just won\'t go below 0. Only check this if you are selling something you have not received yet; it shows as "Pending" on that product until a matching Stock Purchase is logged.</p>'+
     '<div id="qsPreview" class="card" style="margin-top:16px;background:var(--green-50);border-style:dashed;">'+
+      '<div class="list-item" id="pvDiscRow" style="display:none;"><span>Discount</span><b id="pvDisc" style="color:var(--amber);">0 ETB</b></div>'+
       '<div class="list-item"><span>Total sales</span><b id="pvTotal">0 ETB</b></div>'+
       '<div class="list-item" id="pvPaidRow" style="display:none;"><span>Paid now</span><b id="pvPaid">0 ETB</b></div>'+
       '<div class="list-item" id="pvDueRow" style="display:none;"><span>Balance on credit</span><b id="pvDue" style="color:var(--red);">0 ETB</b></div>'+
       (canManage() ? '<div class="list-item"><span>COGS</span><b id="pvCogs">0 ETB</b></div>'+
       '<div class="list-item"><span>Gross profit</span><b id="pvGross" style="color:var(--success);">0 ETB</b></div>' : '')+
     '</div>'+
+    '<label class="check-row" style="margin-top:14px;"><input type="checkbox" id="autoReceipt" style="width:auto;"'+(STATE.autoReceipt?' checked':'')+'> <span>Show receipt after saving</span></label>'+
     '<button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('plus','icon-sm')+' Record sale</button>'+
   '</form>'+
   '</div>'+
@@ -1951,7 +2257,163 @@ function renderSingleQuickSale(){
 }
 
 
+
+/* ---------------- END-OF-DAY CASH DRAWER / Z-REPORT ---------------- */
+function dayCloseFigures(date){
+  var daySales = STATE.data.sales.filter(function(s){ return s.date===date; });
+  var f = {cashSales:0, cashCreditPayments:0, telebirr:0, cbe:0, bank:0, creditSold:0, totalSales:0, grossProfit:0, discounts:0, salesCount:daySales.length};
+  function addDigital(method, amt){ if(method==='telebirr') f.telebirr += amt; else if(method==='cbe') f.cbe += amt; else if(method==='bank') f.bank += amt; }
+  STATE.data.sales.forEach(function(s){
+    if(saleIsCredit(s)){
+      (s.payments||[]).forEach(function(p){
+        if(p.date!==date) return;
+        var m = p.method||'cash';
+        if(m==='cash') f.cashCreditPayments += (p.amount||0); else addDigital(m, p.amount||0);
+      });
+    } else if(s.date===date){
+      var m2 = s.paymentMethod||'cash';
+      if(m2==='cash') f.cashSales += (s.totalSales||0); else addDigital(m2, s.totalSales||0);
+    }
+  });
+  daySales.forEach(function(s){
+    f.totalSales += (s.totalSales||0); f.grossProfit += (s.grossProfit||0); f.discounts += (s.discount||0);
+    if(saleIsCredit(s)) f.creditSold += (s.totalSales||0);
+  });
+  f.cashExpenses = (STATE.data.expenses||[]).filter(function(e){ return e.date===date; }).reduce(function(a,e){ return a+(e.amount||0); },0);
+  Object.keys(f).forEach(function(k){ if(k!=='salesCount') f[k] = round2(f[k]); });
+  f.digital = round2(f.telebirr + f.cbe + f.bank);
+  return f;
+}
+function dayCloseRecord(date, inp){
+  var f = dayCloseFigures(date);
+  var fl = round2(parseFloat(inp.float)||0), out = round2(parseFloat(inp.out)||0);
+  var expected = round2(fl + f.cashSales + f.cashCreditPayments - f.cashExpenses - out);
+  var hasCount = !(inp.counted===''||inp.counted===null||inp.counted===undefined) && !isNaN(parseFloat(inp.counted));
+  var counted = hasCount ? round2(parseFloat(inp.counted)) : null;
+  return Object.assign({}, f, {date:date, openingFloat:fl, otherOut:out, expectedCash:expected, countedCash:counted,
+    difference: counted===null ? null : round2(counted-expected), notes:inp.notes||''});
+}
+function diffBadge(diff){
+  if(diff===null || diff===undefined) return '<span class="muted">Enter the counted cash</span>';
+  if(diff<0) return '<span class="pill pill-red">Shortage · '+fmtETB(-diff)+'</span>';
+  if(diff>0) return '<span class="pill pill-green">Overage · '+fmtETB(diff)+'</span>';
+  return '<span class="pill pill-blue">Balanced</span>';
+}
+function zReportHtml(z){
+  var u = currentUser() || {};
+  var diffTxt = z.difference===null||z.difference===undefined ? '—' : (z.difference<0 ? ('SHORTAGE '+fmtETB(-z.difference)) : (z.difference>0 ? ('OVERAGE '+fmtETB(z.difference)) : 'BALANCED'));
+  var line = function(a,b,cls){ return '<tr'+(cls?' class="'+cls+'"':'')+'><td>'+a+'</td><td>'+b+'</td></tr>'; };
+  return '<div class="zreport">'+
+    '<h1>Z-Report — End of Day</h1>'+
+    '<div class="z-sub">'+esc(u.shopName||'')+(u.shopAddress?(' · '+esc(u.shopAddress)):'')+'</div>'+
+    '<div class="z-sub">Date: <b>'+fmtDateLong(z.date)+'</b> · Printed: '+esc(new Date().toLocaleString())+'</div>'+
+    '<h2>Sales</h2><table>'+
+      line('Number of sales', z.salesCount)+line('Total sales', fmtETB(z.totalSales))+line('Discounts given', fmtETB(z.discounts))+
+      line('Sold on credit', fmtETB(z.creditSold))+line('Gross profit', fmtETB(z.grossProfit))+line('Expenses', fmtETB(z.cashExpenses))+
+    '</table>'+
+    '<h2>Money received</h2><table>'+
+      line('Cash sales', fmtETB(z.cashSales))+line('Cash credit payments', fmtETB(z.cashCreditPayments))+
+      line('Telebirr', fmtETB(z.telebirr))+line('CBE Birr', fmtETB(z.cbe))+line('Bank transfer', fmtETB(z.bank))+
+    '</table>'+
+    '<h2>Cash drawer</h2><table>'+
+      line('Opening float', fmtETB(z.openingFloat))+line('+ Cash sales', fmtETB(z.cashSales))+line('+ Cash credit payments', fmtETB(z.cashCreditPayments))+
+      line('− Cash expenses', fmtETB(z.cashExpenses))+line('− Other cash taken out', fmtETB(z.otherOut))+
+      line('<b>Expected cash</b>', '<b>'+fmtETB(z.expectedCash)+'</b>', 'z-strong')+
+      line('<b>Counted cash</b>', '<b>'+(z.countedCash===null||z.countedCash===undefined?'—':fmtETB(z.countedCash))+'</b>', 'z-strong')+
+      line('<b>Difference</b>', '<b>'+diffTxt+'</b>', 'z-diff'+(z.difference<0?' neg':(z.difference>0?' pos':'')))+
+    '</table>'+
+    (z.notes ? '<h2>Notes</h2><p>'+esc(z.notes)+'</p>' : '')+
+    '<div class="z-sign"><span>Cashier / Manager: ____________________</span><span>Owner: ____________________</span></div>'+
+  '</div>';
+}
+
+function renderDayClose(){
+  var date = STATE.dayCloseDate || todayStr();
+  var saved = (STATE.data.dayCloses||[]).find(function(x){ return x.id===date; });
+  var dr = STATE.dayCloseDraft;
+  if(!dr || dr.date!==date){
+    dr = STATE.dayCloseDraft = saved
+      ? {date:date, float:String(saved.openingFloat||''), out:String(saved.otherOut||''), counted:String(saved.countedCash===null||saved.countedCash===undefined?'':saved.countedCash), notes:saved.notes||''}
+      : {date:date, float:'', out:'', counted:'', notes:''};
+  }
+  var z = dayCloseRecord(date, dr);
+  var cashIn = round2(z.cashSales + z.cashCreditPayments);
+  var hero = heroCard('Cash received', fmtETB(cashIn), [['Cash expenses', fmtETB(z.cashExpenses)], ['Total sales', fmtETB(z.totalSales)]],
+    {note: z.salesCount+' sale'+(z.salesCount!==1?'s':'')+' on '+fmtDateLong(date)});
+  var net = round2(z.cashSales + z.cashCreditPayments - z.cashExpenses);
+  var form = '<div class="card" style="margin-bottom:14px;"><h3 style="margin-bottom:10px;">'+uiIcon('dollar','icon-sm')+' Count the cash drawer</h3>'+
+    '<label>Date</label><input type="date" id="dcDate" value="'+esc(date)+'" max="'+todayStr()+'">'+
+    '<form id="dayCloseForm" data-net="'+net+'">'+
+      '<label>Opening float <span class="field-note" style="display:inline;margin:0;">(cash already in the drawer at the start)</span></label>'+
+      '<input type="number" id="dcFloat" min="0" step="0.01" inputmode="decimal" value="'+esc(dr.float)+'" placeholder="0">'+
+      '<div class="list-item"><span>+ Cash sales</span><b>'+fmtETB(z.cashSales)+'</b></div>'+
+      '<div class="list-item"><span>+ Cash credit payments</span><b>'+fmtETB(z.cashCreditPayments)+'</b></div>'+
+      '<div class="list-item"><span>− Cash expenses</span><b>'+fmtETB(z.cashExpenses)+'</b></div>'+
+      '<label>Other cash taken out <span class="field-note" style="display:inline;margin:0;">(optional — e.g. stock bought with drawer cash)</span></label>'+
+      '<input type="number" id="dcOut" min="0" step="0.01" inputmode="decimal" value="'+esc(dr.out)+'" placeholder="0">'+
+      '<div class="list-item" style="border-top:2px solid var(--border);"><span><b>Expected cash in drawer</b></span><b id="dcExpected">'+fmtETB(z.expectedCash)+'</b></div>'+
+      '<label>Cash counted in the drawer (ETB)</label>'+
+      '<input type="number" id="dcCounted" min="0" step="0.01" inputmode="decimal" value="'+esc(dr.counted)+'" placeholder="Count the notes and coins" required>'+
+      '<div class="dc-diff" id="dcDiff">'+diffBadge(z.difference)+'</div>'+
+      '<label>Notes</label><textarea id="dcNotes" rows="2" placeholder="Optional">'+esc(dr.notes)+'</textarea>'+
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;">'+
+        '<button type="submit" class="btn" style="flex:1;">'+uiIcon('check','icon-sm')+' '+(saved?'Update close':'Save close')+'</button>'+
+        '<button type="button" class="btn btn-gold" data-act="zreport-print" style="flex:1;">'+uiIcon('printer','icon-sm')+' Print Z-Report</button>'+
+      '</div>'+
+      (saved ? '<p class="field-note">This day was already closed — saving will replace that record.</p>' : '')+
+    '</form></div>';
+  var others = '<div class="card" style="margin-bottom:14px;"><h3 style="margin-bottom:6px;">Other money received (not in the drawer)</h3>'+
+    '<div class="list-item"><span>Telebirr</span><b>'+fmtETB(z.telebirr)+'</b></div>'+
+    '<div class="list-item"><span>CBE Birr</span><b>'+fmtETB(z.cbe)+'</b></div>'+
+    '<div class="list-item"><span>Bank transfer</span><b>'+fmtETB(z.bank)+'</b></div>'+
+    '<div class="list-item"><span>Sold on credit</span><b>'+fmtETB(z.creditSold)+'</b></div>'+
+  '</div>';
+  var hist = (STATE.data.dayCloses||[]).slice().sort(function(a,b){ return (b.date||'').localeCompare(a.date||''); }).slice(0,30).map(function(c){
+    return '<div class="list-item"><span>'+fmtDateLong(c.date)+'<br><span class="muted" style="font-size:10.5px;">expected '+fmtETB(c.expectedCash)+' · counted '+fmtETB(c.countedCash)+'</span></span>'+
+      '<span style="display:flex;align-items:center;gap:8px;">'+diffBadge(c.difference)+
+      '<button class="btn btn-outline btn-sm" data-act="zreport-print" data-id="'+esc(c.id)+'">'+uiIcon('printer','icon-sm')+'</button></span></div>';
+  }).join('');
+  return hero + form + others + '<div class="card"><h3 style="margin-bottom:6px;">Previous closings</h3>'+(hist || '<div class="muted">No days closed yet.</div>')+'</div>';
+}
+
+async function onSaveDayClose(ev){
+  ev.preventDefault();
+  var date = STATE.dayCloseDate || todayStr();
+  var z = dayCloseRecord(date, STATE.dayCloseDraft);
+  if(z.countedCash===null){ alert('Enter the cash you counted in the drawer.'); return; }
+  var exists = (STATE.data.dayCloses||[]).some(function(x){ return x.id===date; });
+  if(exists){
+    var ok = await askConfirm({title:'Replace the saved closing for '+fmtDateLong(date)+'?', confirmText:'Replace', details:['The earlier count for this day is overwritten.']});
+    if(!ok) return;
+  }
+  var u = currentUser() || {};
+  var rec = Object.assign({}, z, {closedBy:STATE.session.userId, closedByName:u.ownerName||'', closedByRole:STATE.session.role, closedAt:new Date().toISOString()});
+  try{
+    await shopRef().collection('dayCloses').doc(date).set(rec);
+    toast('Day closed — '+(z.difference<0?('shortage '+fmtETB(-z.difference)):(z.difference>0?('overage '+fmtETB(z.difference)):'cash balanced'))+'.', z.difference<0?'error':'success');
+  }catch(err){ showActionError(err); }
+}
+
 /* ---------------- CUSTOMER CREDIT ---------------- */
+/* ---- debt reminders: a polite Amharic message, opened in SMS or Telegram ---- */
+function reminderText(c){
+  var shop = (currentUser()||{}).shopName || '';
+  var amt = round2(c.balance).toLocaleString('en-US');
+  var due = c.dueDate && c.dueDate > todayStr();
+  var msg = due
+    ? 'ውድ '+c.name+'፣ ከሱቃችን የወሰዱት የ'+amt+' ብር የዱቤ ሂሳብ የመክፈያ ቀኑ '+fmtDateLong(c.dueDate)+' መሆኑን በትህትና እናስታውሳለን።'
+    : 'ውድ '+c.name+'፣ ከሱቃችን የወሰዱት የ'+amt+' ብር የዱቤ ሂሳብ የመክፈያ ቀን ስለደረሰ እንዲያስታውሱ በትህትና እንገልጻለን።';
+  return msg + (shop ? '\n— '+shop : '');
+}
+function reminderLink(c, channel){
+  var text = reminderText(c);
+  if(channel==='tg') return 'https://t.me/share/url?url='+encodeURIComponent(' ')+'&text='+encodeURIComponent(text);
+  var phone = String(c.phone||'').replace(/[^\d+]/g,'');
+  return 'sms:'+phone+'?body='+encodeURIComponent(text);
+}
+function openExternal(url){
+  try{ window.open(url, /^https?:/i.test(url) ? '_blank' : '_self'); }catch(e){}
+}
 function dueBadge(c){
   if(c.balance<=0) return '<span class="pill pill-green">Settled</span>';
   if(c.overdue) return '<span class="pill pill-red">Overdue</span>';
@@ -1988,7 +2450,10 @@ function renderCredit(){
       '<div class="cust-main"><b>'+esc(c.name)+'</b><span class="muted">'+esc(c.phone||'No phone')+' · '+c.count+' open sale'+(c.count!==1?'s':'')+(c.dueDate?(' · due '+fmtDateLong(c.dueDate)):'')+'</span></div>'+
       '<div class="cust-bal"><b style="color:'+(c.balance>0?'var(--red)':'var(--success)')+';">'+fmtETB(c.balance)+'</b><span class="muted">of '+fmtETB(c.total)+'</span></div>'+
       '<div class="cust-status">'+dueBadge(c)+'</div>'+
-      '<button class="btn btn-outline btn-sm" data-act="open-ledger" data-key="'+esc(c.key)+'">Open ledger</button>'+
+      '<div class="cust-actions">'+
+        (c.balance>0 ? '<button class="btn btn-sm" data-act="remind-sms" data-key="'+esc(c.key)+'">'+uiIcon('bell','icon-sm')+' Remind</button>' : '')+
+        '<button class="btn btn-outline btn-sm" data-act="open-ledger" data-key="'+esc(c.key)+'">Open ledger</button>'+
+      '</div>'+
     '</div>';
   }).join('');
   return cards + tabs + toolbar + '<div class="card" style="padding:6px 16px;">'+(rows || '<div class="empty" style="padding:24px;">No customers match.</div>')+'</div>';
@@ -2022,6 +2487,10 @@ function renderCustomerLedger(key){
       '<div><span class="muted">Balance</span><b style="color:'+(c.balance>0?'var(--red)':'var(--success)')+';">'+fmtETB(c.balance)+'</b></div>'+
     '</div>'+
     '<p class="muted" style="margin:6px 0 12px;">'+esc(c.phone||'No phone saved')+(c.dueDate?(' · next due '+fmtDateLong(c.dueDate)):'')+'</p>'+
+    (c.balance>0 ? '<div class="remind-box"><b>Send reminder</b>'+
+      '<div class="remind-btns"><button type="button" class="btn btn-sm" data-act="remind-sms" data-key="'+esc(c.key)+'">SMS</button>'+
+      '<button type="button" class="btn btn-outline btn-sm" data-act="remind-tg" data-key="'+esc(c.key)+'">Telegram</button></div>'+
+      '<p class="remind-text">'+esc(reminderText(c)).replace(/\n/g,'<br>')+'</p></div>' : '')+
     form +
     '<h3 style="margin:16px 0 6px;">Credit sales</h3>'+
     sales.map(function(s){
@@ -2065,11 +2534,12 @@ function renderSales(){
       '<td>'+s.quantity+'</td>'+
       (canManage() ? '<td class="hm">'+fmtETB(s.costPrice)+'</td>' : '')+
       '<td class="hm">'+fmtETB(s.sellingPrice)+'</td>'+
-      '<td>'+fmtETB(s.totalSales)+'</td>'+
+      '<td>'+fmtETB(s.totalSales)+((s.discount||0)>0?'<br><span class="muted" style="font-size:10.5px;">−'+fmtETB(s.discount)+' discount</span>':'')+'</td>'+
       '<td>'+paymentCell(s)+'</td>'+
       (canManage() ? '<td class="hm">'+fmtETB(s.cogs)+'</td>' : '')+
       (canManage() ? '<td class="hm" style="color:var(--success);font-weight:700;">'+fmtETB(s.grossProfit)+'</td>' : '')+
       '<td><div class="row-actions">'+
+        '<button class="btn btn-outline btn-sm" data-act="sale-receipt" data-id="'+s.id+'">'+uiIcon('receipt','icon-sm')+' Receipt</button>'+
         (canManage()?'<button class="btn btn-outline btn-sm" data-act="edit-sale" data-id="'+s.id+'">Edit</button>':'')+
         (canDelete()?'<button class="btn btn-danger btn-sm" data-act="delete-sale" data-id="'+s.id+'">Delete</button>':'')+
       '</div></td>'+
@@ -2113,7 +2583,9 @@ function renderInvoiceItemRow(item, idx){
 function renderInvoice(){
   if(STATE.invoicePreview) return renderInvoicePreview(STATE.invoicePreview);
   var d = STATE.invoiceDraft;
-  var grandTotal = round2(d.items.reduce(function(a,it){return a+(it.qty||0)*(it.unitPrice||0);},0));
+  var subtotal = round2(d.items.reduce(function(a,it){return a+(it.qty||0)*(it.unitPrice||0);},0));
+  var invDisc = Math.min(Math.max(parseFloat(d.discount)||0,0), subtotal);
+  var grandTotal = round2(subtotal - invDisc);
   return '<div class="two-col">'+
   '<div class="card">'+
     '<h3 style="margin-bottom:10px;">Customer details</h3>'+
@@ -2128,8 +2600,10 @@ function renderInvoice(){
     '<h3 style="margin:18px 0 8px;">Items</h3>'+
     '<div class="invoice-items">'+ d.items.map(renderInvoiceItemRow).join('') +'</div>'+
     '<button type="button" class="btn btn-outline btn-sm" data-act="inv-add-item">'+uiIcon('plus','icon-sm')+' Add line</button>'+
-    '<div class="card" style="margin-top:14px;background:var(--green-50);border-style:dashed;display:flex;justify-content:space-between;align-items:center;">'+
-      '<span style="font-weight:700;">Grand total</span><span class="stat-value" style="font-size:18px;">'+fmtETB(grandTotal)+'</span>'+
+    '<label>Discount (ETB) <span class="field-note" style="display:inline;margin:0;">(optional)</span></label><input type="number" id="invDiscount" min="0" step="0.01" inputmode="decimal" value="'+(d.discount||0)+'">'+
+    '<div class="card" style="margin-top:14px;background:var(--green-50);border-style:dashed;">'+
+      (invDisc>0 ? '<div class="list-item"><span>Subtotal</span><b>'+fmtETB(subtotal)+'</b></div><div class="list-item"><span>Discount</span><b style="color:var(--amber);">−'+fmtETB(invDisc)+'</b></div>' : '')+
+      '<div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:700;">Grand total</span><span class="stat-value" style="font-size:18px;">'+fmtETB(grandTotal)+'</span></div>'+
     '</div>'+
     '<form id="invoiceForm"><button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('receipt','icon-sm')+(STATE.editingInvoiceId?' Update invoice':' Generate invoice preview')+'</button></form>'+
   '</div>'+
@@ -2200,13 +2674,16 @@ function renderThermalReceipt(inv, fmt){
     '<div class="tr-sep"></div>'+
     '<div class="tr-row"><span>Receipt</span><span>'+esc(inv.invoiceNo||'')+'</span></div>'+
     '<div class="tr-row"><span>Date</span><span>'+fmtDateLong((inv.createdAt||new Date().toISOString()).slice(0,10))+'</span></div>'+
+    (inv.showTime ? '<div class="tr-row"><span>Time</span><span>'+esc(receiptTime(inv.createdAt))+'</span></div>' : '')+
     (inv.customerName?'<div class="tr-row"><span>Customer</span><span>'+esc(inv.customerName)+'</span></div>':'')+
     (inv.phone?'<div class="tr-row"><span>Phone</span><span>'+esc(inv.phone)+'</span></div>':'')+
     '<div class="tr-sep dashed"></div>'+
     items+
     '<div class="tr-sep dashed"></div>'+
+    ((inv.discount||0)>0 ? '<div class="tr-row"><span>Subtotal</span><span>'+fmtNum(inv.subtotal||round2(inv.total+inv.discount))+'</span></div><div class="tr-row"><span>Discount</span><span>-'+fmtNum(inv.discount)+'</span></div>' : '')+
     '<div class="tr-row tr-total"><span>TOTAL</span><span>'+fmtNum(inv.total)+' ETB</span></div>'+
     '<div class="tr-row"><span>Paid by</span><span>'+esc(payLabel(inv.paymentMethod))+'</span></div>'+
+    ((inv.balance||0)>0 ? '<div class="tr-row"><span>Paid now</span><span>'+fmtNum(inv.paid||0)+'</span></div><div class="tr-row tr-total"><span>BALANCE DUE</span><span>'+fmtNum(inv.balance)+'</span></div>' : '')+
     '<div class="tr-sep"></div>'+
     '<div class="tr-center">Thank you! Come again.</div>'+
     '<div class="tr-center tr-sm" style="margin-top:4px;">Taza Technology™</div>'+
@@ -2242,11 +2719,152 @@ function renderInvoicePreview(inv){
     '<div style="margin-bottom:10px;"><b>Bill to:</b> '+esc(inv.customerName||'Walk-in customer')+
       (inv.phone?' · '+esc(inv.phone):'')+(inv.address?'<br>'+esc(inv.address):'')+'</div>'+
     '<table><thead><tr><th>Item</th><th>Qty</th><th>Unit Price</th><th>Total</th></tr></thead><tbody>'+rows+
+      ((inv.discount||0)>0 ? '<tr><td colspan="3">Subtotal</td><td>'+fmtETB(inv.subtotal||round2(inv.total+inv.discount))+'</td></tr><tr><td colspan="3">Discount</td><td>−'+fmtETB(inv.discount)+'</td></tr>' : '')+
       '<tr class="invoice-total-row"><td colspan="3">TOTAL</td><td>'+fmtETB(inv.total)+'</td></tr>'+
     '</tbody></table>'+
     '<p class="muted" style="margin-top:14px;">Payment method: <b>'+esc(payLabel(inv.paymentMethod))+'</b></p>'+
     '<p class="muted" style="margin-top:10px;">Thank you for your business!</p>'+
   '</div></div>';
+}
+
+/* ---------------- FULL BACKUP & RESTORE ---------------- */
+var BACKUP_COLLECTIONS = ['products','sales','stockPurchases','expenses','invoices','backupSavings','branches','dayCloses','txIds'];
+var BACKUP_PROFILE_FIELDS = ['shopName','shopAddress','shopPhone','dailyGoal','weeklyGoal','monthlyGoal','yearlyGoal','weeklyStockBudget','monthlyStockBudget','backupSavingEnabled','colorPalette'];
+
+async function buildBackup(){
+  var base = shopRef();
+  var out = {app:'Taza DSR', version:1, exportedAt:new Date().toISOString(), shopId:STATE.session.shopId, counts:{}, profile:{}, collections:{}};
+  var prof = STATE.shopProfile || {};
+  BACKUP_PROFILE_FIELDS.forEach(function(k){ if(prof[k]!==undefined) out.profile[k] = prof[k]; });
+  for(var i=0;i<BACKUP_COLLECTIONS.length;i++){
+    var name = BACKUP_COLLECTIONS[i];
+    var snap = await base.collection(name).get();
+    out.collections[name] = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
+    out.counts[name] = out.collections[name].length;
+  }
+  return out;
+}
+function downloadTextFile(name, text, mime){
+  var a = document.createElement('a');
+  a.download = name;
+  try{
+    a.href = URL.createObjectURL(new Blob([text], {type:mime}));
+  }catch(e){
+    a.href = 'data:'+mime+';charset=utf-8,'+encodeURIComponent(text);
+  }
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function(){ try{ URL.revokeObjectURL(a.href); }catch(e){} if(a.parentNode) a.parentNode.removeChild(a); }, 2000);
+}
+async function doBackupDownload(){
+  toast('Preparing your backup…','info');
+  try{
+    var data = await buildBackup();
+    var total = BACKUP_COLLECTIONS.reduce(function(a,k){ return a+data.counts[k]; },0);
+    var u = currentUser() || {};
+    var stamp = todayStr();
+    downloadTextFile('taza-dsr-backup-'+stamp+'.json', JSON.stringify(data), 'application/json');
+    toast('Backup downloaded — '+total+' records.','success');
+  }catch(err){ showActionError(err); }
+}
+/* A backup file is checked before a single record is written. */
+function validateBackup(obj){
+  if(!obj || typeof obj!=='object' || obj.app!=='Taza DSR' || !obj.collections || typeof obj.collections!=='object') return {ok:false, error:'This is not a Taza DSR backup file.'};
+  var total = 0, counts = {};
+  for(var i=0;i<BACKUP_COLLECTIONS.length;i++){
+    var name = BACKUP_COLLECTIONS[i], arr = obj.collections[name];
+    if(arr===undefined){ counts[name]=0; continue; }
+    if(!Array.isArray(arr)) return {ok:false, error:'The backup is damaged ('+name+' is not a list).'};
+    for(var j=0;j<arr.length;j++){
+      var it = arr[j];
+      if(!it || typeof it!=='object' || typeof it.id!=='string' || !/^[A-Za-z0-9_-]{1,128}$/.test(it.id)) return {ok:false, error:'The backup is damaged (a record in '+name+' has an invalid id).'};
+    }
+    counts[name] = arr.length; total += arr.length;
+  }
+  if(total>60000) return {ok:false, error:'The backup is too large to restore in one go.'};
+  return {ok:true, counts:counts, total:total};
+}
+function cleanRecord(item){
+  var d = {};
+  Object.keys(item).forEach(function(k){ if(k!=='id' && !/^__.*__$/.test(k)) d[k] = item[k]; });
+  return d;
+}
+async function restoreBackup(obj){
+  var base = shopRef();
+  var existingTx = {};
+  (await base.collection('txIds').get()).docs.forEach(function(d){ existingTx[d.id] = 1; });
+  var ops = [];
+  BACKUP_COLLECTIONS.forEach(function(name){
+    (obj.collections[name]||[]).forEach(function(item){
+      if(name==='txIds' && existingTx[item.id]) return;   /* a transaction ID can only be created once */
+      ops.push({ref: base.collection(name).doc(item.id), data: cleanRecord(item)});
+    });
+  });
+  for(var i=0;i<ops.length;i+=400){
+    var b = db.batch();
+    ops.slice(i, i+400).forEach(function(op){ b.set(op.ref, op.data); });
+    await b.commit();
+  }
+  var prof = {};
+  BACKUP_PROFILE_FIELDS.forEach(function(k){ if(obj.profile && obj.profile[k]!==undefined && k!=='shopName') prof[k] = obj.profile[k]; });
+  if(Object.keys(prof).length){ await base.update(prof); }
+  return ops.length;
+}
+function onRestoreFile(ev){
+  var input = ev.target, file = input.files && input.files[0];
+  if(!file) return;
+  var reader = new FileReader();
+  reader.onerror = function(){ alert('Could not read that file.'); input.value=''; };
+  reader.onload = function(){
+    input.value = '';
+    var obj;
+    try{ obj = JSON.parse(String(reader.result)); }catch(e){ alert('That file is not a valid backup (it could not be read as JSON).'); return; }
+    var v = validateBackup(obj);
+    if(!v.ok){ alert(v.error); return; }
+    var labels = {products:'products', sales:'sales', stockPurchases:'stock purchases', expenses:'expenses', invoices:'invoices', backupSavings:'saving entries', branches:'branches', dayCloses:'day closings', txIds:'transaction IDs'};
+    askConfirm({
+      title:'Restore this backup?', confirmText:'Restore',
+      details:[ 'Backup made on '+(obj.exportedAt?fmtDateLong(String(obj.exportedAt).slice(0,10)):'an unknown date')+' — '+v.total+' records.' ]
+        .concat(BACKUP_COLLECTIONS.filter(function(k){ return v.counts[k]>0; }).map(function(k){ return v.counts[k]+' '+labels[k]; }))
+        .concat(['Records with the same ID are replaced by the backup version. Records that are not in the backup stay as they are.'])
+    }).then(function(ok){
+      if(!ok) return;
+      toast('Restoring…','info');
+      restoreBackup(obj).then(function(n){ toast('Restore finished — '+n+' records written.','success'); }).catch(showActionError);
+    });
+  };
+  reader.readAsText(file);
+}
+
+function receiptTime(iso){
+  try{ return new Date(iso).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); }catch(e){ return ''; }
+}
+/* A receipt for one or several sales recorded together. */
+function saleReceiptModel(sales){
+  var first = sales[0] || {};
+  var items = sales.map(function(s){ return {name:s.productName, qty:s.quantity, unitPrice:s.sellingPrice, lineTotal:round2(s.quantity*s.sellingPrice)}; });
+  var sum = function(fn){ return round2(sales.reduce(function(a,s){ return a+fn(s); },0)); };
+  return {
+    invoiceNo: 'S-'+String(first.id||'').slice(-5).toUpperCase(),
+    customerName: first.isCredit ? (first.customerName||'') : '', phone: first.isCredit ? (first.customerPhone||'') : '',
+    items: items, subtotal: sum(function(s){ return s.quantity*s.sellingPrice; }), discount: sum(function(s){ return s.discount||0; }),
+    total: sum(function(s){ return s.totalSales||0; }), paymentMethod: first.paymentMethod||'cash',
+    createdAt: first.createdAt || new Date().toISOString(), showTime:true,
+    paid: sum(saleCollected), balance: sum(saleBalanceDue)
+  };
+}
+/* Print any piece of HTML on its own (receipts, Z-report) without touching the screen underneath. */
+function printHtml(inner, fmt){
+  var old = document.getElementById('printTemp'); if(old && old.parentNode) old.parentNode.removeChild(old);
+  var host = document.createElement('div');
+  host.id = 'printTemp'; host.innerHTML = inner;
+  document.body.appendChild(host);
+  applyPrintPageStyle(fmt);
+  var cleaned = false;
+  function cleanup(){ if(cleaned) return; cleaned = true; window.removeEventListener('afterprint', cleanup); if(host.parentNode) host.parentNode.removeChild(host); }
+  window.addEventListener('afterprint', cleanup);
+  setTimeout(cleanup, 120000);
+  setTimeout(function(){ try{ window.print(); }catch(e){ cleanup(); } }, 60);
 }
 
 function applyPrintPageStyle(fmt){
@@ -2286,6 +2904,7 @@ function exportThermalPDF(inv, widthMm){
     sep(false);
     row('Receipt', inv.invoiceNo||'', base, false);
     row('Date', fmtDateLong((inv.createdAt||new Date().toISOString()).slice(0,10)), base, false);
+    if(inv.showTime) row('Time', receiptTime(inv.createdAt), base, false);
     if(inv.customerName) row('Customer', inv.customerName, base, false);
     if(inv.phone) row('Phone', inv.phone, base, false);
     sep(true);
@@ -2296,8 +2915,10 @@ function exportThermalPDF(inv, widthMm){
       row('  '+it.qty+' x '+fmtNum(it.unitPrice), fmtNum(lt), base, false);
     });
     sep(true);
+    if((inv.discount||0)>0){ row('Subtotal', fmtNum(inv.subtotal||round2(inv.total+inv.discount)), base, false); row('Discount', '-'+fmtNum(inv.discount), base, false); }
     row('TOTAL', fmtNum(inv.total)+' ETB', base+2, true);
     row('Paid by', payLabel(inv.paymentMethod), base, false);
+    if((inv.balance||0)>0){ row('Paid now', fmtNum(inv.paid||0), base, false); row('BALANCE DUE', fmtNum(inv.balance), base+1, true); }
     sep(false);
     center('Thank you! Come again.', base, false);
     center('Taza Technology', base-1, false);
@@ -2381,6 +3002,7 @@ function renderProducts(){
       '<td>'+p.currentStock+'</td>'+
       '<td>'+(debt>0 ? '<span class="pill pill-red">'+debt+' pending</span>' : '—')+'</td>'+
       '<td class="hm">'+p.reorderLevel+'</td>'+
+      '<td>'+expiryCell(p)+'</td>'+
       '<td>'+(low?'<span class="pill pill-amber">Low stock</span>':'<span class="pill pill-green">OK</span>')+'</td>'+
       '<td><div class="row-actions">'+
         (canManage()?'<button class="btn btn-outline btn-sm" data-act="edit-product" data-id="'+p.id+'">Edit</button>':'')+
@@ -2401,7 +3023,7 @@ function renderProducts(){
     (anyDebt ? '<div class="lowstock-banner">'+uiIcon('alert','icon-md')+'<span>Some products have sales pending stock delivery — the "Pending" column shows quantity sold that has not yet been received. It will clear automatically once you log the matching Stock Purchase.</span></div>' : '')+
     (STATE.data.products.length ? (
     '<div class="table-wrap"><table><thead><tr>'+
-      '<th>Name</th><th>Category</th><th class="hm">Cost</th><th>Sell</th><th class="hm">Opening</th><th>Current</th><th>Pending</th><th class="hm">Reorder</th><th>Status</th><th></th>'+
+      '<th>Name</th><th>Category</th><th class="hm">Cost</th><th>Sell</th><th class="hm">Opening</th><th>Current</th><th>Pending</th><th class="hm">Reorder</th><th>Expiry</th><th>Status</th><th></th>'+
     '</tr></thead><tbody>'+rows+'</tbody></table></div>'
     ) : emptyState('box','No products yet','Add your first product to start recording sales and stock.'));
 }
@@ -2589,9 +3211,8 @@ function renderReports(){
       '</div>'+
     '</div>'+
     '<div class="grid grid-4" style="margin-top:14px;">'+
-      statCard('Gross Margin', (stats.totalSales>0?round2((stats.gross/stats.totalSales)*100):0)+'%', null, 'sv-green')+
-      statCard('Net Margin', (stats.totalSales>0?round2((stats.net/stats.totalSales)*100):0)+'%', null, netProfitColorClass(reportPct, stats.net))+
       statCard('Current Store Balance', fmtETB(currentStoreBalance()), 'As of today', currentStoreBalance()>=0?'sv-green':'sv-red')+
+      statCard('Discounts given', fmtETB(discountsIn(salesInRange(range.from, range.to))), 'Price reductions in this period', 'sv-black')+
     '</div>'+
     (function(){
       var c = collectionsByMethod(range.from, range.to);
@@ -2626,9 +3247,9 @@ function renderTopProductLists(salesInR){
   function rankedList(items, valueKey, subLabel){
     if(!items.length) return '<div class="muted">No sales in this range.</div>';
     return items.map(function(it,i){
-      var margin = it.revenue>0 ? round2((it.profit/it.revenue)*100) : 0;
+      var perUnit = it.qty>0 ? round2(it.profit/it.qty) : 0;
       return '<div class="list-item"><span><b style="color:var(--gold-dark);">#'+(i+1)+'</b> '+esc(it.name)+
-        '<br><span class="muted" style="font-size:10.5px;">qty '+it.qty+(subLabel==='profit'?(' · margin '+margin+'%'):'')+'</span></span>'+
+        '<br><span class="muted" style="font-size:10.5px;">qty '+it.qty+(subLabel==='profit'?(' · '+fmtETB(perUnit)+' per unit'):'')+'</span></span>'+
         '<b>'+fmtETB(it[valueKey])+'</b></div>';
     }).join('');
   }
@@ -2741,6 +3362,14 @@ function settingsExportCard(){
       '<button class="btn btn-outline btn-sm" data-act="export-csv">'+uiIcon('note','icon-sm')+' CSV</button>'+
       '<button class="btn btn-gold btn-sm" data-act="export-pdf">'+uiIcon('receipt','icon-sm')+' PDF</button>'+
     '</div>'+
+    '<h3 style="margin:18px 0 6px;">Full backup</h3>'+
+    '<p class="muted" style="margin-bottom:10px;">One file with all your products, sales, customer credit, stock purchases, expenses, invoices and day closings. Keep it somewhere safe.</p>'+
+    '<div style="display:flex;gap:6px;flex-wrap:wrap;">'+
+      '<button class="btn btn-sm" data-act="backup-download">'+uiIcon('download','icon-sm')+' Download Full Backup (.json)</button>'+
+      (isCeo() ? '<button class="btn btn-outline btn-sm" data-act="backup-restore">'+uiIcon('upload','icon-sm')+' Restore from Backup (.json)</button>'+
+        '<input type="file" id="restoreFile" accept=".json,application/json" style="display:none;">' : '')+
+    '</div>'+
+    (isCeo() ? '' : '<p class="field-note">Only the CEO account can restore a backup.</p>')+
   '</div>';
 }
 function settingsPrefsCard(){
@@ -2803,6 +3432,9 @@ function settingsSections(u){
   L.push({grp:'Account', id:'account', icon:'users', title:'Account', sub:'Your profile and sign out', body:function(){ return settingsAccountCard(u); }});
   if(canManage()){
     L.push({grp:'Account', id:'security', icon:'gear', title:'Security', sub:'Change your password', body:settingsSecurityCard});
+  }
+  L.push({grp:'Account', id:'pin', icon:'lock', title:'Screen lock (PIN)', sub:(hasPin()?'On — locks after 2 minutes idle':'Off — set a 4-digit PIN'), body:settingsPinCard});
+  if(canManage()){
     L.push({grp:'Business', id:'business', icon:'receipt', title:'Business info', sub:'Address and phone on receipts', body:function(){ return settingsBusinessCard(u); }});
     L.push({grp:'Business', id:'export', icon:'download', title:'Data & export', sub:'Excel, CSV and PDF', body:settingsExportCard});
     L.push({grp:'Finance', id:'goals', icon:'target', title:'Sales Goals', sub:'Daily to yearly targets', body:function(){ return settingsGoalsCard(u); }});
@@ -2980,6 +3612,7 @@ function renderModal(){
       '<div class="form-row"><div><label>Opening stock</label><input type="number" name="openingStock" min="0" step="1" required value="'+(p.openingStock!==undefined?p.openingStock:0)+'" '+(p.id?'':'')+'></div>'+
       '<div><label>Reorder level</label><input type="number" name="reorderLevel" min="0" step="1" required value="'+(p.reorderLevel!==undefined?p.reorderLevel:0)+'"></div></div>'+
       (p.id ? '<label>Current stock</label><input type="number" name="currentStock" min="0" step="1" value="'+p.currentStock+'">' : '')+
+      '<label>Expiry date <span class="field-note" style="display:inline;margin:0;">(optional)</span></label><input type="date" name="expiryDate" value="'+esc(p.expiryDate||'')+'">'+
       (STATE.authError?'<div class="err-text">'+esc(STATE.authError)+'</div>':'')+
       '<div class="modal-foot"><button type="button" class="btn btn-outline" data-act="close-modal">Cancel</button><button type="submit" class="btn">Save</button></div>'+
     '</form>';
@@ -2993,6 +3626,7 @@ function renderModal(){
       '<div class="form-row"><div><label>Quantity</label><input type="number" name="quantity" min="1" step="1" value="'+s.quantity+'" required></div>'+
       '<div><label>Cost price</label><input type="number" name="costPrice" min="0" step="0.01" value="'+s.costPrice+'" required></div></div>'+
       '<label>Selling price</label><input type="number" name="sellingPrice" min="0" step="0.01" value="'+s.sellingPrice+'" required>'+
+      discountField('editDiscount', s.discount||0)+
       '<label style="display:flex;align-items:center;gap:8px;margin-top:14px;cursor:pointer;">'+
         '<input type="checkbox" name="markedOwed" style="width:auto;" '+(s.markedOwed?'checked':'')+'> '+
         '<span style="font-size:12.5px;font-weight:700;color:var(--ink-soft);">Not in stock yet — pending delivery</span>'+
@@ -3052,6 +3686,21 @@ function renderModal(){
       '<p class="field-note">Email: '+esc(st2.email)+' (cannot be changed here)</p>'+
       '<div class="modal-foot"><button type="button" class="btn btn-outline" data-act="close-modal">Cancel</button><button type="submit" class="btn">Save changes</button></div>'+
     '</form>';
+  } else if(m.type==='saleReceipt'){
+    var rm = saleReceiptModel(m.data.sales);
+    var rf = STATE.receiptFormat==='58' ? '58' : '80';
+    title = 'Sale recorded';
+    body = '<div class="ok-text" style="margin-bottom:10px;">'+uiIcon('check','icon-sm')+' '+fmtETB(rm.total)+' recorded'+((rm.balance||0)>0?(' · '+fmtETB(rm.balance)+' on credit'):'')+'</div>'+
+      '<div class="tabs" style="margin:0 0 12px;">'+
+        '<button type="button" class="tab-btn'+(rf==='80'?' active':'')+'" data-act="rcpt-format" data-fmt="80">80mm</button>'+
+        '<button type="button" class="tab-btn'+(rf==='58'?' active':'')+'" data-act="rcpt-format" data-fmt="58">58mm</button>'+
+      '</div>'+
+      '<div class="rcpt-preview">'+renderThermalReceipt(rm, rf)+'</div>'+
+      '<div class="modal-foot" style="flex-wrap:wrap;">'+
+        '<button type="button" class="btn btn-outline" data-act="close-modal">Done</button>'+
+        '<button type="button" class="btn btn-outline" data-act="rcpt-pdf">'+uiIcon('download','icon-sm')+' PDF</button>'+
+        '<button type="button" class="btn" data-act="rcpt-print">'+uiIcon('printer','icon-sm')+' Print receipt</button>'+
+      '</div>';
   } else if(m.type==='customerLedger'){
     var led = creditCustomers().find(function(x){ return x.key===m.data.key; });
     title = led ? led.name : 'Customer';
@@ -3129,7 +3778,12 @@ function bindEvents(){
     var paidNowI = qs.querySelector('#qsPaidNow');
     function updatePreview(){
       var qty = parseFloat(qtyI.value)||0, cost=parseFloat(costI.value)||0, sell=parseFloat(sellI.value)||0;
-      var total = qty*sell, cogs = qty*cost, gross = total-cogs;
+      var discI = qs.querySelector('#qsDiscount');
+      var disc = Math.min(Math.max(parseFloat(discI && discI.value)||0, 0), qty*sell);
+      var total = qty*sell - disc, cogs = qty*cost, gross = total-cogs;
+      var rowDisc = document.getElementById('pvDiscRow'), pvDisc = document.getElementById('pvDisc');
+      if(rowDisc) rowDisc.style.display = disc>0 ? '' : 'none';
+      if(pvDisc) pvDisc.textContent = '−'+fmtETB(disc);
       var pvT = document.getElementById('pvTotal'), pvC = document.getElementById('pvCogs'), pvG = document.getElementById('pvGross');
       if(pvT) pvT.textContent = fmtETB(total);
       if(pvC) pvC.textContent = fmtETB(cogs);
@@ -3160,7 +3814,7 @@ function bindEvents(){
       if(due) due.required = isCredit;
       updatePreview();
     }
-    [costI,sellI,qtyI,paidNowI].forEach(function(i){ if(i) i.addEventListener('input', syncPayUI); });
+    [costI,sellI,qtyI,paidNowI,qs.querySelector('#qsDiscount')].forEach(function(i){ if(i) i.addEventListener('input', syncPayUI); });
     qs.querySelectorAll('input[name=paymentMethod]').forEach(function(r){ r.addEventListener('change', syncPayUI); });
     if(creditChk) creditChk.addEventListener('change', syncPayUI);
     syncPayUI();
@@ -3219,6 +3873,8 @@ function bindEvents(){
   if(invCustomerName) invCustomerName.addEventListener('input', function(){ STATE.invoiceDraft.customerName = invCustomerName.value; render(); preserveFocus('invCustomerName'); });
   var invPhone = document.getElementById('invPhone');
   if(invPhone) invPhone.addEventListener('input', function(){ STATE.invoiceDraft.phone = invPhone.value; render(); preserveFocus('invPhone'); });
+  var invDiscountEl = document.getElementById('invDiscount');
+  if(invDiscountEl) invDiscountEl.addEventListener('input', function(){ STATE.invoiceDraft.discount = parseFloat(invDiscountEl.value)||0; render(); preserveFocus('invDiscount'); });
   var invPayMethod = document.getElementById('invPayMethod');
   if(invPayMethod) invPayMethod.addEventListener('change', function(){ STATE.invoiceDraft.paymentMethod = invPayMethod.value; });
   var invAddress = document.getElementById('invAddress');
@@ -3253,6 +3909,28 @@ function bindEvents(){
     });
   });
 
+  var pinSetF = document.getElementById('pinSetForm'); if(pinSetF) pinSetF.addEventListener('submit', onPinSet);
+  var pinChgF = document.getElementById('pinChangeForm'); if(pinChgF) pinChgF.addEventListener('submit', onPinChange);
+  var pinRmF = document.getElementById('pinRemoveForm'); if(pinRmF) pinRmF.addEventListener('submit', onPinRemove);
+  var restoreFileEl = document.getElementById('restoreFile');
+  if(restoreFileEl) restoreFileEl.addEventListener('change', onRestoreFile);
+  var dcForm = document.getElementById('dayCloseForm');
+  if(dcForm){
+    dcForm.addEventListener('submit', onSaveDayClose);
+    var dcDateEl = document.getElementById('dcDate');
+    dcDateEl.addEventListener('change', function(){ STATE.dayCloseDate = dcDateEl.value || todayStr(); STATE.dayCloseDraft = null; render(); });
+    var dcNet = parseFloat(dcForm.getAttribute('data-net'))||0;
+    var dcRefresh = function(){
+      var d = STATE.dayCloseDraft;
+      d.float = document.getElementById('dcFloat').value; d.out = document.getElementById('dcOut').value;
+      d.counted = document.getElementById('dcCounted').value; d.notes = document.getElementById('dcNotes').value;
+      var expected = round2((parseFloat(d.float)||0) + dcNet - (parseFloat(d.out)||0));
+      var hasCount = d.counted!=='' && !isNaN(parseFloat(d.counted));
+      document.getElementById('dcExpected').textContent = fmtETB(expected);
+      document.getElementById('dcDiff').innerHTML = translateUI(diffBadge(hasCount ? round2(parseFloat(d.counted)-expected) : null));
+    };
+    ['dcFloat','dcOut','dcCounted','dcNotes'].forEach(function(id){ document.getElementById(id).addEventListener('input', dcRefresh); });
+  }
   var dashPeriodSel = document.getElementById('dashPeriod');
   if(dashPeriodSel) dashPeriodSel.addEventListener('change', function(){ STATE.dashboardPeriod = dashPeriodSel.value; render(); });
   var creditSearchIn = document.getElementById('creditSearch');
@@ -3279,6 +3957,10 @@ function bindEvents(){
   });
   var bulkSaleTx = document.getElementById('bulkSaleTx');
   if(bulkSaleTx) bulkSaleTx.addEventListener('input', function(){ STATE.bulkSaleDraft.txId = bulkSaleTx.value; });
+  var autoRcptEl = document.getElementById('autoReceipt');
+  if(autoRcptEl) autoRcptEl.addEventListener('change', function(){ STATE.autoReceipt = autoRcptEl.checked; localStorage.setItem('ssr_autorcpt', autoRcptEl.checked?'1':'0'); });
+  var bulkDiscEl = document.getElementById('bulkDiscount');
+  if(bulkDiscEl) bulkDiscEl.addEventListener('input', function(){ STATE.bulkSaleDraft.discount = parseFloat(bulkDiscEl.value)||0; render(); preserveFocus('bulkDiscount'); });
   var bulkCreditChk = document.getElementById('bulkSaleCredit');
   if(bulkCreditChk) bulkCreditChk.addEventListener('change', function(){ STATE.bulkSaleDraft.credit = bulkCreditChk.checked; render(); });
   [['bulkCustName','customerName'],['bulkCustPhone','customerPhone']].forEach(function(p){
@@ -3325,7 +4007,8 @@ function handleAction(act, el, ev){
   if(act==='tab-signup'){ STATE.authTab='signup'; STATE.authError=''; render(); return; }
   if(act==='forgot'){ STATE.forgotMode=true; STATE.authError=''; STATE.authMsg=''; render(); return; }
   if(act==='back-to-login'){ STATE.forgotMode=false; STATE.authError=''; STATE.authMsg=''; render(); return; }
-  if(act==='logout'){ auth.signOut(); return; }
+  if(act==='logout'){ clearLockFlag(); auth.signOut(); return; }
+  if(act==='lock-now'){ lockNow(false); return; }
   if(act==='resend-verify'){
     if(auth.currentUser){
       auth.currentUser.sendEmailVerification().then(function(){ alert('Verification email sent — check your inbox.'); }).catch(function(err){ showActionError(err); });
@@ -3504,13 +4187,13 @@ function handleAction(act, el, ev){
       STATE.editingInvoiceId = STATE.invoicePreview.id;
       STATE.invoiceDraft = {
         customerName: STATE.invoicePreview.customerName||'', phone: STATE.invoicePreview.phone||'', address: STATE.invoicePreview.address||'',
-        paymentMethod: STATE.invoicePreview.paymentMethod||'cash',
+        paymentMethod: STATE.invoicePreview.paymentMethod||'cash', discount: STATE.invoicePreview.discount||0,
         items: STATE.invoicePreview.items.map(function(it){return {name:it.name,qty:it.qty,unitPrice:it.unitPrice};})
       };
     }
     STATE.invoicePreview=null; render(); return;
   }
-  if(act==='inv-new'){ STATE.invoicePreview=null; STATE.editingInvoiceId=null; STATE.invoiceDraft={customerName:'',phone:'',address:'',items:[{name:'',qty:1,unitPrice:0}]}; render(); return; }
+  if(act==='inv-new'){ STATE.invoicePreview=null; STATE.editingInvoiceId=null; STATE.invoiceDraft={customerName:'',phone:'',address:'',discount:0,items:[{name:'',qty:1,unitPrice:0}]}; render(); return; }
   if(act==='inv-print'){ applyPrintPageStyle(STATE.invoiceFormat||'a4'); window.print(); return; }
   if(act==='inv-format'){ STATE.invoiceFormat = el.getAttribute('data-fmt'); localStorage.setItem('ssr_invfmt', STATE.invoiceFormat); render(); return; }
   if(act==='view-invoice'){
@@ -3525,7 +4208,7 @@ function handleAction(act, el, ev){
       STATE.invoicePreview = null;
       STATE.invoiceDraft = {
         customerName: eInv.customerName||'', phone: eInv.phone||'', address: eInv.address||'',
-        paymentMethod: eInv.paymentMethod||'cash',
+        paymentMethod: eInv.paymentMethod||'cash', discount: eInv.discount||0,
         items: eInv.items.map(function(it){ return {name:it.name, qty:it.qty, unitPrice:it.unitPrice}; })
       };
       render();
@@ -3552,9 +4235,37 @@ function handleAction(act, el, ev){
     if(!STATE.bulkStockDraft.rows.length) STATE.bulkStockDraft.rows.push({name:'',qty:1,unitCost:0});
     render(); return;
   }
+  if(act==='backup-download'){ doBackupDownload(); return; }
+  if(act==='backup-restore'){ var rf0 = document.getElementById('restoreFile'); if(rf0) rf0.click(); return; }
+  if(act==='remind-sms' || act==='remind-tg'){
+    var rc = creditCustomers().find(function(x){ return x.key===el.getAttribute('data-key'); });
+    if(rc && rc.balance>0){
+      if(act==='remind-sms' && !String(rc.phone||'').trim()){ toast('No phone number saved for this customer — opening Telegram instead.','info'); openExternal(reminderLink(rc,'tg')); }
+      else openExternal(reminderLink(rc, act==='remind-tg' ? 'tg' : 'sms'));
+    }
+    return;
+  }
+  if(act==='zreport-print'){
+    var zid = el.getAttribute('data-id');
+    var zrec = zid ? (STATE.data.dayCloses||[]).find(function(x){ return x.id===zid; }) : dayCloseRecord(STATE.dayCloseDate || todayStr(), STATE.dayCloseDraft);
+    if(zrec){
+      if(!zid && zrec.countedCash===null){ alert('Enter the cash you counted first, then print the Z-Report.'); return; }
+      printHtml(zReportHtml(zrec), 'a4');
+    }
+    return;
+  }
+  if(act==='rcpt-format'){ STATE.receiptFormat = el.getAttribute('data-fmt')==='58' ? '58' : '80'; localStorage.setItem('ssr_rcptfmt', STATE.receiptFormat); render(); return; }
+  if(act==='rcpt-print'){ var rmodel = saleReceiptModel(STATE.modal.data.sales); printHtml('<div class="print-thermal">'+renderThermalReceipt(rmodel, STATE.receiptFormat)+'</div>', STATE.receiptFormat); return; }
+  if(act==='rcpt-pdf'){ exportThermalPDF(saleReceiptModel(STATE.modal.data.sales), STATE.receiptFormat==='58'?58:80); return; }
+  if(act==='sale-receipt'){
+    var rs = STATE.data.sales.find(function(x){ return x.id===el.getAttribute('data-id'); });
+    if(rs){ STATE.modal = {type:'saleReceipt', data:{sales:[rs]}}; render(); }
+    return;
+  }
   if(act==='toggle-form'){ var fm = el.getAttribute('data-form'); STATE.formOpen = (STATE.formOpen===fm) ? '' : fm; render(); if(STATE.formOpen){ setTimeout(function(){ var f = document.querySelector('#expenseForm, #stockForm, #bulkStockForm'); if(f && f.scrollIntoView){ try{ f.scrollIntoView({block:'center', behavior:'smooth'}); }catch(e){} } }, 80); } return; }
   if(act==='dash-more'){ STATE.dashMore = !STATE.dashMore; render(); return; }
   if(act==='acc-toggle'){
+    STATE.pinMsg = '';
     var accId = el.getAttribute('data-acc');
     STATE.settingsOpen = (STATE.settingsOpen===accId) ? '' : accId;
     STATE._accAnim = STATE.settingsOpen || null;
@@ -3669,7 +4380,10 @@ async function onQuickSale(ev){
     var payMethod = fd.get('paymentMethod') || 'cash';
     var txIdIn = (fd.get('txId')||'').trim();
     var wantsCredit = canManage() && fd.get('creditSale')==='on';
-    var totalAmt = round2(qty*sellingPrice);
+    var discount = Math.max(0, round2(parseFloat(fd.get('discount'))||0));
+    var grossAmt = round2(qty*sellingPrice);
+    if(discount>grossAmt) throw new Error('Discount cannot be more than the price ('+fmtETB(grossAmt)+').');
+    var totalAmt = round2(grossAmt-discount);
     var paidNow = wantsCredit ? round2(parseFloat(fd.get('paidNow'))||0) : totalAmt;
     var creditInfo = null;
     if(wantsCredit){
@@ -3713,9 +4427,10 @@ async function onQuickSale(ev){
       var p = findProduct(productId);
       productName = p ? p.name : '';
     }
-    await addSale(Object.assign({date:date, productId:productId, productName:productName, quantity:qty, costPrice:costPrice, sellingPrice:sellingPrice, markedOwed: fd.get('markedOwed')==='on'}, salePay));
+    var soldSale = await addSale(Object.assign({date:date, productId:productId, productName:productName, quantity:qty, costPrice:costPrice, sellingPrice:sellingPrice, markedOwed: fd.get('markedOwed')==='on', discount:discount}, salePay));
     STATE.quickSaleSelectedId=''; STATE.quickSaleQuery='';   /* ready for the next customer */
-    STATE.view='sales';
+    if(STATE.autoReceipt){ STATE.modal = {type:'saleReceipt', data:{sales:[soldSale]}}; }   /* stay on Quick Sale for the next customer */
+    else { STATE.view='sales'; }
     render();
   }catch(err){
     showActionError(err);
@@ -3825,7 +4540,17 @@ async function onBulkSaleSubmit(ev){
 
   /* ---- everything is validated BEFORE anything is saved ---- */
   var rowTotal = function(r){ return round2((r.qty||0)*(r.sellingPrice||0)); };
-  var batchTotal = round2(validRows.reduce(function(a,r){ return a+rowTotal(r); },0));
+  var grossBatch = round2(validRows.reduce(function(a,r){ return a+rowTotal(r); },0));
+  var batchDiscount = Math.max(0, round2(parseFloat(d.discount)||0));
+  if(batchDiscount>grossBatch){ alert('Discount cannot be more than the total ('+fmtETB(grossBatch)+').'); return; }
+  var batchTotal = round2(grossBatch - batchDiscount);
+  /* share the discount across the items in proportion to their price (the last item takes the rounding) */
+  var rowDisc = [], usedDisc = 0;
+  validRows.forEach(function(r,i){
+    var share = (i===validRows.length-1) ? round2(batchDiscount-usedDisc) : (grossBatch>0 ? round2(batchDiscount*rowTotal(r)/grossBatch) : 0);
+    rowDisc.push(share); usedDisc = round2(usedDisc+share);
+  });
+  var rowNet = function(i){ return round2(rowTotal(validRows[i]) - rowDisc[i]); };
   var wantsCredit = canManage() && !!d.credit;
   var paidNow = wantsCredit ? round2(parseFloat(d.paidNow)||0) : batchTotal;
   var credit = null;
@@ -3858,7 +4583,7 @@ async function onBulkSaleSubmit(ev){
 
   var submitBtn = ev.target.querySelector('button[type=submit]');
   if(submitBtn) submitBtn.disabled = true;
-  var saved = 0, remainingPaid = paidNow;
+  var saved = 0, remainingPaid = paidNow, soldList = [];
   try{
     for(var i=0;i<validRows.length;i++){
       var r = validRows[i];
@@ -3877,13 +4602,13 @@ async function onBulkSaleSubmit(ev){
         productId = newRef.id; productName = name;
       }
       /* how much of the payment lands on this row (credit: first rows first) */
-      var rowPaid = wantsCredit ? round2(Math.min(rowTotal(r), remainingPaid)) : rowTotal(r);
+      var rowPaid = wantsCredit ? round2(Math.min(rowNet(i), remainingPaid)) : rowNet(i);
       var payHere = needsTx && rowPaid>0;
       var claimThis = payHere && !claimDone;
       var sale = {
         date: date, productId: productId, productName: productName,
         quantity: r.qty, costPrice: r.costPrice||0, sellingPrice: r.sellingPrice||0, markedOwed: markedOwed,
-        paymentMethod: payMethod, txId: payHere ? batchTx : ''
+        paymentMethod: payMethod, txId: payHere ? batchTx : '', discount: rowDisc[i]
       };
       if(wantsCredit){
         Object.assign(sale, credit, {
@@ -3891,14 +4616,14 @@ async function onBulkSaleSubmit(ev){
           payments: rowPaid>0 ? [{date:date, amount:rowPaid, method:payMethod, txId:sale.txId, byUid:STATE.session.userId, txClaim:claimThis}] : []
         });
       }
-      await addSale(sale, {skipTxClaim: !claimThis});
+      soldList.push(await addSale(sale, {skipTxClaim: !claimThis}));
       if(claimThis) claimDone = true;
       if(wantsCredit) remainingPaid = round2(remainingPaid-rowPaid);
       saved++;
     }
-    STATE.bulkSaleDraft = {date:todayStr(), markedOwed:false, paymentMethod:'cash', txId:'', credit:false, customerName:'', customerPhone:'', dueDate:'', paidNow:0, claimedTx:'', rows:[{name:'',qty:1,costPrice:0,sellingPrice:0}]};
-    STATE.quickSaleTopMode = 'single';
-    STATE.view = 'sales';
+    STATE.bulkSaleDraft = {date:todayStr(), markedOwed:false, paymentMethod:'cash', txId:'', discount:0, credit:false, customerName:'', customerPhone:'', dueDate:'', paidNow:0, claimedTx:'', rows:[{name:'',qty:1,costPrice:0,sellingPrice:0}]};
+    if(STATE.autoReceipt && soldList.length){ STATE.modal = {type:'saleReceipt', data:{sales:soldList}}; STATE.quickSaleTopMode = 'single'; }
+    else { STATE.quickSaleTopMode = 'single'; STATE.view = 'sales'; }
     render();
   }catch(err){
     showActionError(err);
@@ -3933,7 +4658,8 @@ async function onSaveProduct(ev){
       var fields = {
         name: fd.get('name'), category: fd.get('category'), barcode: (fd.get('barcode')||'').trim(),
         costPrice: parseFloat(fd.get('costPrice')), sellingPrice: parseFloat(fd.get('sellingPrice')),
-        openingStock: parseFloat(fd.get('openingStock')), reorderLevel: parseFloat(fd.get('reorderLevel'))||0
+        openingStock: parseFloat(fd.get('openingStock')), reorderLevel: parseFloat(fd.get('reorderLevel'))||0,
+        expiryDate: fd.get('expiryDate')||''
       };
       var cs = fd.get('currentStock'); if(cs!==null && cs!=='') fields.currentStock = parseFloat(cs);
       await saveProductDoc(fields, editing);
@@ -3942,7 +4668,8 @@ async function onSaveProduct(ev){
       await saveProductDoc({
         name:fd.get('name'), category:fd.get('category'), barcode:(fd.get('barcode')||'').trim(),
         costPrice:parseFloat(fd.get('costPrice')), sellingPrice:parseFloat(fd.get('sellingPrice')),
-        openingStock:opening, currentStock:opening, debt:0, reorderLevel:parseFloat(fd.get('reorderLevel'))||0
+        openingStock:opening, currentStock:opening, debt:0, reorderLevel:parseFloat(fd.get('reorderLevel'))||0,
+        expiryDate: fd.get('expiryDate')||''
       }, null);
     }
     STATE.modal=null;
@@ -3959,7 +4686,7 @@ async function onSaveEditSale(ev){
     await updateSale(STATE.modal.data.id, {
       date: fd.get('date'), productId: productId, productName: p?p.name:'',
       quantity: parseFloat(fd.get('quantity')), costPrice: parseFloat(fd.get('costPrice')), sellingPrice: parseFloat(fd.get('sellingPrice')),
-      markedOwed: fd.get('markedOwed')==='on'
+      markedOwed: fd.get('markedOwed')==='on', discount: parseFloat(fd.get('discount'))||0
     });
     STATE.modal=null;
     render();
@@ -4188,7 +4915,8 @@ async function onImportCsv(ev){
             sellingPrice:parseFloat(r['Selling Price']||r['sellingPrice']||r['Selling price']||0)||0,
             openingStock:parseFloat(r['Opening Stock']||r['openingStock']||r['Opening stock']||0)||0,
             currentStock:parseFloat(r['Opening Stock']||r['openingStock']||r['Opening stock']||0)||0,
-            reorderLevel:parseFloat(r['Reorder Level']||r['reorderLevel']||r['Reorder level']||0)||0
+            reorderLevel:parseFloat(r['Reorder Level']||r['reorderLevel']||r['Reorder level']||0)||0,
+            expiryDate:(function(v){ v=String(v||'').trim(); return /^\d{4}-\d{2}-\d{2}$/.test(v)?v:''; })(r['Expiry']||r['expiry']||r['Expiry Date']||r['expiryDate'])
           }, null);
           added++;
         }catch(e){ /* skip row on error */ }
@@ -4207,14 +4935,16 @@ async function onGenerateInvoice(ev){
     return {name:it.name.trim(), qty:it.qty, unitPrice:it.unitPrice, lineTotal:round2(it.qty*it.unitPrice)};
   });
   if(!items.length){ alert('Add at least one item with a name and quantity.'); return; }
-  var total = round2(items.reduce(function(a,it){return a+it.lineTotal;},0));
+  var subtotal = round2(items.reduce(function(a,it){return a+it.lineTotal;},0));
+  var discount = Math.min(Math.max(round2(parseFloat(d.discount)||0),0), subtotal);
+  var total = round2(subtotal - discount);
   try{
     if(STATE.editingInvoiceId){
       var existing = (STATE.data.invoices||[]).find(function(x){return x.id===STATE.editingInvoiceId;}) || {};
       var updated = {
         invoiceNo: existing.invoiceNo || ('INV-'+String((STATE.data.invoices||[]).length+1).padStart(4,'0')),
         customerName: d.customerName||'', phone: d.phone||'', address: d.address||'', paymentMethod: d.paymentMethod||'cash',
-        items: items, total: total,
+        items: items, subtotal: subtotal, discount: discount, total: total,
         createdAt: existing.createdAt || new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
@@ -4226,7 +4956,7 @@ async function onGenerateInvoice(ev){
       var invoice = {
         invoiceNo: invoiceNo,
         customerName: d.customerName||'', phone: d.phone||'', address: d.address||'', paymentMethod: d.paymentMethod||'cash',
-        items: items, total: total,
+        items: items, subtotal: subtotal, discount: discount, total: total,
         createdAt: new Date().toISOString()
       };
       var ref = await shopRef().collection('invoices').add(invoice);
@@ -4268,7 +4998,7 @@ function exportInvoicePDF(inv){
     startY: y2+4,
     head: [['Item','Qty','Unit Price','Total']],
     body: inv.items.map(function(it){ return [it.name, String(it.qty), fmtETB(it.unitPrice), fmtETB(it.lineTotal)]; }),
-    foot: [['','', 'TOTAL', fmtETB(inv.total)]],
+    foot: ((inv.discount||0)>0 ? [['','','Subtotal', fmtETB(inv.subtotal||round2(inv.total+inv.discount))],['','','Discount','-'+fmtETB(inv.discount)]] : []).concat([['','', 'TOTAL', fmtETB(inv.total)]]),
     didParseCell: ethCell, theme:'grid', headStyles:{fillColor:[29,58,95]}, footStyles:{fillColor:[201,162,39], textColor:[40,30,5], fontStyle:'bold'}, styles:{fontSize:10}
   });
 
@@ -4288,7 +5018,7 @@ async function exportExcel(){
 
   var salesRows = STATE.data.sales.slice().sort(function(a,b){return a.date.localeCompare(b.date);}).map(function(s){
     return {Date:s.date, Product:s.productName, Quantity:s.quantity, 'Cost Price':s.costPrice, 'Selling Price':s.sellingPrice, 'Total Sales':s.totalSales, COGS:s.cogs, 'Gross Profit':s.grossProfit,
-      'Payment Method':payLabel(s.paymentMethod), 'Transaction ID':s.txId||'', 'On Credit':saleIsCredit(s)?'Yes':'No', 'Customer':s.customerName||'', 'Customer Phone':s.customerPhone||'',
+      'Discount':s.discount||0, 'Payment Method':payLabel(s.paymentMethod), 'Transaction ID':s.txId||'', 'On Credit':saleIsCredit(s)?'Yes':'No', 'Customer':s.customerName||'', 'Customer Phone':s.customerPhone||'',
       'Due Date':s.dueDate||'', 'Amount Paid':saleIsCredit(s)?(s.amountPaid||0):s.totalSales, 'Balance Due':saleBalanceDue(s), 'Created At':s.createdAt};
   });
   XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(salesRows.length?salesRows:[{Date:'',Product:'',Quantity:'',"Cost Price":'',"Selling Price":'',"Total Sales":'',COGS:'',"Gross Profit":'',"Created At":''}]), 'Sales');
@@ -4363,9 +5093,9 @@ function csvRow(arr){
 async function exportCSV(){
   var lines = [];
   lines.push('SALES');
-  lines.push(csvRow(['Date','Product','Quantity','Cost Price','Selling Price','Total Sales','COGS','Gross Profit','Payment Method','Transaction ID','On Credit','Customer','Amount Paid','Balance Due']));
+  lines.push(csvRow(['Date','Product','Quantity','Cost Price','Selling Price','Total Sales','COGS','Gross Profit','Discount','Payment Method','Transaction ID','On Credit','Customer','Amount Paid','Balance Due']));
   STATE.data.sales.slice().sort(function(a,b){return a.date.localeCompare(b.date);}).forEach(function(s){
-    lines.push(csvRow([s.date,s.productName,s.quantity,s.costPrice,s.sellingPrice,s.totalSales,s.cogs,s.grossProfit,payLabel(s.paymentMethod),s.txId||'',saleIsCredit(s)?'Yes':'No',s.customerName||'',saleIsCredit(s)?(s.amountPaid||0):s.totalSales,saleBalanceDue(s)]));
+    lines.push(csvRow([s.date,s.productName,s.quantity,s.costPrice,s.sellingPrice,s.totalSales,s.cogs,s.grossProfit,s.discount||0,payLabel(s.paymentMethod),s.txId||'',saleIsCredit(s)?'Yes':'No',s.customerName||'',saleIsCredit(s)?(s.amountPaid||0):s.totalSales,saleBalanceDue(s)]));
   });
   lines.push(''); lines.push('EXPENSES');
   lines.push(csvRow(['Date','Category','Description','Amount']));
@@ -4449,12 +5179,13 @@ if(FIREBASE_OK){
           return;
         }
         STATE.session = {userId:user.uid, shopId:staffInfo.shopId, role:staffInfo.role, branchId:staffInfo.branchId||null};
-        STATE.data = {products:[],sales:[],stockPurchases:[],expenses:[],invoices:[],backupSavings:[],branches:[],staff:[]};
+        STATE.data = {products:[],sales:[],stockPurchases:[],expenses:[],invoices:[],backupSavings:[],branches:[],staff:[],dayCloses:[]};
         var profSnap = await db.collection('shops').doc(staffInfo.shopId).get();
         STATE.shopProfile = profSnap.exists ? profSnap.data() : {shopName:'',ownerName:'',email:user.email,createdAt:new Date().toISOString()};
         if(STATE.shopProfile.colorPalette && STATE.shopProfile.colorPalette !== PALETTE){ applyPalette(STATE.shopProfile.colorPalette); }
         subscribeAll(staffInfo.shopId);
         resetIdleTimers();
+        initLockState();
         STATE.authLoading = false;
         STATE.authBusy = false;
         STATE.authError=''; STATE.authMsg='';
