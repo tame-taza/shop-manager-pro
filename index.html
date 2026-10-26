@@ -482,6 +482,7 @@ select.hero-select:focus{box-shadow:0 0 0 3px rgba(255,255,255,.35);}
 .goal-mini-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px;font-size:13px;font-weight:700;}
 .goal-mini-top b{color:var(--gold-dark);font-size:17px;}
 .add-toggle{margin-bottom:14px;min-height:48px;font-size:14.5px;}
+.btn-pair{display:flex;gap:10px;} .btn-pair .btn{flex:1;min-width:0;padding-left:8px;padding-right:8px;}
 
 @media(max-width:720px){
   /* inputs that are comfortable with a thumb; 16px stops phones zooming in when a field is tapped */
@@ -608,8 +609,8 @@ function applyPalette(p){
 }
 applyPalette(PALETTE);
 var T = {
-  en:{app_name:"Shop Sales Record", tagline:"Taza Technology", dashboard:"Dashboard", quick_sale:"Quick Sale", sales:"Sales", day_close:"Day Close", grp_overview:"Overview", grp_sales:"Sales", grp_inventory:"Inventory", grp_finance:"Finance", grp_system:"System", invoice:"Invoice", credit:"Customer Credit", calendar:"Calendar", products:"Products", stock_purchase:"Stock Purchase", expenses:"Expenses", reports:"Reports", settings:"Settings", logout:"Log out"},
-  am:{app_name:"የሽያጭ መዝገብ", tagline:"ታዛ ቴክኖሎጂ", dashboard:"ዳሽቦርድ", quick_sale:"ፈጣን ሽያጭ", sales:"ሽያጮች", day_close:"የቀን መዝጊያ", grp_overview:"አጠቃላይ", grp_sales:"ሽያጭ", grp_inventory:"ክምችት", grp_finance:"ፋይናንስ", grp_system:"ሲስተም", invoice:"ደረሰኝ", credit:"የደንበኛ ዱቤ", calendar:"የቀን መቁጠሪያ", products:"ምርቶች", stock_purchase:"የስቶክ ግዢ", expenses:"ወጪዎች", reports:"ሪፖርቶች", settings:"ቅንብሮች", logout:"ውጣ"}
+  en:{app_name:"Shop Sales Record", tagline:"Taza Technology", dashboard:"Dashboard", quick_sale:"Quick Sale", sales:"Sales", day_close:"Day Close", loans:"Cash Loans", grp_overview:"Overview", grp_sales:"Sales", grp_inventory:"Inventory", grp_finance:"Finance", grp_system:"System", invoice:"Invoice", credit:"Customer Credit", calendar:"Calendar", products:"Products", stock_purchase:"Stock Purchase", expenses:"Expenses", reports:"Reports", settings:"Settings", logout:"Log out"},
+  am:{app_name:"የሽያጭ መዝገብ", tagline:"ታዛ ቴክኖሎጂ", dashboard:"ዳሽቦርድ", quick_sale:"ፈጣን ሽያጭ", sales:"ሽያጮች", day_close:"የቀን መዝጊያ", loans:"የሱቅ ብድር", grp_overview:"አጠቃላይ", grp_sales:"ሽያጭ", grp_inventory:"ክምችት", grp_finance:"ፋይናንስ", grp_system:"ሲስተም", invoice:"ደረሰኝ", credit:"የደንበኛ ዱቤ", calendar:"የቀን መቁጠሪያ", products:"ምርቶች", stock_purchase:"የስቶክ ግዢ", expenses:"ወጪዎች", reports:"ሪፖርቶች", settings:"ቅንብሮች", logout:"ውጣ"}
 };
 function tr(k){ return (T[LANG]&&T[LANG][k]) || T.en[k] || k; }
 
@@ -669,7 +670,7 @@ var PHRASES = {
   "Credit sales":"የዱቤ ሽያጮች","Settled":"ተከፍሏል","Due soon":"በቅርቡ ይከፈላል","Open":"ክፍት","Collected in cash":"በጥሬ ገንዘብ የተሰበሰበ","Telebirr / Bank":"ቴሌብር / ባንክ",
   "Customer credit":"የደንበኛ ዱቤ","Cash & Collections":"ገንዘብ እና ስብሰባ","Performance":"አፈጻጸም","Targets":"ግቦች","Records":"መዝገቦች","A4 page":"A4 ወረቀት","80mm receipt":"80mm ደረሰኝ","58mm receipt":"58mm ደረሰኝ",
   "Pay full balance":"ሙሉ ቀሪውን ክፈል","Sales &amp; Profit Trend":"የሽያጭ እና ትርፍ አዝማሚያ","Users &amp; Roles":"ተጠቃሚዎች እና ሚናዎች","Paid by":"የተከፈለው በ","Receipt":"ደረሰኝ","Thank you! Come again.":"እናመሰግናለን! እንደገና ይምጡ።",
-  "Average sale":"አማካይ ሽያጭ","Items sold":"የተሸጡ እቃዎች","Cancel":"ተው","Lock":"ቆልፍ","Lock now":"አሁን ቆልፍ","Screen locked":"ማያ ተቆልፏል","Enter your 4-digit PIN":"4 አሃዝ PIN ያስገቡ","Unlock with Password":"በይለፍ ቃል ክፈት","Use PIN instead":"በ PIN ክፈት","Enter your account password":"የመለያዎን የይለፍ ቃል ያስገቡ","Unlock":"ክፈት","Wrong PIN":"የተሳሳተ PIN","Screen lock (PIN)":"የማያ መቆለፊያ (PIN)","Screen lock":"የማያ መቆለፊያ","Set PIN":"PIN አስቀምጥ","Change PIN":"PIN ቀይር","Remove PIN":"PIN አስወግድ","Log out":"ውጣ","Full backup":"ሙሉ መጠባበቂያ","Download Full Backup (.json)":"ሙሉ መጠባበቂያ አውርድ (.json)","Restore from Backup (.json)":"ከመጠባበቂያ መልስ (.json)","Shortage":"ጉድለት","Overage":"ብልጫ","Balanced":"ሚዛን ተመጣጥኗል","Cash received":"የተቀበለ ጥሬ ገንዘብ","Count the cash drawer":"የገንዘብ መሳቢያ ቆጠራ","Opening float":"የመጀመሪያ ገንዘብ","Expected cash in drawer":"በመሳቢያ መኖር ያለበት ገንዘብ","Cash counted in the drawer (ETB)":"በመሳቢያ የተቆጠረ ገንዘብ (ETB)","Save close":"መዝጊያ አስቀምጥ","Update close":"መዝጊያ አዘምን","Print Z-Report":"Z-Report አትም","Previous closings":"ያለፉ መዝጊያዎች","Enter the counted cash":"የተቆጠረውን ገንዘብ ያስገቡ","Remind":"አስታውስ","Send reminder":"ማስታወሻ ላክ","Telegram":"ቴሌግራም","Sale recorded":"ሽያጭ ተመዝግቧል","Print receipt":"ደረሰኝ አትም","Done":"ጨርስ","Show receipt after saving":"ከመዘገብ በኋላ ደረሰኝ አሳይ","Receipt":"ደረሰኝ","Time":"ሰዓት","Paid now":"አሁን የተከፈለ","BALANCE DUE":"ቀሪ ዕዳ","Expiry date":"የማብቂያ ቀን","Expiry":"ማብቂያ","Expired":"ጊዜው አልፏል","Already expired":"ጊዜያቸው አልፏል","Expiring within 30 days":"በ30 ቀናት ውስጥ የሚያልቁ","Expiring within 60 days":"በ60 ቀናት ውስጥ የሚያልቁ","sell or discount them first":"በቅድሚያ ይሽጡ ወይም ቅናሽ ያድርጉ","Discount (ETB)":"ቅናሽ (ETB)","Discount":"ቅናሽ","Subtotal":"ንዑስ ድምር","Discounts given":"የተሰጡ ቅናሾች","Price reductions in this period":"በዚህ ጊዜ የተሰጡ ቅናሾች","Total for this batch":"የጅምላው ጠቅላላ","Close":"ዝጋ","Add expense":"ወጪ ጨምር","Stock bought this month":"በዚህ ወር የተገዛ ስቶክ","Expenses this month":"የዚህ ወር ወጪ","Entries":"ግቤቶች","Sales made":"የተደረጉ ሽያጮች",
+  "Average sale":"አማካይ ሽያጭ","Items sold":"የተሸጡ እቃዎች","Cancel":"ተው","Cash Loans":"የሱቅ ብድር","Cash lent out":"የተበደረ ጥሬ ገንዘብ","Borrowers":"ተበዳሪዎች","Repaid this month":"በዚህ ወር የተመለሰ","Record cash loan":"የካሽ ብድር መዝግብ","Borrower name":"የተበዳሪ ስም","Amount lent (ETB)":"የተሰጠ መጠን (ETB)","Date taken":"የተወሰደበት ቀን","Expected repayment":"የሚመለስበት ቀን","Save loan":"ብድር አስቀምጥ","Repay":"ክፍያ መልስ","History":"ታሪክ","Record repayment":"ክፍያ መዝግብ","Repaid":"የተመለሰ","Loan":"ብድር","All loans":"ሁሉም ብድሮች","Cash loans out":"ያለ የካሽ ብድር","Date received":"የተቀበለበት ቀን","Paid by":"የተከፈለው በ","Repayments":"ክፍያዎች","PDF report":"የ PDF ሪፖርት","Stock purchase report":"የስቶክ ግዢ ሪፖርት","Download PDF":"PDF አውርድ","Purchases found":"የተገኙ ግዢዎች","Period":"ጊዜ","Daily":"ዕለታዊ","Weekly":"ሳምንታዊ","Monthly":"ወርሃዊ","Yearly":"ዓመታዊ","Custom":"የራስዎ ቀናት","Any day in the week":"በሳምንቱ ውስጥ ማንኛውም ቀን","Any day in the month":"በወሩ ውስጥ ማንኛውም ቀን","Any day in the year":"በዓመቱ ውስጥ ማንኛውም ቀን","Lock":"ቆልፍ","Lock now":"አሁን ቆልፍ","Screen locked":"ማያ ተቆልፏል","Enter your 4-digit PIN":"4 አሃዝ PIN ያስገቡ","Unlock with Password":"በይለፍ ቃል ክፈት","Use PIN instead":"በ PIN ክፈት","Enter your account password":"የመለያዎን የይለፍ ቃል ያስገቡ","Unlock":"ክፈት","Wrong PIN":"የተሳሳተ PIN","Screen lock (PIN)":"የማያ መቆለፊያ (PIN)","Screen lock":"የማያ መቆለፊያ","Set PIN":"PIN አስቀምጥ","Change PIN":"PIN ቀይር","Remove PIN":"PIN አስወግድ","Log out":"ውጣ","Full backup":"ሙሉ መጠባበቂያ","Download Full Backup (.json)":"ሙሉ መጠባበቂያ አውርድ (.json)","Restore from Backup (.json)":"ከመጠባበቂያ መልስ (.json)","Shortage":"ጉድለት","Overage":"ብልጫ","Balanced":"ሚዛን ተመጣጥኗል","Cash received":"የተቀበለ ጥሬ ገንዘብ","Count the cash drawer":"የገንዘብ መሳቢያ ቆጠራ","Opening float":"የመጀመሪያ ገንዘብ","Expected cash in drawer":"በመሳቢያ መኖር ያለበት ገንዘብ","Cash counted in the drawer (ETB)":"በመሳቢያ የተቆጠረ ገንዘብ (ETB)","Save close":"መዝጊያ አስቀምጥ","Update close":"መዝጊያ አዘምን","Print Z-Report":"Z-Report አትም","Previous closings":"ያለፉ መዝጊያዎች","Enter the counted cash":"የተቆጠረውን ገንዘብ ያስገቡ","Remind":"አስታውስ","Send reminder":"ማስታወሻ ላክ","Telegram":"ቴሌግራም","Sale recorded":"ሽያጭ ተመዝግቧል","Print receipt":"ደረሰኝ አትም","Done":"ጨርስ","Show receipt after saving":"ከመዘገብ በኋላ ደረሰኝ አሳይ","Receipt":"ደረሰኝ","Time":"ሰዓት","Paid now":"አሁን የተከፈለ","BALANCE DUE":"ቀሪ ዕዳ","Expiry date":"የማብቂያ ቀን","Expiry":"ማብቂያ","Expired":"ጊዜው አልፏል","Already expired":"ጊዜያቸው አልፏል","Expiring within 30 days":"በ30 ቀናት ውስጥ የሚያልቁ","Expiring within 60 days":"በ60 ቀናት ውስጥ የሚያልቁ","sell or discount them first":"በቅድሚያ ይሽጡ ወይም ቅናሽ ያድርጉ","Discount (ETB)":"ቅናሽ (ETB)","Discount":"ቅናሽ","Subtotal":"ንዑስ ድምር","Discounts given":"የተሰጡ ቅናሾች","Price reductions in this period":"በዚህ ጊዜ የተሰጡ ቅናሾች","Total for this batch":"የጅምላው ጠቅላላ","Close":"ዝጋ","Add expense":"ወጪ ጨምር","Stock bought this month":"በዚህ ወር የተገዛ ስቶክ","Expenses this month":"የዚህ ወር ወጪ","Entries":"ግቤቶች","Sales made":"የተደረጉ ሽያጮች",
   "Collected this month":"በዚህ ወር የተሰበሰበ","Sales today":"የዛሬ ሽያጭ","Sales this week":"የዚህ ሳምንት ሽያጭ","Sales this month":"የዚህ ወር ሽያጭ","Sales this year":"የዚህ ዓመት ሽያጭ","Profit":"ትርፍ","Cash balance":"የሱቅ ገንዘብ",
   "New sale":"አዲስ ሽያጭ","Stock in":"ስቶክ ግቤት","Expense":"ወጪ","Money received":"የተሰበሰበ ገንዘብ","Customers owe you":"ደንበኞች ያለባቸው","More details":"ተጨማሪ ዝርዝሮች",
   "Margins, collections, records and tips":"ትርፍ መጠን፣ ስብሰባ፣ መዝገቦች እና ምክሮች","View":"ይመልከቱ","App":"መተግበሪያ","Your profile and sign out":"መገለጫዎ እና መውጫ","Change your password":"የይለፍ ቃልዎን ይቀይሩ","Address and phone on receipts":"በደረሰኝ ላይ የሚታይ አድራሻና ስልክ",
@@ -1083,7 +1084,7 @@ function canDelete(){ return myRole()==='ceo' || myRole()==='manager'; }
    financial (dashboard, reports, stock, expenses, balances) stays CEO/Manager. */
 function allowedViewsForRole(){
   if(myRole()==='sales') return ['quickSale','sales','settings'];
-  return ['dashboard','quickSale','sales','invoice','credit','calendar','products','stockPurchase','expenses','reports','dayClose','settings'];
+  return ['dashboard','quickSale','sales','invoice','credit','calendar','products','stockPurchase','expenses','reports','dayClose','loans','settings'];
 }
 function defaultViewForRole(){ return myRole()==='sales' ? 'quickSale' : 'dashboard'; }
 
@@ -1116,11 +1117,11 @@ function subscribeAll(uidStr){
     UNSUB[key] = query.onSnapshot(function(snap){
       var rows = snap.docs.map(function(d){ return Object.assign({id:d.id}, d.data()); });
       STATE.data[key] = sorter ? rows.sort(sorter) : rows;
-      render();
+      renderLive();
     }, function(){});
   }
   UNSUB.profile = base.onSnapshot(function(doc){
-    if(doc.exists){ STATE.shopProfile = doc.data(); render(); }
+    if(doc.exists){ STATE.shopProfile = doc.data(); renderLive(); }
   }, function(){});
   /* Everyone needs products (to pick what they are selling). */
   listen('products', base.collection('products'));
@@ -1134,6 +1135,7 @@ function subscribeAll(uidStr){
     listen('invoices', base.collection('invoices'), function(a,b){return (b.createdAt||'').localeCompare(a.createdAt||'');});
     listen('backupSavings', base.collection('backupSavings'));
     listen('dayCloses', base.collection('dayCloses'));
+    listen('cashLoans', base.collection('cashLoans'));
     listen('branches', base.collection('branches'));
     listen('staff', base.collection('staff'));
   }
@@ -1189,7 +1191,9 @@ var STATE = {
   settingsTab:'account',
   settingsOpen:'',
   dashMore:false,
-  formOpen:'',
+  spReport:null,
+  loanFilter:'open',
+  formOpen:'', _inInput:false, _liveRender:false,
   locked:false, lockEntry:'', lockMode:'pin', lockAttempts:0, lockError:'', _lockBusy:false, _lockForce:false, pinMsg:'',
   dayCloseDate:'',
   dayCloseDraft:null,
@@ -1612,13 +1616,29 @@ function currentStoreBalance(){
   var allSales = round2(STATE.data.sales.reduce(function(a,s){ return a+saleCollected(s); },0));
   var allStock = sumBy(STATE.data.stockPurchases, 'totalCost');
   var allExp = sumBy(STATE.data.expenses, 'amount');
-  return round2(allSales - allStock - allExp);
+  return round2(allSales - allStock - allExp + loanFlowAll());
+}
+/* ---- cash loans: money lent out of the shop's cash ---- */
+function loanBalance(l){ return Math.max(0, round2((l.amount||0)-(l.repaid||0))); }
+function loansOutstanding(){ return round2((STATE.data.cashLoans||[]).reduce(function(a,l){ return a+loanBalance(l); },0)); }
+function loanFlowAll(){
+  var given = 0, back = 0;
+  (STATE.data.cashLoans||[]).forEach(function(l){ given += (l.amount||0); (l.payments||[]).forEach(function(p){ back += (p.amount||0); }); });
+  return round2(back - given);
+}
+function loansGivenInRange(from,to){ return round2((STATE.data.cashLoans||[]).filter(function(l){ return l.date>=from && l.date<=to; }).reduce(function(a,l){ return a+(l.amount||0); },0)); }
+function loanRepaidInRange(from,to,cashOnly){
+  var t = 0;
+  (STATE.data.cashLoans||[]).forEach(function(l){ (l.payments||[]).forEach(function(p){
+    if(p.date>=from && p.date<=to && (!cashOnly || (p.method||'cash')==='cash')) t += (p.amount||0);
+  }); });
+  return round2(t);
 }
 function cashDeltaForRange(fromStr, toStr){
   var sales = cashCollectedInRange(fromStr,toStr);
   var stock = sumBy(stockPurchasesInRange(fromStr,toStr), 'totalCost');
   var exp = sumBy(expensesInRange(fromStr,toStr), 'amount');
-  return round2(sales - stock - exp);
+  return round2(sales - stock - exp - loansGivenInRange(fromStr,toStr) + loanRepaidInRange(fromStr,toStr,false));
 }
 
 function topDay(metric){
@@ -1634,6 +1654,7 @@ function topDay(metric){
 /* ---------------- render root ---------------- */
 function render(){
   var root = document.getElementById('app');
+  var focusSnap = (STATE._inInput || STATE._liveRender) ? captureFocus() : null;
   if(!FIREBASE_OK){
     root.innerHTML = '<div class="auth-wrap"><div class="auth-card"><div class="auth-brand"><div class="brand-mark">TT</div><div><b style="display:block;font-weight:800;">Shop Sales Record</b><span class="muted">Taza Technology™</span></div></div>'+
       '<div class="err-text">This preview cannot load the sync service (blocked by this browser context). Please open the downloaded HTML file directly, or use it packaged as an app, to log in and sync data.</div></div></div>';
@@ -1655,6 +1676,7 @@ function render(){
     root.innerHTML = translateUI(renderShell());
   }
   bindEvents();
+  restoreFocus(focusSnap);
 }
 
 function startResendCooldown(){
@@ -1744,9 +1766,10 @@ var NAV = [
   {id:'expenses', grp:'finance', icon:'dollar', label:'expenses'},
   {id:'reports', grp:'finance', icon:'chart', label:'reports'},
   {id:'dayClose', grp:'finance', icon:'dollar', label:'day_close'},
+  {id:'loans', grp:'finance', icon:'users', label:'loans'},
   {id:'settings', grp:'system', icon:'gear', label:'settings'}
 ];
-var VIEW_TITLES = {dashboard:'Dashboard',quickSale:'Quick Add Sale',sales:'Sales Record',invoice:'Invoice Maker',credit:'Customer Credit',calendar:'Sales Calendar',products:'Products',stockPurchase:'Stock Purchase',expenses:'Expenses',reports:'Reports',dayClose:'End-of-Day Cash Drawer',settings:'Settings'};
+var VIEW_TITLES = {dashboard:'Dashboard',quickSale:'Quick Add Sale',sales:'Sales Record',invoice:'Invoice Maker',credit:'Customer Credit',calendar:'Sales Calendar',products:'Products',stockPurchase:'Stock Purchase',expenses:'Expenses',reports:'Reports',dayClose:'End-of-Day Cash Drawer',loans:'Cash Loans',settings:'Settings'};
 
 function navIcon(name){
   var paths = {
@@ -1839,6 +1862,7 @@ function renderView(){
     case 'invoice': return renderInvoice();
     case 'credit': return renderCredit();
     case 'dayClose': return renderDayClose();
+    case 'loans': return renderLoans();
     case 'calendar': return renderCalendar();
     case 'products': return renderProducts();
     case 'stockPurchase': return renderStockPurchase();
@@ -1965,6 +1989,7 @@ function renderDashboard(){
     '<div class="list-item"><span>Cash</span><b>'+fmtETB(coll.cash)+'</b></div>'+
     '<div class="list-item"><span>Telebirr / Bank</span><b>'+fmtETB(coll.digital)+'</b></div>'+
     '<div class="list-item"><span>Customers owe you</span><b style="color:'+(creditOut>0?'var(--red)':'var(--success)')+';">'+fmtETB(creditOut)+'</b></div>'+
+    (loansOutstanding()>0 ? '<div class="list-item"><span>Cash loans out</span><b style="color:var(--amber);">'+fmtETB(loansOutstanding())+'</b></div>' : '')+
   '</div>';
 
   /* ---- 6. everything else, one tap away ---- */
@@ -2280,6 +2305,8 @@ function dayCloseFigures(date){
     if(saleIsCredit(s)) f.creditSold += (s.totalSales||0);
   });
   f.cashExpenses = (STATE.data.expenses||[]).filter(function(e){ return e.date===date; }).reduce(function(a,e){ return a+(e.amount||0); },0);
+  f.loansGiven = loansGivenInRange(date,date);
+  f.loanRepaymentsCash = loanRepaidInRange(date,date,true);
   Object.keys(f).forEach(function(k){ if(k!=='salesCount') f[k] = round2(f[k]); });
   f.digital = round2(f.telebirr + f.cbe + f.bank);
   return f;
@@ -2287,7 +2314,7 @@ function dayCloseFigures(date){
 function dayCloseRecord(date, inp){
   var f = dayCloseFigures(date);
   var fl = round2(parseFloat(inp.float)||0), out = round2(parseFloat(inp.out)||0);
-  var expected = round2(fl + f.cashSales + f.cashCreditPayments - f.cashExpenses - out);
+  var expected = round2(fl + f.cashSales + f.cashCreditPayments + f.loanRepaymentsCash - f.cashExpenses - f.loansGiven - out);
   var hasCount = !(inp.counted===''||inp.counted===null||inp.counted===undefined) && !isNaN(parseFloat(inp.counted));
   var counted = hasCount ? round2(parseFloat(inp.counted)) : null;
   return Object.assign({}, f, {date:date, openingFloat:fl, otherOut:out, expectedCash:expected, countedCash:counted,
@@ -2317,7 +2344,9 @@ function zReportHtml(z){
     '</table>'+
     '<h2>Cash drawer</h2><table>'+
       line('Opening float', fmtETB(z.openingFloat))+line('+ Cash sales', fmtETB(z.cashSales))+line('+ Cash credit payments', fmtETB(z.cashCreditPayments))+
-      line('− Cash expenses', fmtETB(z.cashExpenses))+line('− Other cash taken out', fmtETB(z.otherOut))+
+      line('− Cash expenses', fmtETB(z.cashExpenses))+
+      (z.loansGiven ? line('− Cash loans given out', fmtETB(z.loansGiven)) : '')+(z.loanRepaymentsCash ? line('+ Cash loan repayments', fmtETB(z.loanRepaymentsCash)) : '')+
+      line('− Other cash taken out', fmtETB(z.otherOut))+
       line('<b>Expected cash</b>', '<b>'+fmtETB(z.expectedCash)+'</b>', 'z-strong')+
       line('<b>Counted cash</b>', '<b>'+(z.countedCash===null||z.countedCash===undefined?'—':fmtETB(z.countedCash))+'</b>', 'z-strong')+
       line('<b>Difference</b>', '<b>'+diffTxt+'</b>', 'z-diff'+(z.difference<0?' neg':(z.difference>0?' pos':'')))+
@@ -2340,7 +2369,7 @@ function renderDayClose(){
   var cashIn = round2(z.cashSales + z.cashCreditPayments);
   var hero = heroCard('Cash received', fmtETB(cashIn), [['Cash expenses', fmtETB(z.cashExpenses)], ['Total sales', fmtETB(z.totalSales)]],
     {note: z.salesCount+' sale'+(z.salesCount!==1?'s':'')+' on '+fmtDateLong(date)});
-  var net = round2(z.cashSales + z.cashCreditPayments - z.cashExpenses);
+  var net = round2(z.cashSales + z.cashCreditPayments + z.loanRepaymentsCash - z.cashExpenses - z.loansGiven);
   var form = '<div class="card" style="margin-bottom:14px;"><h3 style="margin-bottom:10px;">'+uiIcon('dollar','icon-sm')+' Count the cash drawer</h3>'+
     '<label>Date</label><input type="date" id="dcDate" value="'+esc(date)+'" max="'+todayStr()+'">'+
     '<form id="dayCloseForm" data-net="'+net+'">'+
@@ -2349,6 +2378,8 @@ function renderDayClose(){
       '<div class="list-item"><span>+ Cash sales</span><b>'+fmtETB(z.cashSales)+'</b></div>'+
       '<div class="list-item"><span>+ Cash credit payments</span><b>'+fmtETB(z.cashCreditPayments)+'</b></div>'+
       '<div class="list-item"><span>− Cash expenses</span><b>'+fmtETB(z.cashExpenses)+'</b></div>'+
+      (z.loansGiven ? '<div class="list-item"><span>− Cash loans given out</span><b>'+fmtETB(z.loansGiven)+'</b></div>' : '')+
+      (z.loanRepaymentsCash ? '<div class="list-item"><span>+ Cash loan repayments</span><b>'+fmtETB(z.loanRepaymentsCash)+'</b></div>' : '')+
       '<label>Other cash taken out <span class="field-note" style="display:inline;margin:0;">(optional — e.g. stock bought with drawer cash)</span></label>'+
       '<input type="number" id="dcOut" min="0" step="0.01" inputmode="decimal" value="'+esc(dr.out)+'" placeholder="0">'+
       '<div class="list-item" style="border-top:2px solid var(--border);"><span><b>Expected cash in drawer</b></span><b id="dcExpected">'+fmtETB(z.expectedCash)+'</b></div>'+
@@ -2392,6 +2423,128 @@ async function onSaveDayClose(ev){
     await shopRef().collection('dayCloses').doc(date).set(rec);
     toast('Day closed — '+(z.difference<0?('shortage '+fmtETB(-z.difference)):(z.difference>0?('overage '+fmtETB(z.difference)):'cash balanced'))+'.', z.difference<0?'error':'success');
   }catch(err){ showActionError(err); }
+}
+
+
+/* ---------------- CASH LOANS ---------------- */
+async function repayLoan(id, amount, dateStr, method){
+  var ref = shopRef().collection('cashLoans').doc(id);
+  await db.runTransaction(async function(tx){
+    var snap = await tx.get(ref);
+    if(!snap.exists) throw new Error('This loan no longer exists.');
+    var d = snap.data();
+    var due = round2((d.amount||0)-(d.repaid||0));
+    if(!(amount>0)) throw new Error('Enter an amount greater than 0.');
+    if(amount > due + 0.001) throw new Error('That is more than is still owed ('+fmtETB(due)+').');
+    var pay = {date:dateStr, amount:amount, method:method||'cash', byUid:STATE.session.userId};
+    tx.update(ref, {repaid: round2((d.repaid||0)+amount), payments:(d.payments||[]).concat([pay])});
+  });
+}
+async function undoLoanPayment(id, idx){
+  var ref = shopRef().collection('cashLoans').doc(id);
+  await db.runTransaction(async function(tx){
+    var snap = await tx.get(ref);
+    if(!snap.exists) throw new Error('This loan no longer exists.');
+    var d = snap.data(), pays = (d.payments||[]).slice(), p = pays[idx];
+    if(!p) throw new Error('That repayment was not found — refresh and try again.');
+    pays.splice(idx,1);
+    tx.update(ref, {repaid: round2(Math.max(0,(d.repaid||0)-(p.amount||0))), payments:pays});
+  });
+}
+function loanStatusPill(l){
+  if(loanBalance(l)<=0) return '<span class="pill pill-green">Settled</span>';
+  if(l.dueDate && l.dueDate < todayStr()) return '<span class="pill pill-red">Overdue</span>';
+  return '<span class="pill pill-blue">Open</span>';
+}
+function renderLoans(){
+  var all = (STATE.data.cashLoans||[]).slice().sort(function(a,b){ return (b.date||'').localeCompare(a.date||'') || (b.createdAt||'').localeCompare(a.createdAt||''); });
+  var filter = STATE.loanFilter || 'open';
+  var list = all.filter(function(l){ return filter==='all' || loanBalance(l)>0; });
+  var t = todayStr(), mo = isoDate(startOfMonth(new Date()));
+  var names = {};
+  all.forEach(function(l){ if(loanBalance(l)>0) names[(l.borrower||'').trim().toLowerCase()] = 1; });
+  var hero = heroCard('Cash lent out', fmtETB(loansOutstanding()), [['Borrowers', String(Object.keys(names).length)], ['Repaid this month', fmtETB(loanRepaidInRange(mo,t,false))]],
+    {note:'Cash taken from the shop is counted out of your Store Balance until it is paid back. It is not an expense, so it does not change your profit.'});
+  var open = STATE.formOpen==='loan';
+  var toggle = '<button type="button" class="btn btn-block add-toggle'+(open?' btn-outline':'')+'" data-act="toggle-form" data-form="loan">'+(open ? 'Close' : (uiIcon('plus','icon-sm')+' Record cash loan'))+'</button>';
+  var form = open ? ('<div class="card" style="margin-bottom:14px;"><h3 style="margin-bottom:10px;">Record cash loan</h3>'+
+    '<form id="loanForm">'+
+      '<label>Borrower name</label><input type="text" name="borrower" placeholder="Who took the cash?" required>'+
+      '<label>Phone <span class="field-note" style="display:inline;margin:0;">(optional)</span></label><input type="tel" name="phone" inputmode="tel" placeholder="Optional">'+
+      '<label>Amount lent (ETB)</label><input type="number" name="amount" min="0.01" step="0.01" inputmode="decimal" required>'+
+      '<div class="form-row"><div><label>Date taken</label><input type="date" name="date" value="'+todayStr()+'" max="'+todayStr()+'" required></div>'+
+      '<div><label>Expected repayment <span class="field-note" style="display:inline;margin:0;">(optional)</span></label><input type="date" name="dueDate"></div></div>'+
+      '<label>Notes</label><textarea name="notes" rows="2" placeholder="Optional — e.g. reason, who approved"></textarea>'+
+      '<button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('check','icon-sm')+' Save loan</button>'+
+      '<p class="field-note">The cash is taken out of your Store Balance right away.</p>'+
+    '</form></div>') : '';
+  var tabs = '<div class="tabs" style="margin:6px 0 12px;">'+
+    '<button class="tab-btn'+(filter==='open'?' active':'')+'" data-act="loan-filter" data-filter="open">Open</button>'+
+    '<button class="tab-btn'+(filter==='all'?' active':'')+'" data-act="loan-filter" data-filter="all">All loans</button></div>';
+  var rows = list.map(function(l){
+    var bal = loanBalance(l);
+    return '<tr><td>'+fmtDateLong(l.date)+'</td>'+
+      '<td><b>'+esc(l.borrower)+'</b>'+(l.phone?'<br><span class="muted" style="font-size:10.5px;">'+esc(l.phone)+'</span>':'')+'</td>'+
+      '<td>'+fmtETB(l.amount)+'</td><td>'+fmtETB(l.repaid||0)+'</td>'+
+      '<td><b style="color:'+(bal>0?'var(--red)':'var(--success)')+';">'+fmtETB(bal)+'</b><br>'+loanStatusPill(l)+'</td>'+
+      '<td>'+(l.dueDate?fmtDateLong(l.dueDate):'—')+'</td>'+
+      '<td><div class="row-actions"><button class="btn btn-sm" data-act="loan-open" data-id="'+l.id+'">'+(bal>0?'Repay':'History')+'</button>'+
+      '<button class="btn btn-danger btn-sm" data-act="delete-loan" data-id="'+l.id+'">Delete</button></div></td></tr>';
+  }).join('');
+  return hero + toggle + form + tabs +
+    '<div class="card">'+(list.length ? '<div class="table-wrap" style="border:none;"><table style="min-width:0;"><thead><tr><th>Date</th><th>Borrower</th><th>Loan</th><th>Repaid</th><th>Balance</th><th>Due</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>'
+      : '<div class="muted">'+(all.length ? 'No open loans — everything has been repaid.' : 'No cash loans recorded yet.')+'</div>')+'</div>';
+}
+function renderLoanModal(l){
+  var bal = loanBalance(l);
+  var methods = Object.keys(PAY_METHODS).map(function(k){ return '<option value="'+k+'">'+PAY_METHODS[k]+'</option>'; }).join('');
+  var pays = (l.payments||[]).map(function(p,i){ return {p:p, i:i}; }).sort(function(a,b){ return (b.p.date||'').localeCompare(a.p.date||''); });
+  return '<div class="ledger-summary">'+
+      '<div><span class="muted">Loan</span><b>'+fmtETB(l.amount)+'</b></div>'+
+      '<div><span class="muted">Repaid</span><b style="color:var(--success);">'+fmtETB(l.repaid||0)+'</b></div>'+
+      '<div><span class="muted">Balance</span><b style="color:'+(bal>0?'var(--red)':'var(--success)')+';">'+fmtETB(bal)+'</b></div></div>'+
+    '<p class="muted" style="margin:6px 0 12px;">'+fmtDateLong(l.date)+(l.phone?(' · '+esc(l.phone)):'')+(l.dueDate?(' · expected back '+fmtDateLong(l.dueDate)):'')+(l.notes?('<br>'+esc(l.notes)):'')+'</p>'+
+    (bal>0 ?
+      '<form id="loanRepayForm" class="credit-box"><h3 style="margin-bottom:8px;">Record repayment</h3>'+
+        '<div class="form-row"><div><label>Amount (ETB)</label><input type="number" id="lrAmount" name="amount" min="0.01" max="'+bal+'" step="0.01" inputmode="decimal" required></div>'+
+        '<div><label>Date received</label><input type="date" name="date" value="'+todayStr()+'" max="'+todayStr()+'" required></div></div>'+
+        '<button type="button" class="link-btn" data-act="fill-loan-full" data-amount="'+bal+'">Repay full balance ('+fmtETB(bal)+')</button>'+
+        '<label>Paid by</label><select name="method">'+methods+'</select>'+
+        '<button type="submit" class="btn btn-block" style="margin-top:12px;">Record repayment</button></form>'
+      : '<div class="ok-text" style="margin-bottom:12px;">This loan has been repaid in full.</div>')+
+    '<h3 style="margin:16px 0 6px;">Repayments</h3>'+
+    (pays.length ? pays.map(function(x){
+      return '<div class="list-item"><span>'+fmtDateLong(x.p.date)+' · '+esc(payLabel(x.p.method))+'</span><span style="display:flex;align-items:center;gap:8px;"><b style="color:var(--success);">+'+fmtETB(x.p.amount)+'</b>'+
+        '<button class="btn btn-outline btn-sm" data-act="undo-loan-pay" data-id="'+l.id+'" data-idx="'+x.i+'">Undo</button></span></div>';
+    }).join('') : '<div class="muted">No repayments yet.</div>');
+}
+async function onAddLoan(ev){
+  ev.preventDefault();
+  var fd = new FormData(ev.target);
+  var borrower = (fd.get('borrower')||'').trim();
+  var amount = round2(parseFloat(fd.get('amount'))||0);
+  if(!borrower){ alert('Enter who took the cash.'); return; }
+  if(!(amount>0)){ alert('Enter the amount that was lent (more than 0).'); return; }
+  var btn = ev.target.querySelector('button[type=submit]'); if(btn) btn.disabled = true;
+  try{
+    await shopRef().collection('cashLoans').add({
+      borrower:borrower, phone:(fd.get('phone')||'').trim(), amount:amount, date:fd.get('date')||todayStr(), dueDate:fd.get('dueDate')||'',
+      notes:(fd.get('notes')||'').trim(), repaid:0, payments:[], createdBy:STATE.session.userId, createdAt:new Date().toISOString()
+    });
+    STATE.formOpen = ''; render();
+    toast(fmtETB(amount)+' lent to '+borrower+' — taken out of your Store Balance.','success');
+  }catch(err){ showActionError(err); if(btn) btn.disabled = false; }
+}
+async function onLoanRepay(ev){
+  ev.preventDefault();
+  var fd = new FormData(ev.target);
+  var amount = round2(parseFloat(fd.get('amount'))||0);
+  var btn = ev.target.querySelector('button[type=submit]'); if(btn) btn.disabled = true;
+  try{
+    await repayLoan(STATE.modal.data.id, amount, fd.get('date')||todayStr(), fd.get('method')||'cash');
+    toast(fmtETB(amount)+' received — added back to your Store Balance.','success');
+    render();
+  }catch(err){ showActionError(err); if(btn) btn.disabled = false; }
 }
 
 /* ---------------- CUSTOMER CREDIT ---------------- */
@@ -2728,7 +2881,7 @@ function renderInvoicePreview(inv){
 }
 
 /* ---------------- FULL BACKUP & RESTORE ---------------- */
-var BACKUP_COLLECTIONS = ['products','sales','stockPurchases','expenses','invoices','backupSavings','branches','dayCloses','txIds'];
+var BACKUP_COLLECTIONS = ['products','sales','stockPurchases','expenses','invoices','backupSavings','branches','dayCloses','cashLoans','txIds'];
 var BACKUP_PROFILE_FIELDS = ['shopName','shopAddress','shopPhone','dailyGoal','weeklyGoal','monthlyGoal','yearlyGoal','weeklyStockBudget','monthlyStockBudget','backupSavingEnabled','colorPalette'];
 
 async function buildBackup(){
@@ -2821,7 +2974,7 @@ function onRestoreFile(ev){
     try{ obj = JSON.parse(String(reader.result)); }catch(e){ alert('That file is not a valid backup (it could not be read as JSON).'); return; }
     var v = validateBackup(obj);
     if(!v.ok){ alert(v.error); return; }
-    var labels = {products:'products', sales:'sales', stockPurchases:'stock purchases', expenses:'expenses', invoices:'invoices', backupSavings:'saving entries', branches:'branches', dayCloses:'day closings', txIds:'transaction IDs'};
+    var labels = {products:'products', sales:'sales', stockPurchases:'stock purchases', expenses:'expenses', invoices:'invoices', backupSavings:'saving entries', branches:'branches', dayCloses:'day closings', cashLoans:'cash loans', txIds:'transaction IDs'};
     askConfirm({
       title:'Restore this backup?', confirmText:'Restore',
       details:[ 'Backup made on '+(obj.exportedAt?fmtDateLong(String(obj.exportedAt).slice(0,10)):'an unknown date')+' — '+v.total+' records.' ]
@@ -3042,6 +3195,84 @@ function renderBudgetCard(label, used, budget){
     '</div>'+
   '</div>';
 }
+/* ---------------- STOCK PURCHASE REPORT (PDF) ---------------- */
+var SP_LABELS = {daily:'Daily', weekly:'Weekly', monthly:'Monthly', yearly:'Yearly', custom:'Custom'};
+function spReportRange(r){
+  var ref = parseISO(r.date || todayStr());
+  if(r.period==='daily') return {from:isoDate(ref), to:isoDate(ref)};
+  if(r.period==='weekly'){ var s = startOfWeek(ref); return {from:isoDate(s), to:isoDate(addDays(s,6))}; }
+  if(r.period==='monthly') return {from:isoDate(new Date(ref.getFullYear(), ref.getMonth(), 1)), to:isoDate(new Date(ref.getFullYear(), ref.getMonth()+1, 0))};
+  if(r.period==='yearly') return {from:ref.getFullYear()+'-01-01', to:ref.getFullYear()+'-12-31'};
+  var a = r.from || todayStr(), b = r.to || todayStr();
+  return a<=b ? {from:a, to:b} : {from:b, to:a};
+}
+function renderStockReportCard(){
+  var r = STATE.spReport || (STATE.spReport = {period:'daily', date:todayStr(), from:todayStr(), to:todayStr()});
+  var range = spReportRange(r);
+  var list = stockPurchasesInRange(range.from, range.to);
+  var opts = Object.keys(SP_LABELS).map(function(k){ return '<option value="'+k+'"'+(r.period===k?' selected':'')+'>'+SP_LABELS[k]+'</option>'; }).join('');
+  var dateLabel = {daily:'Date', weekly:'Any day in the week', monthly:'Any day in the month', yearly:'Any day in the year'}[r.period];
+  var dates = r.period==='custom'
+    ? '<div class="form-row"><div><label>From</label><input type="date" id="spRepFrom" value="'+esc(r.from)+'" max="'+todayStr()+'"></div><div><label>To</label><input type="date" id="spRepTo" value="'+esc(r.to)+'" max="'+todayStr()+'"></div></div>'
+    : '<label>'+dateLabel+'</label><input type="date" id="spRepDate" value="'+esc(r.date)+'">';
+  return '<div class="card" style="margin-bottom:14px;"><h3 style="margin-bottom:10px;">'+uiIcon('download','icon-sm')+' Stock purchase report</h3>'+
+    '<form id="stockReportForm">'+
+      '<label>Report</label><select id="spRepPeriod">'+opts+'</select>'+dates+
+      '<div class="list-item" style="margin-top:12px;"><span>Period</span><b>'+fmtDateLong(range.from)+(range.from!==range.to?(' – '+fmtDateLong(range.to)):'')+'</b></div>'+
+      '<div class="list-item"><span>Purchases found</span><b>'+list.length+' · '+fmtETB(sumBy(list,'totalCost'))+'</b></div>'+
+      '<button type="submit" class="btn btn-block" style="margin-top:14px;">'+uiIcon('download','icon-sm')+' Download PDF</button>'+
+    '</form></div>';
+}
+function exportStockPurchasePDF(r){
+  if(typeof window.jspdf === 'undefined'){ alert('PDF export library failed to load. Check your connection and try again.'); return; }
+  var range = spReportRange(r);
+  var list = stockPurchasesInRange(range.from, range.to).slice().sort(function(a,b){ return (a.date||'').localeCompare(b.date||'') || (a.createdAt||'').localeCompare(b.createdAt||''); });
+  if(!list.length){ alert('No stock purchases were recorded in that period.'); return; }
+  var shop = currentUser() || {};
+  var total = sumBy(list,'totalCost'), qty = sumBy(list,'quantity');
+  var byProduct = {}, bySupplier = {};
+  list.forEach(function(sp){
+    var p = byProduct[sp.productName] || (byProduct[sp.productName] = {name:sp.productName, qty:0, total:0}); p.qty += (sp.quantity||0); p.total += (sp.totalCost||0);
+    var sName = (sp.supplier||'').trim() || 'Not specified';
+    var s = bySupplier[sName] || (bySupplier[sName] = {name:sName, n:0, total:0}); s.n++; s.total += (sp.totalCost||0);
+  });
+  var doc = new window.jspdf.jsPDF({unit:'mm', format:'a4'});
+  doc.setFontSize(16); doc.setTextColor(29,58,95);
+  ptxt(doc, shop.shopName || 'Shop', 14, 18);
+  doc.setFontSize(10); doc.setTextColor(90,90,90);
+  var y = 25;
+  if(shop.shopAddress){ ptxt(doc, shop.shopAddress+(shop.shopPhone?' · '+shop.shopPhone:''), 14, y); y += 5; }
+  doc.setFontSize(13); doc.setTextColor(20,30,25);
+  ptxt(doc, 'Stock Purchase Report — '+SP_LABELS[r.period], 14, y+2); y += 8;
+  doc.setFontSize(10); doc.setTextColor(90,90,90);
+  ptxt(doc, 'Period: '+fmtDateLong(range.from)+(range.from!==range.to?(' to '+fmtDateLong(range.to)):''), 14, y); y += 5;
+  ptxt(doc, 'Generated: '+fmtDateLong(todayStr()), 14, y);
+  var head = {fillColor:[29,58,95]};
+  doc.autoTable({ startY:y+6, head:[['Summary','']],
+    body:[['Total spent', fmtETB(total)], ['Number of purchases', String(list.length)], ['Different products', String(Object.keys(byProduct).length)], ['Total quantity bought', String(qty)]],
+    didParseCell: ethCell, theme:'striped', headStyles:head, styles:{fontSize:10} });
+  var nextY = doc.lastAutoTable.finalY + 9;
+  doc.setFontSize(12); doc.setTextColor(20,30,25); ptxt(doc, 'Purchases', 14, nextY);
+  doc.autoTable({ startY:nextY+3, head:[['Date','Product','Qty','Unit cost','Total','Supplier']],
+    body:list.map(function(sp){ return [fmtDateLong(sp.date), sp.productName, String(sp.quantity), fmtETB(sp.unitCost), fmtETB(sp.totalCost), sp.supplier||'—']; }),
+    foot:[['','','','TOTAL', fmtETB(total), '']],
+    didParseCell: ethCell, theme:'grid', headStyles:head, footStyles:{fillColor:[201,162,39], textColor:[40,30,5], fontStyle:'bold'}, styles:{fontSize:9} });
+  nextY = doc.lastAutoTable.finalY + 9;
+  doc.setFontSize(12); doc.setTextColor(20,30,25); ptxt(doc, 'By product', 14, nextY);
+  doc.autoTable({ startY:nextY+3, head:[['Product','Quantity','Total spent']],
+    body:Object.keys(byProduct).map(function(k){ return byProduct[k]; }).sort(function(a,b){ return b.total-a.total; }).map(function(p){ return [p.name, String(round2(p.qty)), fmtETB(round2(p.total))]; }),
+    didParseCell: ethCell, theme:'striped', headStyles:head, styles:{fontSize:9} });
+  nextY = doc.lastAutoTable.finalY + 9;
+  if(nextY > 262){ doc.addPage(); nextY = 20; }
+  doc.setFontSize(12); doc.setTextColor(20,30,25); ptxt(doc, 'By supplier / source', 14, nextY);
+  doc.autoTable({ startY:nextY+3, head:[['Supplier / source','Purchases','Total spent']],
+    body:Object.keys(bySupplier).map(function(k){ return bySupplier[k]; }).sort(function(a,b){ return b.total-a.total; }).map(function(s){ return [s.name, String(s.n), fmtETB(round2(s.total))]; }),
+    didParseCell: ethCell, theme:'striped', headStyles:head, styles:{fontSize:9} });
+  var pages = doc.getNumberOfPages();
+  for(var i=1;i<=pages;i++){ doc.setPage(i); doc.setFontSize(8); doc.setTextColor(140,140,140); doc.text('Page '+i+' of '+pages, 196, 290, {align:'right'}); }
+  doc.save('stock-purchases-'+r.period+'-'+range.from+(range.from!==range.to?('_to_'+range.to):'')+'.pdf');
+}
+
 function renderStockPurchase(){
   var mode = STATE.stockMode||'single';
   var wkStart = isoDate(startOfWeek(new Date()));
@@ -3055,7 +3286,11 @@ function renderStockPurchase(){
   var budgets = renderBudgetCard('Weekly budget', weekTotal, parseFloat((STATE.shopProfile||{}).weeklyStockBudget)||0)+
     renderBudgetCard('Monthly budget', monthTotal, parseFloat((STATE.shopProfile||{}).monthlyStockBudget)||0);
   var open = STATE.formOpen==='stock';
-  var toggle = '<button type="button" class="btn btn-block add-toggle'+(open?' btn-outline':'')+'" data-act="toggle-form" data-form="stock">'+(open ? 'Close' : (uiIcon('plus','icon-sm')+' Record stock purchase'))+'</button>';
+  var repOpen = STATE.formOpen==='stockreport';
+  var toggle = '<div class="btn-pair">'+
+    '<button type="button" class="btn add-toggle'+(open?' btn-outline':'')+'" data-act="toggle-form" data-form="stock">'+(open ? 'Close' : (uiIcon('plus','icon-sm')+' Record stock purchase'))+'</button>'+
+    '<button type="button" class="btn btn-outline add-toggle" data-act="toggle-form" data-form="stockreport">'+(repOpen ? 'Close' : (uiIcon('download','icon-sm')+' PDF report'))+'</button>'+
+  '</div>';
   var tabs = '<div class="tabs" style="margin-bottom:14px;">'+
       '<button type="button" class="tab-btn'+(mode==='single'?' active':'')+'" data-act="stock-mode" data-mode="single">Single item</button>'+
       '<button type="button" class="tab-btn'+(mode==='bulk'?' active':'')+'" data-act="stock-mode" data-mode="bulk">'+uiIcon('box','icon-sm')+' Bulk entry</button>'+
@@ -3106,6 +3341,7 @@ function renderStockPurchase(){
         '</form></div>';
     }
   }
+  if(repOpen) formArea = renderStockReportCard();
   return hero + budgets + toggle + formArea + historyCard;
 }
 
@@ -3686,6 +3922,10 @@ function renderModal(){
       '<p class="field-note">Email: '+esc(st2.email)+' (cannot be changed here)</p>'+
       '<div class="modal-foot"><button type="button" class="btn btn-outline" data-act="close-modal">Cancel</button><button type="submit" class="btn">Save changes</button></div>'+
     '</form>';
+  } else if(m.type==='loanRepay'){
+    var lnm = (STATE.data.cashLoans||[]).find(function(x){ return x.id===m.data.id; });
+    title = lnm ? lnm.borrower : 'Loan';
+    body = (lnm ? renderLoanModal(lnm) : '<div class="muted">This loan was not found.</div>') + '<div class="modal-foot"><button type="button" class="btn btn-outline btn-block" data-act="close-modal">Close</button></div>';
   } else if(m.type==='saleReceipt'){
     var rm = saleReceiptModel(m.data.sales);
     var rf = STATE.receiptFormat==='58' ? '58' : '80';
@@ -3718,7 +3958,7 @@ function renderModal(){
       '<div class="modal-foot"><button type="button" class="btn btn-outline" data-act="close-modal">Cancel</button><button type="submit" class="btn">Save changes</button></div>'+
     '</form>';
   }
-  return '<div class="modal-back'+(STATE._modalEnter?' enter':'')+'" data-act="close-modal-back"><div class="modal'+(m.type==='customerLedger'?' modal-wide':'')+(STATE._modalEnter?' enter':'')+'"><h2>'+title+'</h2>'+body+'</div></div>';
+  return '<div class="modal-back'+(STATE._modalEnter?' enter':'')+'" data-act="close-modal-back"><div class="modal'+((m.type==='customerLedger'||m.type==='loanRepay')?' modal-wide':'')+(STATE._modalEnter?' enter':'')+'"><h2>'+title+'</h2>'+body+'</div></div>';
 }
 
 /* ---------------- EVENT BINDING ---------------- */
@@ -3909,6 +4149,14 @@ function bindEvents(){
     });
   });
 
+  var loanF = document.getElementById('loanForm'); if(loanF) loanF.addEventListener('submit', onAddLoan);
+  var loanRepF = document.getElementById('loanRepayForm'); if(loanRepF) loanRepF.addEventListener('submit', onLoanRepay);
+  var spRepForm = document.getElementById('stockReportForm');
+  if(spRepForm){
+    spRepForm.addEventListener('submit', function(ev){ ev.preventDefault(); exportStockPurchasePDF(STATE.spReport); });
+    var spBind = function(id, key){ var el = document.getElementById(id); if(el) el.addEventListener('change', function(){ STATE.spReport[key] = el.value; render(); }); };
+    spBind('spRepPeriod','period'); spBind('spRepDate','date'); spBind('spRepFrom','from'); spBind('spRepTo','to');
+  }
   var pinSetF = document.getElementById('pinSetForm'); if(pinSetF) pinSetF.addEventListener('submit', onPinSet);
   var pinChgF = document.getElementById('pinChangeForm'); if(pinChgF) pinChgF.addEventListener('submit', onPinChange);
   var pinRmF = document.getElementById('pinRemoveForm'); if(pinRmF) pinRmF.addEventListener('submit', onPinRemove);
@@ -3997,10 +4245,37 @@ function bindEvents(){
   if(repTo) repTo.addEventListener('change', function(){ STATE.reportCustomTo = repTo.value; render(); });
 }
 
-function preserveFocus(id){
-  var el = document.getElementById(id);
-  if(el){ el.focus(); var v=el.value; el.value=''; el.value=v; }
+/* The whole screen is redrawn after many keystrokes. render() now remembers which field you were typing in,
+   what it contained and exactly where the cursor was, and puts all three back — so you can edit in the
+   middle of a word. (This function is kept only because older call sites still call it.) */
+function preserveFocus(id){}
+function captureFocus(){
+  var ae = document.activeElement, root = document.getElementById('app');
+  if(!ae || !/^(INPUT|TEXTAREA)$/.test(ae.tagName) || !root || !root.contains(ae)) return null;
+  /* a field is found again by its id, or by (form id + field name) when it has no id of its own */
+  var key = ae.id ? {id:ae.id} : ((ae.name && ae.form && ae.form.id) ? {form:ae.form.id, name:ae.name} : null);
+  if(!key) return null;
+  var snap = {key:key, type:(ae.type||'').toLowerCase(), value:ae.value, start:null, end:null, dir:'none'};
+  try{ snap.start = ae.selectionStart; snap.end = ae.selectionEnd; snap.dir = ae.selectionDirection || 'none'; }catch(e){}
+  return snap;
 }
+function restoreFocus(snap){
+  if(!snap) return;
+  var el = null;
+  if(snap.key.id) el = document.getElementById(snap.key.id);
+  else { var fm = document.getElementById(snap.key.form); el = fm && fm.elements ? fm.elements[snap.key.name] : null; }
+  if(!el || el.length!==undefined && el.tagName===undefined) return;   /* a group of radio buttons — nothing to restore */
+  var textual = (el.tagName==='TEXTAREA') || /^(text|search|tel|url|email|password|)$/.test(snap.type);
+  var skipValue = /^(checkbox|radio|file|button|submit|reset|hidden)$/.test(snap.type);
+  /* while typing: keep what was typed in text boxes; when live data arrives: keep it in every kind of box */
+  if(!skipValue && (textual || STATE._liveRender) && el.value !== snap.value) el.value = snap.value;
+  try{ el.focus(); }catch(e){}
+  if(snap.start!==null && snap.start!==undefined){ try{ el.setSelectionRange(snap.start, snap.end, snap.dir); }catch(e){} }
+}
+/* mark renders that happen inside a typing event, or because live data arrived */
+document.addEventListener('input', function(){ STATE._inInput = true; }, true);
+document.addEventListener('input', function(){ STATE._inInput = false; }, false);
+function renderLive(){ STATE._liveRender = true; try{ render(); } finally{ STATE._liveRender = false; } }
 
 function handleAction(act, el, ev){
   if(act==='tab-login'){ STATE.authTab='login'; STATE.authError=''; render(); return; }
@@ -4235,6 +4510,26 @@ function handleAction(act, el, ev){
     if(!STATE.bulkStockDraft.rows.length) STATE.bulkStockDraft.rows.push({name:'',qty:1,unitCost:0});
     render(); return;
   }
+  if(act==='loan-filter'){ STATE.loanFilter = el.getAttribute('data-filter'); render(); return; }
+  if(act==='loan-open'){ STATE.modal = {type:'loanRepay', data:{id:el.getAttribute('data-id')}}; render(); return; }
+  if(act==='fill-loan-full'){ var la = document.getElementById('lrAmount'); if(la) la.value = el.getAttribute('data-amount'); return; }
+  if(act==='undo-loan-pay'){
+    var ulId = el.getAttribute('data-id'), ulIdx = parseInt(el.getAttribute('data-idx'),10);
+    var ul = (STATE.data.cashLoans||[]).find(function(x){ return x.id===ulId; }), up2 = ul && (ul.payments||[])[ulIdx];
+    askConfirm({title:'Undo this repayment'+(up2?(' of '+fmtETB(up2.amount)):'')+'?', confirmText:'Undo repayment',
+      details: up2 ? ['The balance still owed by '+ul.borrower+' goes back up by '+fmtETB(up2.amount)+'.', fmtETB(up2.amount)+' is taken out of your Store Balance again.'] : []
+    }).then(function(ok){ if(ok) undoLoanPayment(ulId, ulIdx).then(function(){ toast('Repayment reversed.','success'); }).catch(showActionError); });
+    return;
+  }
+  if(act==='delete-loan'){
+    var dlId = el.getAttribute('data-id');
+    var dl = (STATE.data.cashLoans||[]).find(function(x){ return x.id===dlId; });
+    askConfirm({title:'Delete the loan to '+(dl?dl.borrower:'this person')+(dl?(' ('+fmtETB(dl.amount)+')'):'')+'?', confirmText:'Delete loan',
+      details: dl ? ['The loan is removed from the register'+((dl.payments||[]).length?(' together with its '+dl.payments.length+' repayment'+(dl.payments.length>1?'s':'')):'')+'.',
+        'Your Store Balance goes '+(loanBalance(dl)>=0?'up':'down')+' by '+fmtETB(Math.abs(round2((dl.amount||0)-(dl.repaid||0))))+' (the part that was counted as lent out and not yet repaid).'] : []
+    }).then(function(ok){ if(ok) shopRef().collection('cashLoans').doc(dlId).delete().then(function(){ toast('Loan deleted.','success'); }).catch(showActionError); });
+    return;
+  }
   if(act==='backup-download'){ doBackupDownload(); return; }
   if(act==='backup-restore'){ var rf0 = document.getElementById('restoreFile'); if(rf0) rf0.click(); return; }
   if(act==='remind-sms' || act==='remind-tg'){
@@ -4262,7 +4557,7 @@ function handleAction(act, el, ev){
     if(rs){ STATE.modal = {type:'saleReceipt', data:{sales:[rs]}}; render(); }
     return;
   }
-  if(act==='toggle-form'){ var fm = el.getAttribute('data-form'); STATE.formOpen = (STATE.formOpen===fm) ? '' : fm; render(); if(STATE.formOpen){ setTimeout(function(){ var f = document.querySelector('#expenseForm, #stockForm, #bulkStockForm'); if(f && f.scrollIntoView){ try{ f.scrollIntoView({block:'center', behavior:'smooth'}); }catch(e){} } }, 80); } return; }
+  if(act==='toggle-form'){ var fm = el.getAttribute('data-form'); STATE.formOpen = (STATE.formOpen===fm) ? '' : fm; render(); if(STATE.formOpen){ setTimeout(function(){ var f = document.querySelector('#expenseForm, #stockForm, #bulkStockForm, #stockReportForm, #loanForm'); if(f && f.scrollIntoView){ try{ f.scrollIntoView({block:'center', behavior:'smooth'}); }catch(e){} } }, 80); } return; }
   if(act==='dash-more'){ STATE.dashMore = !STATE.dashMore; render(); return; }
   if(act==='acc-toggle'){
     STATE.pinMsg = '';
@@ -5179,7 +5474,7 @@ if(FIREBASE_OK){
           return;
         }
         STATE.session = {userId:user.uid, shopId:staffInfo.shopId, role:staffInfo.role, branchId:staffInfo.branchId||null};
-        STATE.data = {products:[],sales:[],stockPurchases:[],expenses:[],invoices:[],backupSavings:[],branches:[],staff:[],dayCloses:[]};
+        STATE.data = {products:[],sales:[],stockPurchases:[],expenses:[],invoices:[],backupSavings:[],branches:[],staff:[],dayCloses:[],cashLoans:[]};
         var profSnap = await db.collection('shops').doc(staffInfo.shopId).get();
         STATE.shopProfile = profSnap.exists ? profSnap.data() : {shopName:'',ownerName:'',email:user.email,createdAt:new Date().toISOString()};
         if(STATE.shopProfile.colorPalette && STATE.shopProfile.colorPalette !== PALETTE){ applyPalette(STATE.shopProfile.colorPalette); }
