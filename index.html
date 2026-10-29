@@ -1193,6 +1193,7 @@ var STATE = {
   dashMore:false,
   spReport:null,
   loanFilter:'open',
+  _renderPending:false,
   formOpen:'', _inInput:false, _liveRender:false,
   locked:false, lockEntry:'', lockMode:'pin', lockAttempts:0, lockError:'', _lockBusy:false, _lockForce:false, pinMsg:'',
   dayCloseDate:'',
@@ -1654,6 +1655,7 @@ function topDay(metric){
 /* ---------------- render root ---------------- */
 function render(){
   var root = document.getElementById('app');
+  STATE._renderPending = false;
   var focusSnap = (STATE._inInput || STATE._liveRender) ? captureFocus() : null;
   if(!FIREBASE_OK){
     root.innerHTML = '<div class="auth-wrap"><div class="auth-card"><div class="auth-brand"><div class="brand-mark">TT</div><div><b style="display:block;font-weight:800;">Shop Sales Record</b><span class="muted">Taza Technology™</span></div></div>'+
@@ -2134,7 +2136,7 @@ function renderBulkSaleForm(){
         Object.keys(PAY_METHODS).map(function(k){
           return '<label class="pay-opt"><input type="radio" name="bulkPay" data-bulksale-pay="'+k+'"'+((d.paymentMethod||'cash')===k?' checked':'')+'><span>'+PAY_METHODS[k]+'</span></label>';
         }).join('')+'</div>'+
-      (needsTx ? '<label>Transaction ID <span class="field-note" style="display:inline;margin:0;">(one ID for the whole payment)</span></label><input type="text" id="bulkSaleTx" value="'+esc(d.txId||'')+'" placeholder="e.g. DEF1A2B3C4" autocomplete="off">' : '')+
+      '<div id="bulkTxWrap">'+(needsTx ? '<label>Transaction ID <span class="field-note" style="display:inline;margin:0;">(one ID for the whole payment)</span></label><input type="text" id="bulkSaleTx" value="'+esc(d.txId||'')+'" placeholder="e.g. DEF1A2B3C4" autocomplete="off">' : '')+'</div>'+
       '<label style="margin-top:14px;">Items</label>'+
       '<div class="invoice-items" id="bulkSaleItems">'+itemRows+'</div>'+
       '<button type="button" class="btn btn-outline btn-sm" data-act="bulk-sale-add-row" style="margin-top:6px;">+ Add another item</button>'+
@@ -2151,10 +2153,10 @@ function renderBulkSaleForm(){
         '<p class="field-note">Money paid now is shared across the items from the first one down, and goes straight into your Store Balance. The rest stays in Customer Credit.</p>'+
       '</div>' : '')+
       '<label>Discount (ETB) <span class="field-note" style="display:inline;margin:0;">(optional, for the whole batch)</span></label><input type="number" id="bulkDiscount" min="0" step="0.01" inputmode="decimal" value="'+(d.discount||0)+'">'+
-      '<div class="card" style="margin-top:14px;background:var(--green-50);border-style:dashed;"><div class="list-item"><span>Total for this batch</span><b>'+fmtETB(net)+'</b></div>'+
+      '<div id="bulkSaleTotals"><div class="card" style="margin-top:14px;background:var(--green-50);border-style:dashed;"><div class="list-item"><span>Total for this batch</span><b>'+fmtETB(net)+'</b></div>'+
         (disc>0 ? '<div class="list-item"><span>Discount</span><b style="color:var(--amber);">−'+fmtETB(disc)+'</b></div>' : '')+
         (isCredit ? '<div class="list-item"><span>Paid now</span><b>'+fmtETB(paid)+'</b></div><div class="list-item"><span>Balance on credit</span><b style="color:var(--red);">'+fmtETB(Math.max(0,net-paid))+'</b></div>' : '')+
-      '</div>'+
+      '</div></div>'+
       '<label class="check-row" style="margin-top:14px;"><input type="checkbox" id="autoReceipt" style="width:auto;"'+(STATE.autoReceipt?' checked':'')+'> <span>Show receipt after saving</span></label>'+
       '<button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('plus','icon-sm')+' Save all sales</button>'+
       '</form>'+
@@ -2176,7 +2178,7 @@ function renderBulkSaleRow(item, idx){
     '<input type="number" id="bsQty_'+idx+'" min="0" step="1" placeholder="Qty" value="'+qty+'" data-bulksale-field="qty" data-idx="'+idx+'">'+
     '<input type="number" id="bsCost_'+idx+'" min="0" step="0.01" placeholder="Cost" value="'+(item.costPrice||0)+'" data-bulksale-field="costPrice" data-idx="'+idx+'"'+(noCost?' style="display:none;"':'')+'>'+
     '<input type="number" id="bsSell_'+idx+'" min="0" step="0.01" placeholder="Sell price" value="'+sell+'" data-bulksale-field="sellingPrice" data-idx="'+idx+'">'+
-    '<div class="ln-total">'+fmtETB(total)+'</div>'+
+    '<div class="ln-total" id="lnTotal_'+idx+'">'+fmtETB(total)+'</div>'+
     '<button type="button" class="remove-line" data-act="bulk-sale-remove-row" data-idx="'+idx+'">×</button>'+
   '</div>';
 }
@@ -2225,7 +2227,7 @@ function renderSingleQuickSale(){
         '<div class="combo-wrap">'+
           '<input type="text" id="qsProductSearch" placeholder="Search by name or scan a barcode…" value="'+esc(STATE.quickSaleQuery||'')+'" autocomplete="off">'+
           '<button type="button" class="btn btn-outline btn-sm" data-act="qs-scan-barcode" style="margin-top:6px;">'+uiIcon('barcode','icon-sm')+' Scan barcode</button>'+
-          '<div class="combo-results">'+ (matches.length? matches.map(function(p){
+          '<div class="combo-results" id="qsResults">'+ (matches.length? matches.map(function(p){
             return '<div class="combo-item" data-act="qs-pick-product" data-id="'+p.id+'">'+esc(p.name)+' <span class="muted">(stock: '+p.currentStock+')</span></div>';
           }).join('') : '<div class="combo-item muted">No matching products</div>') +'</div>'+
         '</div>'
@@ -2609,7 +2611,7 @@ function renderCredit(){
       '</div>'+
     '</div>';
   }).join('');
-  return cards + tabs + toolbar + '<div class="card" style="padding:6px 16px;">'+(rows || '<div class="empty" style="padding:24px;">No customers match.</div>')+'</div>';
+  return cards + tabs + toolbar + '<div class="card" id="creditList" style="padding:6px 16px;">'+(rows || '<div class="empty" style="padding:24px;">No customers match.</div>')+'</div>';
 }
 
 function renderCustomerLedger(key){
@@ -2710,15 +2712,15 @@ function renderSales(){
       '<input type="text" id="salesSearch" placeholder="Search product…" value="'+esc(f.search)+'">'+
       '<input type="date" id="salesDateFilter" value="'+esc(f.date)+'">'+
       '<select id="salesProductFilter">'+productOptions+'</select>'+
-      (f.search||f.date||f.product ? '<button class="btn-outline btn btn-sm" data-act="clear-sales-filter">Clear</button>' : '')+
+      '<span id="salesClearWrap">'+(f.search||f.date||f.product ? '<button class="btn-outline btn btn-sm" data-act="clear-sales-filter">Clear</button>' : '')+'</span>'+
     '</div>'+
     '<button class="btn" data-nav="quickSale">'+uiIcon('plus','icon-sm')+' Add sale</button>'+
   '</div>'+
-  (list.length ? (
+  '<div id="salesList">'+(list.length ? (
   '<div class="table-wrap"><table><thead><tr>'+
     '<th>Date</th><th>Product</th><th>Qty</th>'+(canManage()?'<th class="hm">Cost</th>':'')+'<th class="hm">Sell</th><th>Total sales</th><th>Payment</th>'+(canManage()?'<th class="hm">COGS</th><th class="hm">Gross profit</th>':'')+'<th></th>'+
   '</tr></thead><tbody>'+rows+'</tbody></table></div>'
-  ) : emptyState('list','No sales match','Try clearing your filters, or record a new sale.'));
+  ) : emptyState('list','No sales match','Try clearing your filters, or record a new sale.'))+'</div>';
 }
 
 /* ---------------- INVOICE MAKER ---------------- */
@@ -2729,7 +2731,7 @@ function renderInvoiceItemRow(item, idx){
     '<input type="text" id="invItemName_'+idx+'" placeholder="Item / product name" value="'+esc(item.name||'')+'" data-inv-field="name" data-idx="'+idx+'">'+
     '<input type="number" id="invItemQty_'+idx+'" min="0" step="1" placeholder="Qty" value="'+qty+'" data-inv-field="qty" data-idx="'+idx+'">'+
     '<input type="number" id="invItemPrice_'+idx+'" min="0" step="0.01" placeholder="Unit price" value="'+price+'" data-inv-field="unitPrice" data-idx="'+idx+'">'+
-    '<div class="ln-total">'+fmtETB(total)+'</div>'+
+    '<div class="ln-total" id="lnTotal_'+idx+'">'+fmtETB(total)+'</div>'+
     '<button type="button" class="remove-line" data-act="inv-remove-item" data-idx="'+idx+'">×</button>'+
   '</div>';
 }
@@ -2754,10 +2756,10 @@ function renderInvoice(){
     '<div class="invoice-items">'+ d.items.map(renderInvoiceItemRow).join('') +'</div>'+
     '<button type="button" class="btn btn-outline btn-sm" data-act="inv-add-item">'+uiIcon('plus','icon-sm')+' Add line</button>'+
     '<label>Discount (ETB) <span class="field-note" style="display:inline;margin:0;">(optional)</span></label><input type="number" id="invDiscount" min="0" step="0.01" inputmode="decimal" value="'+(d.discount||0)+'">'+
-    '<div class="card" style="margin-top:14px;background:var(--green-50);border-style:dashed;">'+
+    '<div id="invTotals"><div class="card" style="margin-top:14px;background:var(--green-50);border-style:dashed;">'+
       (invDisc>0 ? '<div class="list-item"><span>Subtotal</span><b>'+fmtETB(subtotal)+'</b></div><div class="list-item"><span>Discount</span><b style="color:var(--amber);">−'+fmtETB(invDisc)+'</b></div>' : '')+
       '<div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-weight:700;">Grand total</span><span class="stat-value" style="font-size:18px;">'+fmtETB(grandTotal)+'</span></div>'+
-    '</div>'+
+    '</div></div>'+
     '<form id="invoiceForm"><button type="submit" class="btn btn-block" style="margin-top:16px;">'+uiIcon('receipt','icon-sm')+(STATE.editingInvoiceId?' Update invoice':' Generate invoice preview')+'</button></form>'+
   '</div>'+
   '<div class="card"><h3 style="margin-bottom:10px;">Recent invoices</h3>'+
@@ -3352,7 +3354,7 @@ function renderBulkStockRow(item, idx){
     '<input type="text" id="bulkItemName_'+idx+'" placeholder="Product name" value="'+esc(item.name||'')+'" data-bulk-field="name" data-idx="'+idx+'">'+
     '<input type="number" id="bulkItemQty_'+idx+'" min="0" step="1" placeholder="Qty" value="'+qty+'" data-bulk-field="qty" data-idx="'+idx+'">'+
     '<input type="number" id="bulkItemCost_'+idx+'" min="0" step="0.01" placeholder="Unit cost" value="'+cost+'" data-bulk-field="unitCost" data-idx="'+idx+'">'+
-    '<div class="ln-total">'+fmtETB(total)+'</div>'+
+    '<div class="ln-total" id="lnTotal_'+idx+'">'+fmtETB(total)+'</div>'+
     '<button type="button" class="remove-line" data-act="bulk-remove-row" data-idx="'+idx+'">×</button>'+
   '</div>';
 }
@@ -4068,7 +4070,7 @@ function bindEvents(){
           STATE.quickSaleSelectedId = exact.id; STATE.quickSaleQuery='';
           render(); return;
         }
-        render(); preserveFocus('qsProductSearch');
+        refreshRegions(['qsResults']);
       });
     }
   }
@@ -4110,23 +4112,21 @@ function bindEvents(){
   var invoiceForm = document.getElementById('invoiceForm');
   if(invoiceForm) invoiceForm.addEventListener('submit', onGenerateInvoice);
   var invCustomerName = document.getElementById('invCustomerName');
-  if(invCustomerName) invCustomerName.addEventListener('input', function(){ STATE.invoiceDraft.customerName = invCustomerName.value; render(); preserveFocus('invCustomerName'); });
+  if(invCustomerName) invCustomerName.addEventListener('input', function(){ STATE.invoiceDraft.customerName = invCustomerName.value; });
   var invPhone = document.getElementById('invPhone');
-  if(invPhone) invPhone.addEventListener('input', function(){ STATE.invoiceDraft.phone = invPhone.value; render(); preserveFocus('invPhone'); });
+  if(invPhone) invPhone.addEventListener('input', function(){ STATE.invoiceDraft.phone = invPhone.value; });
   var invDiscountEl = document.getElementById('invDiscount');
-  if(invDiscountEl) invDiscountEl.addEventListener('input', function(){ STATE.invoiceDraft.discount = parseFloat(invDiscountEl.value)||0; render(); preserveFocus('invDiscount'); });
+  if(invDiscountEl) invDiscountEl.addEventListener('input', function(){ STATE.invoiceDraft.discount = parseFloat(invDiscountEl.value)||0; refreshRegions(['invTotals']); });
   var invPayMethod = document.getElementById('invPayMethod');
   if(invPayMethod) invPayMethod.addEventListener('change', function(){ STATE.invoiceDraft.paymentMethod = invPayMethod.value; });
   var invAddress = document.getElementById('invAddress');
-  if(invAddress) invAddress.addEventListener('input', function(){ STATE.invoiceDraft.address = invAddress.value; render(); preserveFocus('invAddress'); });
+  if(invAddress) invAddress.addEventListener('input', function(){ STATE.invoiceDraft.address = invAddress.value; });
   app.querySelectorAll('[data-inv-field]').forEach(function(inp){
     inp.addEventListener('input', function(){
       var idx = parseInt(inp.getAttribute('data-idx'),10);
       var field = inp.getAttribute('data-inv-field');
       STATE.invoiceDraft.items[idx][field] = (field==='name') ? inp.value : (parseFloat(inp.value)||0);
-      var focusId = inp.id;
-      render();
-      preserveFocus(focusId);
+      refreshRegions(['lnTotal_'+idx, 'invTotals']);
     });
   });
 
@@ -4135,17 +4135,15 @@ function bindEvents(){
   var bulkDate = document.getElementById('bulkDate');
   if(bulkDate) bulkDate.addEventListener('change', function(){ STATE.bulkStockDraft.date = bulkDate.value; });
   var bulkSupplier = document.getElementById('bulkSupplier');
-  if(bulkSupplier) bulkSupplier.addEventListener('input', function(){ STATE.bulkStockDraft.supplier = bulkSupplier.value; render(); preserveFocus('bulkSupplier'); });
+  if(bulkSupplier) bulkSupplier.addEventListener('input', function(){ STATE.bulkStockDraft.supplier = bulkSupplier.value; });
   var bulkNotes = document.getElementById('bulkNotes');
-  if(bulkNotes) bulkNotes.addEventListener('input', function(){ STATE.bulkStockDraft.notes = bulkNotes.value; render(); preserveFocus('bulkNotes'); });
+  if(bulkNotes) bulkNotes.addEventListener('input', function(){ STATE.bulkStockDraft.notes = bulkNotes.value; });
   app.querySelectorAll('[data-bulk-field]').forEach(function(inp){
     inp.addEventListener('input', function(){
       var idx = parseInt(inp.getAttribute('data-idx'),10);
       var field = inp.getAttribute('data-bulk-field');
       STATE.bulkStockDraft.rows[idx][field] = (field==='name') ? inp.value : (parseFloat(inp.value)||0);
-      var focusId = inp.id;
-      render();
-      preserveFocus(focusId);
+      refreshRegions(['lnTotal_'+idx]);
     });
   });
 
@@ -4182,7 +4180,7 @@ function bindEvents(){
   var dashPeriodSel = document.getElementById('dashPeriod');
   if(dashPeriodSel) dashPeriodSel.addEventListener('change', function(){ STATE.dashboardPeriod = dashPeriodSel.value; render(); });
   var creditSearchIn = document.getElementById('creditSearch');
-  if(creditSearchIn) creditSearchIn.addEventListener('input', function(){ STATE.creditSearch = creditSearchIn.value; render(); preserveFocus('creditSearch'); });
+  if(creditSearchIn) creditSearchIn.addEventListener('input', function(){ STATE.creditSearch = creditSearchIn.value; refreshRegions(['creditList']); });
   var rpForm = document.getElementById('receivePaymentForm');
   if(rpForm){
     rpForm.addEventListener('submit', onReceivePayment);
@@ -4203,12 +4201,11 @@ function bindEvents(){
   app.querySelectorAll('[data-bulksale-pay]').forEach(function(r){
     r.addEventListener('change', function(){ STATE.bulkSaleDraft.paymentMethod = r.getAttribute('data-bulksale-pay'); if(STATE.bulkSaleDraft.paymentMethod==='cash') STATE.bulkSaleDraft.txId=''; render(); });
   });
-  var bulkSaleTx = document.getElementById('bulkSaleTx');
-  if(bulkSaleTx) bulkSaleTx.addEventListener('input', function(){ STATE.bulkSaleDraft.txId = bulkSaleTx.value; });
+  bindBulkTx();
   var autoRcptEl = document.getElementById('autoReceipt');
   if(autoRcptEl) autoRcptEl.addEventListener('change', function(){ STATE.autoReceipt = autoRcptEl.checked; localStorage.setItem('ssr_autorcpt', autoRcptEl.checked?'1':'0'); });
   var bulkDiscEl = document.getElementById('bulkDiscount');
-  if(bulkDiscEl) bulkDiscEl.addEventListener('input', function(){ STATE.bulkSaleDraft.discount = parseFloat(bulkDiscEl.value)||0; render(); preserveFocus('bulkDiscount'); });
+  if(bulkDiscEl) bulkDiscEl.addEventListener('input', function(){ STATE.bulkSaleDraft.discount = parseFloat(bulkDiscEl.value)||0; refreshRegions(['bulkSaleTotals', 'bulkTxWrap']); });
   var bulkCreditChk = document.getElementById('bulkSaleCredit');
   if(bulkCreditChk) bulkCreditChk.addEventListener('change', function(){ STATE.bulkSaleDraft.credit = bulkCreditChk.checked; render(); });
   [['bulkCustName','customerName'],['bulkCustPhone','customerPhone']].forEach(function(p){
@@ -4218,7 +4215,7 @@ function bindEvents(){
   var bulkDueEl = document.getElementById('bulkDue');
   if(bulkDueEl) bulkDueEl.addEventListener('change', function(){ STATE.bulkSaleDraft.dueDate = bulkDueEl.value; });
   var bulkPaidEl = document.getElementById('bulkPaidNow');
-  if(bulkPaidEl) bulkPaidEl.addEventListener('input', function(){ STATE.bulkSaleDraft.paidNow = parseFloat(bulkPaidEl.value)||0; render(); preserveFocus('bulkPaidNow'); });
+  if(bulkPaidEl) bulkPaidEl.addEventListener('input', function(){ STATE.bulkSaleDraft.paidNow = parseFloat(bulkPaidEl.value)||0; refreshRegions(['bulkSaleTotals', 'bulkTxWrap']); });
   var bulkSaleOwed = document.getElementById('bulkSaleOwed');
   if(bulkSaleOwed) bulkSaleOwed.addEventListener('change', function(){ STATE.bulkSaleDraft.markedOwed = bulkSaleOwed.checked; });
   app.querySelectorAll('[data-bulksale-field]').forEach(function(inp){
@@ -4226,14 +4223,12 @@ function bindEvents(){
       var idx = parseInt(inp.getAttribute('data-idx'),10);
       var field = inp.getAttribute('data-bulksale-field');
       STATE.bulkSaleDraft.rows[idx][field] = (field==='name') ? inp.value : (parseFloat(inp.value)||0);
-      var focusId = inp.id;
-      render();
-      preserveFocus(focusId);
+      refreshRegions(['lnTotal_'+idx, 'bulkSaleTotals', 'bulkTxWrap']);
     });
   });
 
   var salesSearch = document.getElementById('salesSearch');
-  if(salesSearch) salesSearch.addEventListener('input', function(){ STATE.salesFilter.search = salesSearch.value; render(); preserveFocus('salesSearch'); });
+  if(salesSearch) salesSearch.addEventListener('input', function(){ STATE.salesFilter.search = salesSearch.value; refreshRegions(['salesList','salesClearWrap']); });
   var salesDateFilter = document.getElementById('salesDateFilter');
   if(salesDateFilter) salesDateFilter.addEventListener('change', function(){ STATE.salesFilter.date = salesDateFilter.value; render(); });
   var salesProductFilter = document.getElementById('salesProductFilter');
@@ -4275,7 +4270,39 @@ function restoreFocus(snap){
 /* mark renders that happen inside a typing event, or because live data arrived */
 document.addEventListener('input', function(){ STATE._inInput = true; }, true);
 document.addEventListener('input', function(){ STATE._inInput = false; }, false);
-function renderLive(){ STATE._liveRender = true; try{ render(); } finally{ STATE._liveRender = false; } }
+/* Typing must never replace the box you are typing in (phone keyboards — especially Amharic — lose their place
+   when that happens and the cursor jumps). So typing only updates the parts that depend on it. */
+function bindBulkTx(){
+  var el = document.getElementById('bulkSaleTx');
+  if(el && !el.__txBound){ el.__txBound = true; el.addEventListener('input', function(){ STATE.bulkSaleDraft.txId = el.value; }); }
+}
+function refreshRegions(ids, structural){
+  var tpl = document.createElement('div');
+  tpl.innerHTML = translateUI(renderView());
+  ids.forEach(function(id){
+    var fresh = tpl.querySelector('#'+id), cur = document.getElementById(id);
+    if(fresh && cur && cur.innerHTML !== fresh.innerHTML) cur.innerHTML = fresh.innerHTML;
+  });
+  /* if a field has to appear or disappear, redraw once (the focus is restored as a fallback) */
+  var must = (structural||[]).some(function(id){ return !!document.getElementById(id) !== !!tpl.querySelector('#'+id); });
+  if(must){ render(); return; }
+  labelTables(); bindBulkTx();
+}
+function isEditingField(){
+  var ae = document.activeElement, root = document.getElementById('app');
+  if(!ae || !root || !root.contains(ae)) return false;
+  if(ae.tagName==='TEXTAREA' || ae.tagName==='SELECT') return true;
+  return ae.tagName==='INPUT' && !/^(button|submit|checkbox|radio|reset|file|hidden)$/.test((ae.type||'').toLowerCase());
+}
+/* New data from Firebase arrives all the time. While you are typing it waits, and is applied the moment you leave the field. */
+function renderLive(){
+  if(isEditingField()){ STATE._renderPending = true; return; }
+  STATE._liveRender = true; try{ render(); } finally{ STATE._liveRender = false; }
+}
+document.addEventListener('focusout', function(){
+  if(!STATE._renderPending) return;
+  setTimeout(function(){ if(STATE._renderPending && !isEditingField()){ STATE._renderPending = false; renderLive(); } }, 80);
+}, true);
 
 function handleAction(act, el, ev){
   if(act==='tab-login'){ STATE.authTab='login'; STATE.authError=''; render(); return; }
